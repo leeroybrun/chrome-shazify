@@ -1,0 +1,87 @@
+<div class="topbar">
+	<div class="right">
+		<a class="iconmelon clickable" ng-click="refreshTags()" ng-if="!updating">
+			<svg viewBox="0 0 32 32">
+				<g filter="">
+					<use xlink:href="#rotate"></use>
+				</g>
+			</svg>
+		</a>
+		<a class="iconmelon" ng-if="updating">
+			<svg viewBox="0 0 32 32">
+				<g filter="">
+					<use xlink:href="#rotate"></use>
+					<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="4s" repeatCount="indefinite"/>
+				</g>
+			</svg>
+		</a>
+		<a class="iconmelon" href="#/settings">
+			<svg viewBox="0 0 32 32">
+				<g filter="">
+					<use xlink:href="#settings-toolkit"></use>
+				</g>
+			</svg>
+		</a>
+	</div>
+	<h2 chrome-translate>myTags</h2>
+</div>
+<div class="tags-list">
+	<div class="updating" ng-if="updating">
+		<div class="content">
+			<div class="iconmelon">
+				<svg viewBox="0 0 32 32">
+					<g filter="">
+						<use xlink:href="#rotate"></use>
+						<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="4s" repeatCount="indefinite"/>
+					</g>
+				</svg>
+			</div>
+			<p chrome-translate>updatingTags</p>
+		</div>
+	</div>
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags">
+		<div class="tag-status">
+			<div class="success" ng-if="tag.status == 3">
+				<div class="iconmelon">
+					<svg viewBox="0 0 32 32">
+						<g filter="">
+							<use xlink:href="#success"></use>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<div class="error" ng-if="tag.status == 2">
+				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)">
+					<svg viewBox="0 0 32 32">
+						<g filter="">
+							<use xlink:href="#error"></use>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<div class="search" ng-if="tag.status == 1">
+				<div class="iconmelon">
+					<svg viewBox="0 0 32 32">
+						<g filter="">
+							<use xlink:href="#search"></use>
+						</g>
+					</svg>
+				</div>
+			</div>
+		</div>
+		<img ng-src="{{tag.image}}" class="tag-image">
+		<span class="tag-name">{{tag.name}}</span><br />
+		<span class="tag-artist">{{tag.artist}}</span>
+	</div>
+	<div class="modal" ng-if="newSearch.show">
+		<p chrome-translate>searchQueryPrompt</p>
+		<form ng-submit="newSearch.send()">
+			<p><label chrome-translate>trackField</label><br />
+			<input type="text" ng-model="newSearch.query.track"></p>
+			<p><label chrome-translate>artistField</label><br />
+			<input type="text" ng-model="newSearch.query.artist"></p>
+			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate>searchTrackButton</button></p>
+			<p class="error-msg" ng-if="newSearch.error">{{newSearch.error}}</p>
+		</form>
+	</div>
+</div>

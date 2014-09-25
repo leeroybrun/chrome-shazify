@@ -1,0 +1,76 @@
+{
+  "appDesc": {
+    "message":"Exportez cos tags Shazam dans une playlist Spotify",
+    "description":"The description of the application, displayed in the web store."
+  },
+  "myTags": {
+  	"message": "Mes tags Shazam",
+  	"description": ""
+  },
+  "updatingTags": {
+  	"message": "Mise à jour des tags en cours...",
+  	"description": ""
+  },
+  "searchTrackButton": {
+    "message": "Lancer une nouvelle recherche",
+    "description": ""
+  },
+  "trackField": {
+    "message": "Titre",
+    "description": ""
+  },
+  "artistField": {
+    "message": "Artiste",
+    "description": ""
+  },
+  "searchQueryPrompt": {
+  	"message": "Veuillez entrer une requête de recherche pour Spotify",
+  	"description": ""
+  },
+  "noTrackFoundQuery": {
+  	"message": "Aucun titre trouvé pour \"$query$\"...",
+  	"description": "",
+    "placeholders": {
+      "query": {
+        "content": "$1",
+        "example": "track:... artist:..."
+      }
+    }
+  },
+  "settings": {
+  	"message": "Paramètres",
+  	"description": ""
+  },
+  "promptShazamLogin": {
+  	"message": "Veuillez vous connecter à MyShazam afin de pouvoir récupérer vos tags.",
+  	"description": ""
+  },
+  "openShazamLogin": {
+  	"message": "Ouvrir la page de connexion",
+  	"description": ""
+  },
+  "promptSpotifyLogin": {
+    "message": "Veuillez autoriser Shazam2Spotify à accéder à votre compte Spotify afin de pouvoir y créer et gérer une playlist.",
+    "description": ""
+  },
+  "authSpotify": {
+  	"message": "Autoriser l'application",
+  	"description": ""
+  },
+  "spotifyLoginSuccess": {
+  	"message": "Vous êtes bien connectés à Spotify.",
+  	"description": ""
+  },
+  "shazamLoginSuccess": {
+  	"message": "Vous êtes bien connectés à Shazam.",
+  	"description": ""
+  },
+  "logout": {
+  	"message": "Déconnexion",
+  	"description": ""
+  },
+  "backToTags": {
+  	"message": "Retour aux tags",
+  	"description": ""
+  }
+}
