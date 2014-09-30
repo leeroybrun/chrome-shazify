@@ -1,0 +1,229 @@
+/*!
+Pure v0.5.0
+Copyright 2014 Yahoo! Inc. All rights reserved.
+Licensed under the BSD License.
+https://github.com/yui/pure/blob/master/LICENSE.md
+*/
+.pure-button{display:inline-block;*display:inline;zoom:1;line-height:normal;white-space:nowrap;vertical-align:baseline;text-align:center;cursor:pointer;-webkit-user-drag:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.pure-button::-moz-focus-inner{padding:0;border:0}.pure-button{font-family:inherit;font-size:100%;*font-size:90%;*overflow:visible;padding:.5em 1em;color:#444;color:rgba(0,0,0,.8);*color:#444;border:1px solid #999;border:0 rgba(0,0,0,0);background-color:#E6E6E6;text-decoration:none;border-radius:2px}.pure-button-hover,.pure-button:hover,.pure-button:focus{filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#1a000000', GradientType=0);background-image:-webkit-gradient(linear,0 0,0 100%,from(transparent),color-stop(40%,rgba(0,0,0,.05)),to(rgba(0,0,0,.1)));background-image:-webkit-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));background-image:-moz-linear-gradient(top,rgba(0,0,0,.05) 0,rgba(0,0,0,.1));background-image:-o-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));background-image:linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1))}.pure-button:focus{outline:0}.pure-button-active,.pure-button:active{box-shadow:0 0 0 1px rgba(0,0,0,.15) inset,0 0 6px rgba(0,0,0,.2) inset}.pure-button[disabled],.pure-button-disabled,.pure-button-disabled:hover,.pure-button-disabled:focus,.pure-button-disabled:active{border:0;background-image:none;filter:progid:DXImageTransform.Microsoft.gradient(enabled=false);filter:alpha(opacity=40);-khtml-opacity:.4;-moz-opacity:.4;opacity:.4;cursor:not-allowed;box-shadow:none}.pure-button-hidden{display:none}.pure-button::-moz-focus-inner{padding:0;border:0}.pure-button-primary,.pure-button-selected,a.pure-button-primary,a.pure-button-selected{background-color:#0078e7;color:#fff}
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-error {
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+/* Custom CSS */
+
+/* General */
+
+	body {
+		font-family:'Helvetica Neue', Helvetica, sans-serif;
+		font-size:12px;
+		line-height:1.5;
+		margin:12px 15px;
+	}
+
+	.container {
+		width:300px;
+	}
+
+	.iconmelon {
+	  position: relative;
+	  width: 32px;
+	  height: 32px;
+	  display: block;
+	  fill: #525151;
+	}
+	.iconmelon:after,
+	.im:after {
+	  content: '';
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	}
+
+	.clickable {
+		cursor:pointer;
+	}
+
+	* {
+		outline: none;
+	}
+
+/* Modal */
+
+	.modal {
+		position:fixed;
+		top:50px;
+		left:50%;
+		margin-left:-125px;
+		width:220px;
+		box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+		border: 1px solid #bbb;
+		background: #ffffff;
+		    
+		padding:15px;
+	}
+
+	.modal p:first-child {
+		margin-top:0;
+	}
+
+	.modal label {
+		font-weight:bold;
+	}
+
+	.modal input {
+		width: 202px;
+		background-color: white;
+		border: 1px solid #cccccc;
+		padding: 6px 8px;
+	}
+
+/* Updating */
+	.updating {
+		position:absolute;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		background-color:rgba(255,255,255,0.8);
+		font-size:14px;
+		z-index:3000;
+	}
+
+	.updating .content {
+		width:150px;
+		height:150px;
+		position:absolute;
+		top:20px;
+		left:50%;
+		margin-left:-75px;
+		text-align:center;
+	}
+
+	.updating .iconmelon {
+		width:64px;
+		height:64px;
+		margin:40px auto;
+		display:block;
+	}
+
+	.updating .iconmelon svg {
+		padding:8px;
+		margin-left:-10px;
+	}
+
+/* Top bar */
+
+	.topbar {
+		border-bottom:1px solid #e0e0e0;
+		padding-bottom:7px;
+		overflow:hidden;
+		margin-bottom:10px;
+	}
+
+	.topbar h2 {
+		margin-top:0;
+		margin-bottom:0;
+		font-weight:normal;
+		font-size:20px;
+	}
+
+	.topbar .right {
+		float:right;
+		overflow:hidden;
+	}
+
+	.topbar .iconmelon {
+		width:16px;
+		height:16px;
+		float:left;
+		margin-left:7px;
+		margin-top:4px;
+	}
+
+	.topbar .left .iconmelon {
+		margin-left:0;
+		margin-right:10px;
+	}
+
+/* Tags */
+	.tags-list {
+		overflow:hidden;
+		position:relative;
+		min-height:250px;
+	}
+
+	.tags-list .tag {
+		overflow:hidden;
+		clear:both;
+		margin-bottom:7px;
+		border-bottom:1px solid #e0e0e0;
+		padding-bottom:7px;
+	}
+
+	.tag-status {
+		float:right;
+		margin-left:10px;
+		margin-top:5px;
+	}
+
+	.tag-status .success .iconmelon {
+		fill:#2ECC71;
+	}
+
+	.tag-status .error .iconmelon {
+		fill:#F9690E;
+	}
+
+	.tag-status .search .iconmelon {
+		fill:#59ABE3;
+	}
+
+	.tag.tag-success {
+
+	}
+
+	.tag.tag-search {
+		
+	}
+
+	.tag.tag-error {
+		
+	}
+
+	.tag .tag-image {
+		width:50px;
+		float:left;
+		margin-right:10px;
+	}
+
+	.tag .tag-name {
+		font-weight:bold;
+	}
+
+	.tag .tag-artist {
+		opacity:0.8;
+	}

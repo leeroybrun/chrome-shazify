@@ -13,10 +13,9 @@
   "browser_action": {
     "default_icon": "icons/icon19.png",
     "default_title": "Shazam2Spotify",
-    "default_popup": "src/popup/popup.html"
+    "default_popup": "popup/popup.html"
   },
   "permissions": [
-    "cookies",
     "tabs",
     "identity",
     "storage",

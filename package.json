@@ -1,0 +1,15 @@
+{
+  "name": "chrome-shazam2spotify",
+  "version": "0.0.1",
+  "author": "Leeroy Brun <leeroy.brun@batiplus.ch>",
+  "private": true,
+  "description": "Chrome extension used to export your Shazam tags to a Spotify playlist",
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-watch": "*"
+  },
+  "license": "MIT"
+}

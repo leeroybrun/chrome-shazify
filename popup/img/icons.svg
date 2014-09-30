@@ -1,13 +1,4 @@
-<!doctype html>
-<html ng-app="myApp" ng-csp="">
-	<head>
-		<link rel="stylesheet" href="popup.css">
-		<script src="lib/jquery.js"></script>
-		<script src="lib/angular.min.js"></script>
-		<script src="lib/angular-route.min.js"></script>
-		<script src="lib/async.js"></script>
-	</head>
-	<svg id="svg-source" height="0" version="1.1" 
+<svg id="svg-source" height="0" version="1.1" 
 	  xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%" 
 	  xmlns:xlink="http://www.w3.org/1999/xlink">
 	  <g id="arrow-left" data-iconmelon="Dripicons:1343443effeb28db6f9ad48fdc372632">
@@ -136,10 +127,3 @@
 	    </g>
 	  </g>
 	</svg>
-	<body>
-		<div class="container">
-			<div ng-view></div>
-		</div>
-		<script src="popup.js"></script>
-	</body>
-</html>
