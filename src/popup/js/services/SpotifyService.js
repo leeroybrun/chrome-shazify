@@ -359,11 +359,11 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 						if(status === true) {
 							callback(true);
 						} else {
-							Spotify.openLogin(false, callback);
+							Spotify.openLogin(true, callback);
 						}
 					});
 				} else {
-					Spotify.openLogin(false, callback);
+					Spotify.openLogin(true, callback);
 				}
 			});
 		},
