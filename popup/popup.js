@@ -745,11 +745,11 @@ angular.module('Shazam2Spotify', ['ngRoute'])
 						if(status === true) {
 							callback(true);
 						} else {
-							Spotify.openLogin(false, callback);
+							Spotify.openLogin(true, callback);
 						}
 					});
 				} else {
-					Spotify.openLogin(false, callback);
+					Spotify.openLogin(true, callback);
 				}
 			});
 		},

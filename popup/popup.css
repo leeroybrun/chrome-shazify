@@ -187,7 +187,6 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.tag-status {
 		float:right;
 		margin-left:10px;
-		margin-top:5px;
 	}
 
 	.tag-status .success .iconmelon {
@@ -215,12 +214,17 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 	.tag .tag-image {
-		width:50px;
+		width:32px;
 		float:left;
 		margin-right:10px;
 	}
 
 	.tag .tag-name {
+		text-overflow: ellipsis;
+
+		/* Required for text-overflow to do anything */
+		white-space: nowrap;
+		overflow: hidden;
 		font-weight:bold;
 	}
 
