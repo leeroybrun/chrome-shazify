@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify', ['ngRoute'])
+angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
 			.when('/', {
@@ -92,6 +92,11 @@ angular.module('Shazam2Spotify', ['ngRoute'])
 					$scope.newSearch.show = false;
 				}
 			});
+		},
+		cancel: function() {
+			$scope.newSearch.error = null;
+			$scope.newSearch.tag = null;
+			$scope.newSearch.show = false;
 		}
 	};
 

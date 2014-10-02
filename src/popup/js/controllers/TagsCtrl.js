@@ -37,6 +37,11 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 					$scope.newSearch.show = false;
 				}
 			});
+		},
+		cancel: function() {
+			$scope.newSearch.error = null;
+			$scope.newSearch.tag = null;
+			$scope.newSearch.show = false;
 		}
 	};
 

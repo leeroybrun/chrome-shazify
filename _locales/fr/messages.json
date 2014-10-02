@@ -72,5 +72,9 @@
   "backToTags": {
   	"message": "Retour aux tags",
   	"description": ""
+  },
+  "cancel": {
+    "message": "Annuler",
+    "description": ""
   }
 }

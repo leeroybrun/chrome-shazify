@@ -71,7 +71,60 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		outline: none;
 	}
 
+/* Animations */
+
+	@-webkit-keyframes enterAnimation {
+		to { 
+			opacity: 1;
+			transform: translate(0, 0);
+		}
+	}
+
+	@keyframes enterAnimation {
+		to { 
+			opacity: 1;
+			transform: translate(0, 0);
+		}
+	}
+
+	@-webkit-keyframes leaveAnimation {
+		to { 
+			opacity: 0;
+			transform: translate(0, -50px);
+		}
+	}
+
+	@keyframes leaveAnimation {
+		to { 
+			opacity: 0;
+			transform: translate(0, -50px);
+		}
+	}
+
 /* Modal */
+
+	.modal-overlay {
+		position:fixed;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		background-color:rgba(0,0,0,0.25);
+		z-index:2999;
+	}
+
+	.modal-overlay.ng-enter, .modal-overlay.ng-leave {
+		-webkit-transition: 0.3s ease all;
+				transition: 0.3s ease all;
+	}
+
+	.modal-overlay.ng-enter, .modal-overlay.ng-leave.ng-leave-active {
+		opacity:0;
+	}
+
+	.modal-overlay.ng-enter.ng-enter-active, .modal-overlay.ng-leave {
+		opacity:1;
+	}
 
 	.modal {
 		position:fixed;
@@ -82,8 +135,25 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		box-shadow: 0 3px 6px rgba(0,0,0,0.25);
 		border: 1px solid #bbb;
 		background: #ffffff;
+		z-index:3000;
 		    
 		padding:15px;
+	}
+
+	.modal.ng-enter {
+		opacity: 0;
+		transform: translate(0, -50px);
+
+		-webkit-animation: enterAnimation 0.2s ease forwards;
+				animation: enterAnimation 0.2s ease forwards;
+	}
+
+	.modal.ng-leave {
+		opacity: 1;
+		transform: translate(0, 0);
+
+		-webkit-animation: leaveAnimation 0.2s ease forwards;
+				animation: leaveAnimation 0.2s ease forwards;
 	}
 
 	.modal p:first-child {
@@ -111,6 +181,19 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		background-color:rgba(255,255,255,0.8);
 		font-size:14px;
 		z-index:3000;
+	}
+
+	.updating.ng-enter, .modal-overlay.ng-leave {
+		-webkit-transition: 0.3s ease all;
+				transition: 0.3s ease all;
+	}
+
+	.updating.ng-enter, .updating.ng-leave.ng-leave-active {
+		opacity:0;
+	}
+
+	.updating.ng-enter.ng-enter-active, .updating.ng-leave {
+		opacity:1;
 	}
 
 	.updating .content {
@@ -141,7 +224,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		border-bottom:1px solid #e0e0e0;
 		padding-bottom:7px;
 		overflow:hidden;
-		margin-bottom:10px;
+		margin-bottom:7px;
 	}
 
 	.topbar h2 {
@@ -184,9 +267,31 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		padding-bottom:7px;
 	}
 
+	.tags-list .tag.ng-enter {
+		opacity: 0;
+		transform: translate(0, -50px);
+
+		-webkit-animation: enterAnimation 0.2s ease forwards;
+				animation: enterAnimation 0.2s ease forwards;
+	}
+
+	.tags-list .tag.ng-enter-stagger {
+		-webkit-animation-delay:50ms;
+		animation-delay:50ms;
+
+		-webkit-animation-duration:0;
+		animation-duration:0;
+	}
+
 	.tag-status {
 		float:right;
 		margin-left:10px;
+		margin-top:2px;
+	}
+
+	.tag-status .iconmelon {
+		width:32px;
+		height:32px;
 	}
 
 	.tag-status .success .iconmelon {
@@ -214,7 +319,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 	.tag .tag-image {
-		width:32px;
+		width:36px;
 		float:left;
 		margin-right:10px;
 	}

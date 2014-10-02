@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify', ['ngRoute'])
+angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
 			.when('/', {
