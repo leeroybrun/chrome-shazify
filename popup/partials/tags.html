@@ -39,6 +39,16 @@
 			<p chrome-translate>updatingTags</p>
 		</div>
 	</div>
+	<div class="no-tags" ng-if="!tags">
+		<p class="iconmelon">
+			<svg viewBox="0 0 32 32">
+				<g filter="">
+					<use xlink:href="#error"></use>
+				</g>
+			</svg>
+		</p>
+		<p chrome-translate>noTagsFound</p>
+	</div>
 	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags">
 		<div class="tag-status">
 			<div class="success" ng-if="tag.status == 3">

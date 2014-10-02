@@ -7,6 +7,10 @@
   	"message": "Mes tags Shazam",
   	"description": ""
   },
+  "noTagsFound": {
+    "message": "Aucun tag trouvé",
+    "description": ""
+  },
   "updatingTags": {
   	"message": "Mise à jour des tags en cours...",
   	"description": ""

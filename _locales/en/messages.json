@@ -7,6 +7,10 @@
   	"message": "My Shazam Tags",
   	"description": ""
   },
+  "noTagsFound": {
+    "message": "No tag found",
+    "description": ""
+  },
   "updatingTags": {
   	"message": "Updating tags...",
   	"description": ""
