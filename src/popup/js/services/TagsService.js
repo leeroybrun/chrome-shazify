@@ -2,19 +2,13 @@ angular.module('Shazam2Spotify').factory('TagsService', function(StorageHelper) 
 	var Tags = {
 		list: [],
 
-		genSpotifyQuery: function(track, artist) {
-			var reSpaces = new RegExp(' ', 'g');
-
-			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ artist.replace('Feat. ', '').replace(reSpaces, '+');
-		},
-
 		add: function(newTag, callback) {
 			callback = callback || function(){};
 
 			newTag.spotifyId = newTag.spotifyId || null;
 			newTag.status = newTag.status || 1; // Status : 1 = just added, 2 = not found in spotify, 3 = found & added to playlist
 
-			newTag.query = newTag.query || Tags.genSpotifyQuery(newTag.name, newTag.artist);
+			newTag.query = newTag.query || '';
 
 			var found = false;
 			for(var i in Tags.list) {

@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper, StorageHelper, TagsService, $timeout, $http) {
+angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper, StorageHelper, TagsService, SpotifyService, $timeout, $http) {
 	var Shazam = {
 		newTags: [],
 
@@ -34,12 +34,12 @@ angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper,
 			function saveTags(error) {
 				if(error) {
 					TagsService.save(function() {
-						callback(status);
+						callback(error);
 					});
 				} else {
 					Shazam.data.set({'lastTagsUpdate': (new Date()).toString()}, function() {
 						TagsService.save(function() {
-							callback(error);
+							callback();
 						});
 					});
 				}
@@ -53,8 +53,6 @@ angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper,
 					.success(function(data) {
 						if(data && typeof data === 'object' && data.feed.indexOf('ms-no-tags') == -1) {
 							var lastTagDate = new Date(parseInt($('<div/>').append(data.feed).find('article').last().find('.tl-date').attr('data-time')));
-
-							console.log('Last update: '+ lastTagsUpdate);
 
 							Shazam.parseTags(lastTagsUpdate, data.feed, function() {
 								if(data.previous && data.feed.indexOf('ms-no-tags') == -1 && lastTagDate > lastTagsUpdate) {
@@ -91,6 +89,8 @@ angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper,
 						date: date,
 						image: $('img[itemprop="image"]', this).attr('src')
 					};
+
+					tag.query = SpotifyService.genQuery(tag.name, tag.artist);
 
 					TagsService.add(tag);
 				}

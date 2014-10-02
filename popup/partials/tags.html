@@ -82,8 +82,7 @@
 			<input type="text" ng-model="newSearch.query.track"></p>
 			<p><label chrome-translate>artistField</label><br />
 			<input type="text" ng-model="newSearch.query.artist"></p>
-			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate>searchTrackButton</button></p>
-			<p><a class="pure-button pure-button-warning" ng-click="newSearch.cancel()" chrome-translate>cancel</a></p>
+			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate>searchTrackButton</button><a class="pure-button pure-button-warning cancel-button" ng-click="newSearch.cancel()" chrome-translate>cancel</a></p>
 			<p class="error-msg" ng-if="newSearch.error">{{newSearch.error}}</p>
 		</form>
 	</div>

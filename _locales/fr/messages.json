@@ -73,6 +73,10 @@
   	"message": "Déconnexion",
   	"description": ""
   },
+  "loginStatus": {
+    "message": "Statut de connexion",
+    "description": ""
+  },
   "backToTags": {
   	"message": "Retour aux tags",
   	"description": ""

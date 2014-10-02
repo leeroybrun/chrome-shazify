@@ -73,6 +73,10 @@
   	"message": "Logout",
   	"description": ""
   },
+  "loginStatus": {
+    "message": "Login status",
+    "description": ""
+  },
   "backToTags": {
   	"message": "Back to tags",
   	"description": ""

@@ -5,6 +5,12 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			clientSecret: 'b3bc17ef4d964fccb63b1f37af9101f8'
 		},
 
+		genQuery: function(track, artist) {
+			var reSpaces = new RegExp(' ', 'g');
+
+			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ artist.replace('Feat. ', '').replace(reSpaces, '+');
+		},
+
 		getUserAndPlaylist: function(callback) {
 			Spotify.data.get(['userId', 'playlistId'], function(items) {
 				var userId = items.userId;
@@ -34,8 +40,8 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 					function checkPlaylistId(cb) {
 						if(!playlistId) {
 							console.log('No playlistId stored, need to getOrCreate.');
-							Spotify.playlist.getOrCreate(function(data) {
-								if(data && data.id) {
+							Spotify.playlist.getOrCreate(function(err, data) {
+								if(data && data.id && !err) {
 									playlistId = data.id;
 									cb();
 								} else {
@@ -56,10 +62,8 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			name: chrome.i18n.getMessage('myTags'),
 
 			get: function(callback) {
-				console.log('Get playlist');
-
 				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
-					if(err) { return; }
+					if(err) { return callback(err); }
 
 					Spotify.call({
 						method: 'GET',
@@ -67,7 +71,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 					}, function(err, data) {
 						if(err) { console.log(err); }
 
-						callback(data);
+						callback(err, data);
 					});
 				});
 			},
@@ -90,32 +94,25 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 							'public': false
 						}
 					}, function(err, data) {
-						if(err) { console.log(err); }
+						if(err) { console.log(err); return callback(err); }
 
 						Spotify.data.set({playlistId: data.id}, function() {
-							callback(data);
+							callback(null, data);
 						});
 					});
 				});
 			},
 
 			getOrCreate: function(callback) {
-				console.log('getOrCreate playlist');
-
 				var playlistName = Spotify.playlist.name;
 
 				Spotify.data.get(['userId', 'playlistId'], function(items) {
-					console.log('Got data from storage/cache: ', items);
-
 					var userId = items.userId;
 					var playlistId = items.playlistId;
 
 					if(playlistId) {
-						console.log('PlaylistId exists in storage: '+ playlistId);
 						return Spotify.playlist.get(callback);
 					}
-
-					console.log('Call findInPagedResult...');
 
 					Spotify.findInPagedResult({
 						method: 'GET',
@@ -128,8 +125,6 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 								found = playlist.id;
 							}
 						});
-
-						console.log('Found ? '+ found);
 
 						cbFind(found);
 					}, function(playlistId) {
@@ -167,7 +162,6 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			},
 
 			searchAndAddTag: function(tag, query, shouldSave, callback) {
-				console.log('Searching for "'+ query +'"');
 				Spotify.call({
 					endpoint: '/v1/search',
 					method: 'GET',
@@ -178,11 +172,9 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 					}
 				}, function(err, data) {
 					if(err) { console.log(err); return callback(err); }
-					if(data.tracks.total === 0) { console.log('Not found.'); tag.status = 2; return callback(new Error('Not found')); }
+					if(data.tracks.total === 0) { tag.status = 2; return callback(new Error('Not found')); }
 
 					var track = data.tracks.items[0];
-
-					console.log('Found: ', track);
 
 					tag.spotifyId = track.id;
 					tag.status = 3;
@@ -309,11 +301,19 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 							callback(null, data);
 						})
 						.error(function(data, status) {
-							callback(new Error('Error calling API'));
-							console.log('Error calling API : ', options, data, status);
-
 							if(status === 401) {
-								// Relogin ?
+								Spotify.refreshToken(function(status) {
+									if(status === true) {
+										// Refresh/login successfull, retry call
+										Spotify.call(options, callback);
+									} else {
+										// Error...
+										callback(new Error('Please authorize Shazam2Spotify to access your Spotify account.'));
+									}
+								});
+							} else {
+								callback(new Error('Error calling API'));
+								console.error('Error calling API : ', options, data, status);
 							}
 						});
 				});
@@ -334,14 +334,6 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 				if(!items.expiresIn) {
 					return callback(false);
 				}
-
-				/* Dirty debuging...
-				console.log('Token time: '+ items.tokenTime);
-				console.log('Token time: '+ new Date(items.tokenTime));
-				console.log('expiresIn: '+ items.expiresIn);
-				console.log('Token time + expires: '+ new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)));
-				console.log('Current date: '+ new Date());
-				console.log('Need refresh ? ', new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)) <= new Date())*/
 
 				// Token expired, we need to get one new with the refreshToken
 				if(new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)) <= new Date()) {
@@ -393,12 +385,12 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 						});
 					} else {
 						callback(false);
-						console.log('Error getting token : ', data);
+						console.error('Error getting token : ', data);
 					}
 				})
 				.error(function(data, status) {
 					callback(false);
-					console.log('Error getting token : ', data, status);
+					console.error('Error getting token : ', data, status);
 				});
 		},
 
@@ -426,6 +418,8 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 								endpoint: '/v1/me',
 								method: 'GET'
 							}, function(err, data) {
+								if(err) { console.err('Error getting user infos', err); }
+								
 								Spotify.data.set({'userId': data.id}, function() {
 									callback(true);
 								});

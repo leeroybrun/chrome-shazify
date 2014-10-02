@@ -56,6 +56,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 });;angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, ShazamService, SpotifyService, TagsService) {
 	$scope.updating = true;
 
+	$scope.tags = TagsService.list;
+
 	$scope.updateTags = function(callback) {
 		$scope.updating = true;
 
@@ -81,7 +83,7 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 			track: ''
 		},
 		send: function() {
-			var query = TagsService.genSpotifyQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
+			var query = SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
 
 			SpotifyService.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
 				if(error) {
@@ -126,14 +128,13 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 	var refreshTags = function() {
 		checkLogin(function(status) {
 			if(status === true) {
-				SpotifyService.playlist.get(function() {
+				SpotifyService.playlist.get(function(err) {
 					TagsService.load(function() {
-						console.log('Tags loaded');
 						$scope.tags = TagsService.list;
+
 						$scope.updateTags(function() {
-							console.log('Tags updated');
 							SpotifyService.playlist.searchAndAddTags(function() {
-								console.log('Tags added');
+								// Tags added
 							});
 						});
 					});
@@ -282,7 +283,7 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 	};
 
 	return Storage;
-});;angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper, StorageHelper, TagsService, $timeout, $http) {
+});;angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper, StorageHelper, TagsService, SpotifyService, $timeout, $http) {
 	var Shazam = {
 		newTags: [],
 
@@ -318,12 +319,12 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 			function saveTags(error) {
 				if(error) {
 					TagsService.save(function() {
-						callback(status);
+						callback(error);
 					});
 				} else {
 					Shazam.data.set({'lastTagsUpdate': (new Date()).toString()}, function() {
 						TagsService.save(function() {
-							callback(error);
+							callback();
 						});
 					});
 				}
@@ -337,8 +338,6 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 					.success(function(data) {
 						if(data && typeof data === 'object' && data.feed.indexOf('ms-no-tags') == -1) {
 							var lastTagDate = new Date(parseInt($('<div/>').append(data.feed).find('article').last().find('.tl-date').attr('data-time')));
-
-							console.log('Last update: '+ lastTagsUpdate);
 
 							Shazam.parseTags(lastTagsUpdate, data.feed, function() {
 								if(data.previous && data.feed.indexOf('ms-no-tags') == -1 && lastTagDate > lastTagsUpdate) {
@@ -376,6 +375,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 						image: $('img[itemprop="image"]', this).attr('src')
 					};
 
+					tag.query = SpotifyService.genQuery(tag.name, tag.artist);
+
 					TagsService.add(tag);
 				}
 			});
@@ -394,6 +395,12 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 		api: {
 			clientId: 'b0b7b50eac4642f482825c535bae2708',
 			clientSecret: 'b3bc17ef4d964fccb63b1f37af9101f8'
+		},
+
+		genQuery: function(track, artist) {
+			var reSpaces = new RegExp(' ', 'g');
+
+			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ artist.replace('Feat. ', '').replace(reSpaces, '+');
 		},
 
 		getUserAndPlaylist: function(callback) {
@@ -425,8 +432,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 					function checkPlaylistId(cb) {
 						if(!playlistId) {
 							console.log('No playlistId stored, need to getOrCreate.');
-							Spotify.playlist.getOrCreate(function(data) {
-								if(data && data.id) {
+							Spotify.playlist.getOrCreate(function(err, data) {
+								if(data && data.id && !err) {
 									playlistId = data.id;
 									cb();
 								} else {
@@ -447,10 +454,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 			name: chrome.i18n.getMessage('myTags'),
 
 			get: function(callback) {
-				console.log('Get playlist');
-
 				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
-					if(err) { return; }
+					if(err) { return callback(err); }
 
 					Spotify.call({
 						method: 'GET',
@@ -458,7 +463,7 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 					}, function(err, data) {
 						if(err) { console.log(err); }
 
-						callback(data);
+						callback(err, data);
 					});
 				});
 			},
@@ -481,32 +486,25 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 							'public': false
 						}
 					}, function(err, data) {
-						if(err) { console.log(err); }
+						if(err) { console.log(err); return callback(err); }
 
 						Spotify.data.set({playlistId: data.id}, function() {
-							callback(data);
+							callback(null, data);
 						});
 					});
 				});
 			},
 
 			getOrCreate: function(callback) {
-				console.log('getOrCreate playlist');
-
 				var playlistName = Spotify.playlist.name;
 
 				Spotify.data.get(['userId', 'playlistId'], function(items) {
-					console.log('Got data from storage/cache: ', items);
-
 					var userId = items.userId;
 					var playlistId = items.playlistId;
 
 					if(playlistId) {
-						console.log('PlaylistId exists in storage: '+ playlistId);
 						return Spotify.playlist.get(callback);
 					}
-
-					console.log('Call findInPagedResult...');
 
 					Spotify.findInPagedResult({
 						method: 'GET',
@@ -519,8 +517,6 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 								found = playlist.id;
 							}
 						});
-
-						console.log('Found ? '+ found);
 
 						cbFind(found);
 					}, function(playlistId) {
@@ -558,7 +554,6 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 			},
 
 			searchAndAddTag: function(tag, query, shouldSave, callback) {
-				console.log('Searching for "'+ query +'"');
 				Spotify.call({
 					endpoint: '/v1/search',
 					method: 'GET',
@@ -569,11 +564,9 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 					}
 				}, function(err, data) {
 					if(err) { console.log(err); return callback(err); }
-					if(data.tracks.total === 0) { console.log('Not found.'); tag.status = 2; return callback(new Error('Not found')); }
+					if(data.tracks.total === 0) { tag.status = 2; return callback(new Error('Not found')); }
 
 					var track = data.tracks.items[0];
-
-					console.log('Found: ', track);
 
 					tag.spotifyId = track.id;
 					tag.status = 3;
@@ -700,11 +693,19 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 							callback(null, data);
 						})
 						.error(function(data, status) {
-							callback(new Error('Error calling API'));
-							console.log('Error calling API : ', options, data, status);
-
 							if(status === 401) {
-								// Relogin ?
+								Spotify.refreshToken(function(status) {
+									if(status === true) {
+										// Refresh/login successfull, retry call
+										Spotify.call(options, callback);
+									} else {
+										// Error...
+										callback(new Error('Please authorize Shazam2Spotify to access your Spotify account.'));
+									}
+								});
+							} else {
+								callback(new Error('Error calling API'));
+								console.error('Error calling API : ', options, data, status);
 							}
 						});
 				});
@@ -725,14 +726,6 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 				if(!items.expiresIn) {
 					return callback(false);
 				}
-
-				/* Dirty debuging...
-				console.log('Token time: '+ items.tokenTime);
-				console.log('Token time: '+ new Date(items.tokenTime));
-				console.log('expiresIn: '+ items.expiresIn);
-				console.log('Token time + expires: '+ new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)));
-				console.log('Current date: '+ new Date());
-				console.log('Need refresh ? ', new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)) <= new Date())*/
 
 				// Token expired, we need to get one new with the refreshToken
 				if(new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)) <= new Date()) {
@@ -784,12 +777,12 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 						});
 					} else {
 						callback(false);
-						console.log('Error getting token : ', data);
+						console.error('Error getting token : ', data);
 					}
 				})
 				.error(function(data, status) {
 					callback(false);
-					console.log('Error getting token : ', data, status);
+					console.error('Error getting token : ', data, status);
 				});
 		},
 
@@ -817,6 +810,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 								endpoint: '/v1/me',
 								method: 'GET'
 							}, function(err, data) {
+								if(err) { console.err('Error getting user infos', err); }
+								
 								Spotify.data.set({'userId': data.id}, function() {
 									callback(true);
 								});
@@ -850,19 +845,13 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 	var Tags = {
 		list: [],
 
-		genSpotifyQuery: function(track, artist) {
-			var reSpaces = new RegExp(' ', 'g');
-
-			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ artist.replace('Feat. ', '').replace(reSpaces, '+');
-		},
-
 		add: function(newTag, callback) {
 			callback = callback || function(){};
 
 			newTag.spotifyId = newTag.spotifyId || null;
 			newTag.status = newTag.status || 1; // Status : 1 = just added, 2 = not found in spotify, 3 = found & added to playlist
 
-			newTag.query = newTag.query || Tags.genSpotifyQuery(newTag.name, newTag.artist);
+			newTag.query = newTag.query || '';
 
 			var found = false;
 			for(var i in Tags.list) {

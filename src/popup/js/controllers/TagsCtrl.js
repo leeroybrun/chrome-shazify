@@ -1,6 +1,8 @@
 angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, ShazamService, SpotifyService, TagsService) {
 	$scope.updating = true;
 
+	$scope.tags = TagsService.list;
+
 	$scope.updateTags = function(callback) {
 		$scope.updating = true;
 
@@ -26,7 +28,7 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 			track: ''
 		},
 		send: function() {
-			var query = TagsService.genSpotifyQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
+			var query = SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
 
 			SpotifyService.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
 				if(error) {
@@ -71,14 +73,13 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 	var refreshTags = function() {
 		checkLogin(function(status) {
 			if(status === true) {
-				SpotifyService.playlist.get(function() {
+				SpotifyService.playlist.get(function(err) {
 					TagsService.load(function() {
-						console.log('Tags loaded');
 						$scope.tags = TagsService.list;
+
 						$scope.updateTags(function() {
-							console.log('Tags updated');
 							SpotifyService.playlist.searchAndAddTags(function() {
-								console.log('Tags added');
+								// Tags added
 							});
 						});
 					});

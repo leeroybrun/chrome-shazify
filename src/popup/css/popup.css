@@ -69,6 +69,8 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	* {
 		outline: none;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
 	}
 
 	.error-msg {
@@ -138,8 +140,8 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		position:fixed;
 		top:50px;
 		left:50%;
-		margin-left:-125px;
-		width:220px;
+		margin-left:-150px;
+		width:300px;
 		border-radius:3px;
 		-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 		box-shadow: 0 1px 2px rgba(0,0,0,0.15);
@@ -174,11 +176,15 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 	.modal input {
-		width: 202px;
+		width: 270px;
 		background-color: white;
 		border: 1px solid #cccccc;
 		padding: 6px 8px;
 		border-radius:3px;
+	}
+
+	.modal .cancel-button {
+		margin-left:10px;
 	}
 
 /* Updating */
@@ -254,7 +260,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		height:16px;
 		float:left;
 		margin-left:7px;
-		margin-top:4px;
+		margin-top:6px;
 	}
 
 	.topbar .left .iconmelon {
@@ -345,4 +351,40 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.tag .tag-artist {
 		opacity:0.8;
+	}
+
+/* Settings */
+
+	.login-status {
+		overflow:hidden;
+	}
+
+	.login-status .status {
+		padding:15px;
+		border-radius:3px;
+		border:1px solid;
+		float:left;
+		width:142px;
+		text-align:center;
+		font-size:14px;
+	}
+
+	.login-status .iconmelon {
+		margin:10px auto 5px auto;
+	}
+
+	.login-status .status+.status {
+		margin-left:15px;
+	}
+
+	.login-status .status.on {
+		color: #3c763d;
+		background-color: #dff0d8;
+		border-color: #d6e9c6;
+	}
+
+	.login-status .status.off {
+		color: #a94442;
+		background-color: #f2dede;
+		border-color: #ebccd1;
 	}
