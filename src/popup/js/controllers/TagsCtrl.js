@@ -1,5 +1,5 @@
 angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, ShazamService, SpotifyService, TagsService) {
-	$scope.updating = false;
+	$scope.updating = true;
 
 	$scope.updateTags = function(callback) {
 		$scope.updating = true;
@@ -30,7 +30,7 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 
 			SpotifyService.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
 				if(error) {
-					$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery', query);
+					$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
 				} else {
 					$scope.newSearch.error = null;
 					$scope.newSearch.tag = null;

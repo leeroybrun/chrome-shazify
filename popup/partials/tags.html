@@ -75,6 +75,7 @@
 	</div>
 	<div class="modal-overlay" ng-if="newSearch.show" ng-click="newSearch.cancel()"></div>
 	<div class="modal" ng-if="newSearch.show">
+		<p chrome-translate>trackNotFound</p>
 		<p chrome-translate>searchQueryPrompt</p>
 		<form ng-submit="newSearch.send()">
 			<p><label chrome-translate>trackField</label><br />

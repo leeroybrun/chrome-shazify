@@ -1,6 +1,6 @@
 {
   "appDesc": {
-    "message":"Exportez cos tags Shazam dans une playlist Spotify",
+    "message":"Exportez vos tags Shazam dans une playlist Spotify",
     "description":"The description of the application, displayed in the web store."
   },
   "myTags": {
@@ -23,12 +23,16 @@
     "message": "Artiste",
     "description": ""
   },
+  "trackNotFound": {
+    "message": "Oops ! Nous ne trouvons pas ce morceau sur Spotify...",
+    "description": ""
+  },
   "searchQueryPrompt": {
-  	"message": "Veuillez entrer une requête de recherche pour Spotify",
+  	"message": "Aidez-nous en entrant une nouvelle requête de recherche :",
   	"description": ""
   },
   "noTrackFoundQuery": {
-  	"message": "Aucun titre trouvé pour \"$query$\"...",
+  	"message": "Aucun morceau trouvé... veuillez modifier les champs ci-dessus et réessayer.",
   	"description": "",
     "placeholders": {
       "query": {

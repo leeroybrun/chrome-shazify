@@ -71,6 +71,14 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		outline: none;
 	}
 
+	.error-msg {
+		color: #a94442;
+		background-color: #f2dede;
+		border:1px solid #ebccd1;
+		border-radius:3px;
+		padding:6px 8px;
+	}
+
 /* Animations */
 
 	@-webkit-keyframes enterAnimation {
@@ -202,7 +210,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		width:150px;
 		height:150px;
 		position:absolute;
-		top:20px;
+		top:0;
 		left:50%;
 		margin-left:-75px;
 		text-align:center;
@@ -258,7 +266,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.tags-list {
 		overflow:hidden;
 		position:relative;
-		min-height:200px;
+		min-height:240px;
 	}
 
 	.tags-list .tag {

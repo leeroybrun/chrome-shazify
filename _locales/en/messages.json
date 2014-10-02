@@ -23,12 +23,16 @@
     "message": "Artist",
     "description": ""
   },
-  "searchQueryPrompt": {
-  	"message": "Please enter a search query for Spotify",
+  "trackNotFound": {
+  	"message": "Oops ! We cannot find this track on Spotify...",
   	"description": ""
   },
+  "searchQueryPrompt": {
+    "message": "Please help us by entering/updating the search query below.",
+    "description": ""
+  },
   "noTrackFoundQuery": {
-  	"message": "No track found for query \"$query$\"...",
+  	"message": "No track found... please change fields above and try again.",
   	"description": "",
     "placeholders": {
       "query": {
