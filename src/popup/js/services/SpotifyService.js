@@ -404,32 +404,39 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			}
 
 			chrome.identity.launchWebAuthFlow({'url': Spotify.getUrl.authorize(), 'interactive': interactive}, function(redirectUrl) {
+				console.log('redirectUrl: '+redirectUrl);
+
+				if(!redirectUrl) {
+					callback(false);
+					return console.error('Authorization failed : redirect URL empty ('+ redirectUrl +')');
+				}
+
 				var params = Helper.getUrlVars(redirectUrl);
 
-				if(!params.error && params.code) {
-					Spotify.data.set({'authCode': params.code}, function() {
-						Spotify.getAccessToken(params.code, function(status) {
-							if(!status) {
-								return callback(status);
-							}
+				if(params.error || !params.code) {
+					callback(false);
+					return console.log('Authorization has failed.', params.error);
+				}
 
-							// We get the user ID
-							Spotify.call({
-								endpoint: '/v1/me',
-								method: 'GET'
-							}, function(err, data) {
-								if(err) { console.err('Error getting user infos', err); }
-								
-								Spotify.data.set({'userId': data.id}, function() {
-									callback(true);
-								});
+				Spotify.data.set({'authCode': params.code}, function() {
+					Spotify.getAccessToken(params.code, function(status) {
+						if(!status) {
+							return callback(status);
+						}
+
+						// We get the user ID
+						Spotify.call({
+							endpoint: '/v1/me',
+							method: 'GET'
+						}, function(err, data) {
+							if(err) { console.err('Error getting user infos', err); }
+							
+							Spotify.data.set({'userId': data.id}, function() {
+								callback(true);
 							});
 						});
 					});
-				} else {
-					callback(false);
-					console.log('Authorization has failed. '+ params.error);
-				}
+				});
 			});
 		},
 

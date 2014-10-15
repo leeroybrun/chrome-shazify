@@ -796,6 +796,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 			}
 
 			chrome.identity.launchWebAuthFlow({'url': Spotify.getUrl.authorize(), 'interactive': interactive}, function(redirectUrl) {
+				console.log('redirectUrl: '+redirectUrl);
+
 				var params = Helper.getUrlVars(redirectUrl);
 
 				if(!params.error && params.code) {
