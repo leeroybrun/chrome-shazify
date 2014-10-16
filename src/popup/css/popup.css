@@ -353,7 +353,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		margin-right:10px;
 	}
 
-	.tag .tag-name {
+	.tag .tag-name, .tag .tag-artist {
 		text-overflow: ellipsis;
 
 		/* Required for text-overflow to do anything */
