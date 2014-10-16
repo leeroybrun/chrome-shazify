@@ -337,6 +337,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 
 				// Token expired, we need to get one new with the refreshToken
 				if(new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)) <= new Date()) {
+					console.log('Token expired, we need to refresh it.');
 					Spotify.refreshToken(callback);
 				} else {
 					callback(true);
@@ -345,22 +346,28 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 		},
 
 		refreshToken: function(callback) {
+			console.log('Calling refreshToken.');
 			Spotify.data.get('refreshToken', function(items) {
 				if(items.refreshToken) {
+					console.log('Our refreshToken: ', items.refreshToken);
 					Spotify.getAccessToken(items.refreshToken, function(status) {
+						console.log('Refresh token success ? ', status);
 						if(status === true) {
 							callback(true);
 						} else {
+							console.log('Error while refreshing token... open login.');
 							Spotify.openLogin(true, callback);
 						}
 					});
 				} else {
+					console.log('No refresh token stored... open login.');
 					Spotify.openLogin(true, callback);
 				}
 			});
 		},
 
 		getAccessToken: function(authCode, callback) {
+			console.log('Calling getAccessToken. AuthCode: ', authCode);
 			$http({
 				url: Spotify.getUrl.token(),
 				method: 'POST',
@@ -374,6 +381,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 				})
 			})
 				.success(function(data) {
+					console.log('GetToken returned: ', data);
 					if(data.access_token && data.expires_in && data.refresh_token) {
 						Spotify.data.set({
 							'accessToken': data.access_token,
@@ -384,13 +392,13 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 							callback(true);
 						});
 					} else {
-						callback(false);
 						console.error('Error getting token : ', data);
+						callback(false);
 					}
 				})
 				.error(function(data, status) {
-					callback(false);
 					console.error('Error getting token : ', data, status);
+					callback(false);
 				});
 		},
 
@@ -404,7 +412,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			}
 
 			chrome.identity.launchWebAuthFlow({'url': Spotify.getUrl.authorize(), 'interactive': interactive}, function(redirectUrl) {
-				console.log('redirectUrl: '+redirectUrl);
+				console.log('redirectUrl: ', redirectUrl);
 
 				if(!redirectUrl) {
 					callback(false);
@@ -412,6 +420,8 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 				}
 
 				var params = Helper.getUrlVars(redirectUrl);
+
+				console.log('AuthWebFlow returned params: ', params);
 
 				if(params.error || !params.code) {
 					callback(false);
