@@ -9,7 +9,10 @@
     "grunt-cli": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-watch": "*"
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-compress": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-clean": "*"
   },
   "license": "MIT"
 }

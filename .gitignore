@@ -2,3 +2,5 @@
 node_modules/
 popup/popup.css
 popup/popup.js
+dist/
+build/
