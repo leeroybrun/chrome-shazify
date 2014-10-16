@@ -15,7 +15,7 @@ angular.module('Shazam2Spotify').factory('Helper', function() {
 			var params = {};
 			var match;
 
-			while (match = re.exec(url)) {
+			while ((match = re.exec(url)) !== null) {
 			    params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
 			}
 
