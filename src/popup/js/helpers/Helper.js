@@ -10,17 +10,16 @@ angular.module('Shazam2Spotify').factory('Helper', function() {
 			return str.join("&");
 		},
 
-		// Thanks : http://stackoverflow.com/a/4656873/1160800
 		getUrlVars: function(url) {
-		    var vars = [], hash;
-		    var hashes = url.slice(url.indexOf('?') + 1).split('&');
-		    for(var i = 0; i < hashes.length; i++)
-		    {
-		        hash = hashes[i].split('=');
-		        vars.push(hash[0]);
-		        vars[hash[0]] = hash[1];
-		    }
-		    return vars;
+		    var re = /[\\?&]([^&#=]*)=([^&#]*)/g;
+			var params = {};
+			var match;
+
+			while (match = re.exec(url)) {
+			    params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+			}
+
+			return params;
 		},
 
 		// Thanks : https://github.com/spotify/web-api-auth-examples/blob/master/authorization_code/app.js#L24
