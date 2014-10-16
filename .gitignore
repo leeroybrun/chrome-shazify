@@ -1,2 +1,4 @@
 .DS_Store
 node_modules/
+popup/pupup.css
+popup/popup.js
