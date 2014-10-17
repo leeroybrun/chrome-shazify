@@ -236,7 +236,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			}
 		},
 
-		data: new StorageHelper('Spotify'),
+		data: new StorageHelper('Spotify', 'sync'), // New storage, synced with other Chrome installs
 
 		getUrl: {
 			redirect: function() {

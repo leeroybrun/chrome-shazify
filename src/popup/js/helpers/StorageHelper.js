@@ -1,5 +1,8 @@
 angular.module('Shazam2Spotify').factory('StorageHelper', function() {
-	var Storage = function(prefix) {
+	var Storage = function(prefix, type) {
+		type = type  || 'local';
+
+		this.type = (['local', 'sync'].indexOf(type) != -1) ? type : 'local';
 		this.prefix = prefix;
 		this.cache = {};
 	};
@@ -31,7 +34,7 @@ angular.module('Shazam2Spotify').factory('StorageHelper', function() {
 		}
 
 		// Get additional values from storage
-		chrome.storage.local.get(toGetFromStorage, function(items) {
+		chrome.storage[this.type].get(toGetFromStorage, function(items) {
 			for(var key in items) {
 				var name = key.replace(storage.prefix+'_', ''); // Retrive original name
 
@@ -50,7 +53,7 @@ angular.module('Shazam2Spotify').factory('StorageHelper', function() {
 			data[this.prefix+'_'+key] = JSON.stringify(objects[key]);
 		}
 
-		chrome.storage.local.set(data, function() {
+		chrome.storage[this.type].set(data, function() {
 			var error = null;
 			if(chrome.runtime.lastError) {
 				error = chrome.runtime.lastError;
