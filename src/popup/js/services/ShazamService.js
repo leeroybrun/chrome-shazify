@@ -100,9 +100,5 @@ angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper,
 		}
 	};
 
-	Shazam.data.get('tags', function(items) {
-		Shazam.tags = items.tags;
-	});
-
 	return Shazam;
 });
