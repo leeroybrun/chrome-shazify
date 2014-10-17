@@ -25,8 +25,8 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 								endpoint: '/v1/me',
 								method: 'GET'
 							}, function(err, data) {
-								if(err) { console.log(err); return cb(err); }
-								if(data && data.id) { console.log(data); return cb(new Error('Cannot get user ID')); }
+								if(err) { console.error(err); return cb(err); }
+								if(data && data.id) { console.error(data); return cb(new Error('Cannot get user ID')); }
 
 								userId = data.id;
 
@@ -69,7 +69,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 						method: 'GET',
 						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId
 					}, function(err, data) {
-						if(err) { console.log(err); }
+						if(err) { console.error(err); }
 
 						callback(err, data);
 					});
@@ -94,7 +94,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 							'public': false
 						}
 					}, function(err, data) {
-						if(err) { console.log(err); return callback(err); }
+						if(err) { console.error(err); return callback(err); }
 
 						Spotify.data.set({playlistId: data.id}, function() {
 							callback(null, data);
@@ -171,7 +171,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 						limit: 1
 					}
 				}, function(err, data) {
-					if(err) { console.log(err); return callback(err); }
+					if(err) { console.error(err); return callback(err); }
 					if(data.tracks.total === 0) { tag.status = 2; return callback(new Error('Not found')); }
 
 					var track = data.tracks.items[0];
@@ -261,7 +261,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 
 		findInPagedResult: function(callOptions, checkFind, callback) {
 			Spotify.call(callOptions, function(err, data) {
-				if(err) { console.log(err); }
+				if(err) { console.error(err); }
 
 				checkFind(data.items, function(found) {
 					if(found) {
@@ -346,11 +346,8 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 		},
 
 		refreshToken: function(callback) {
-			console.log('Calling refreshToken.');
 			Spotify.data.get('refreshToken', function(items) {
 				if(items.refreshToken) {
-					console.log('Our refreshToken: ', items.refreshToken);
-
 					$http({
 						url: Spotify.getUrl.token(),
 						method: 'POST',
@@ -368,7 +365,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 								if(status === true) {
 									callback(true);
 								} else {
-									console.log('Error while refreshing token... open login.');
+									console.error('Error while refreshing token... open login.');
 									Spotify.openLogin(true, callback);
 								}
 							});
@@ -385,7 +382,6 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 		},
 
 		getAccessToken: function(authCode, callback) {
-			console.log('Calling getAccessToken. AuthCode: '+ authCode);
 			$http({
 				url: Spotify.getUrl.token(),
 				method: 'POST',
@@ -408,7 +404,6 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 		},
 
 		saveAccessToken: function(data, callback) {
-			console.log('GetToken returned: ', data);
 			if(data.access_token && data.expires_in) {
 				Spotify.data.set({
 					'accessToken': data.access_token,
@@ -455,7 +450,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 
 				if(params.error || !params.code) {
 					callback(false);
-					return console.log('Authorization has failed.', params.error);
+					return console.error('Authorization has failed.', params.error);
 				}
 
 				Spotify.data.set({'authCode': params.code}, function() {
