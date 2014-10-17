@@ -2,7 +2,7 @@ angular.module('Shazam2Spotify').factory('ShazamService', function(ChromeHelper,
 	var Shazam = {
 		newTags: [],
 
-		data: new StorageHelper('Shazam', 'sync'), // New storage, synced with other Chrome installs
+		data: new StorageHelper('Shazam'),
 
 		openLogin: function() {
 			ChromeHelper.focusOrCreateTab('https://www.shazam.com/myshazam');
