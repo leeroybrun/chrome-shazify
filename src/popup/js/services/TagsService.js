@@ -33,12 +33,16 @@ angular.module('Shazam2Spotify').factory('TagsService', function(StorageHelper) 
 		},
 
 		save: function(callback) {
+			callback = callback || function(){};
+
 			Tags.data.set({'tagsList': Tags.list}, function() {
 				callback();
 			});
 		},
 		
 		load: function(callback) {
+			callback = callback || function(){};
+			
 			Tags.data.get('tagsList', function(items) {
 				Tags.list = items.tagsList || [];
 
