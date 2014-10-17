@@ -350,15 +350,33 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 			Spotify.data.get('refreshToken', function(items) {
 				if(items.refreshToken) {
 					console.log('Our refreshToken: ', items.refreshToken);
-					Spotify.getAccessToken(items.refreshToken, function(status) {
-						console.log('Refresh token success ? ', status);
-						if(status === true) {
-							callback(true);
-						} else {
-							console.log('Error while refreshing token... open login.');
-							Spotify.openLogin(true, callback);
-						}
-					});
+
+					$http({
+						url: Spotify.getUrl.token(),
+						method: 'POST',
+						headers: {
+							'Content-Type':  'application/x-www-form-urlencoded; charset=UTF-8',
+							'Authorization': 'Basic '+ window.btoa(Spotify.api.clientId+':'+Spotify.api.clientSecret)
+						},
+						data: $.param({
+							grant_type: 'refresh_token',
+							refresh_token: items.refreshToken
+						})
+					})
+						.success(function(data) {
+							Spotify.saveAccessToken(data, function(status) {
+								if(status === true) {
+									callback(true);
+								} else {
+									console.log('Error while refreshing token... open login.');
+									Spotify.openLogin(true, callback);
+								}
+							});
+						})
+						.error(function(data, status) {
+							console.error('Error getting token : ', data, status);
+							callback(false);
+						});
 				} else {
 					console.log('No refresh token stored... open login.');
 					Spotify.openLogin(true, callback);
@@ -367,7 +385,7 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 		},
 
 		getAccessToken: function(authCode, callback) {
-			console.log('Calling getAccessToken. AuthCode: ', authCode);
+			console.log('Calling getAccessToken. AuthCode: '+ authCode);
 			$http({
 				url: Spotify.getUrl.token(),
 				method: 'POST',
@@ -381,25 +399,37 @@ angular.module('Shazam2Spotify').factory('SpotifyService', function(ChromeHelper
 				})
 			})
 				.success(function(data) {
-					console.log('GetToken returned: ', data);
-					if(data.access_token && data.expires_in && data.refresh_token) {
-						Spotify.data.set({
-							'accessToken': data.access_token,
-							'expiresIn': data.expires_in,
-							'refreshToken': data.refresh_token,
-							'tokenTime': new Date().toString()
-						}, function() {
-							callback(true);
-						});
-					} else {
-						console.error('Error getting token : ', data);
-						callback(false);
-					}
+					Spotify.saveAccessToken(data, callback);
 				})
 				.error(function(data, status) {
 					console.error('Error getting token : ', data, status);
 					callback(false);
 				});
+		},
+
+		saveAccessToken: function(data, callback) {
+			console.log('GetToken returned: ', data);
+			if(data.access_token && data.expires_in) {
+				Spotify.data.set({
+					'accessToken': data.access_token,
+					'expiresIn': data.expires_in,
+					'tokenTime': new Date().toString()
+				}, function() {
+					// In case of a refresh, the API will not return a new refreshToken
+					if(!data.refresh_token) {
+						return callback(true);
+					}
+					
+					Spotify.data.set({
+						'refreshToken': data.refresh_token
+					}, function() {
+						callback(true);
+					});
+				});
+			} else {
+				console.error('Error getting token : ', data);
+				callback(false);
+			}
 		},
 
 		openLogin: function(interactive, callback) {
