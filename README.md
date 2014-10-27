@@ -1,4 +1,4 @@
-chrome-shazam2spotify
+Shazam2Spotify
 =====================
 
 Chrome extension used to export your Shazam tags to a Spotify playlist.
