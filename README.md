@@ -10,7 +10,9 @@ To install the extention, just go to the Chrome Webstore : https://chrome.google
 ## How to use
 
 It will only works if you use the Shazam app for iOS or Android AND you are logged in with Facebook in the app.
-If these conditions are met, Shazam will sync your tags with MyShazam (www.shazam.com/myshazam).
+
+If these conditions are met, Shazam will sync your tags with their MyShazam service (www.shazam.com/myshazam).
+
 This extension will then parse the MyShazam website, get your tags, and add them to a new playlist created on your Spotify account.
 
 How it works :
@@ -33,7 +35,7 @@ When you want to update your Spotify playlist with new tags, simply click on the
 grunt build
 ```
 
-### Hos to bundle
+### How to bundle
 
 ```
 grunt bundle
