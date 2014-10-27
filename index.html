@@ -11,7 +11,6 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <meta name="google-site-verification" content="fJRpEyuBRo2pFHLPcUUkTkEbJk3ZwUGEsHVucgTJMbk" />
   </head>
   <body>
     <div class="wrapper">
@@ -29,37 +28,50 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <p>Chrome extension used to export your Shazam tags to a Spotify playlist.</p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<h2>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>To install the extention, just go to the Chrome Webstore : <a href="https://chrome.google.com/webstore/detail/shazam2spotify/clhbpnpnaneankhiagfnjcegpccjkbib">https://chrome.google.com/webstore/detail/shazam2spotify/clhbpnpnaneankhiagfnjcegpccjkbib</a></p>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+
+<p>It will only works if you use the Shazam app for iOS or Android AND you are logged in with Facebook in the app.</p>
+
+<p>If these conditions are met, Shazam will sync your tags with their MyShazam service (<a href="http://www.shazam.com/myshazam">www.shazam.com/myshazam</a>).</p>
+
+<p>This extension will then parse the MyShazam website, get your tags, and add them to a new playlist created on your Spotify account.</p>
+
+<p>How it works :</p>
+
+<ol>
+<li>Install the extension</li>
+<li>Click on the new icon appeared on your Chrome toolbar</li>
+<li>You will be asked to login on MyShazam and Spotify</li>
+<li>A new playlist ("My Shazam Tags") will be created on your Spotify account</li>
+<li>Your Shazam tags will be listed and automatically added to this playlist</li>
+</ol>
+
+<p>If a Shazam tag cannot be found on Spotify, you will have the possibility to change the search query for this track.</p>
+
+<p>When you want to update your Spotify playlist with new tags, simply click on the Shazam2Spotify icon on Chrome toolbar. It will then search for new tags on Shazam and add them to Spotify.</p>
+
+<h2>
+<a name="developers" class="anchor" href="#developers"><span class="octicon octicon-link"></span></a>Developers</h2>
+
+<h3>
+<a name="how-to-build" class="anchor" href="#how-to-build"><span class="octicon octicon-link"></span></a>How to build</h3>
+
+<pre><code>grunt build
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="how-to-bundle" class="anchor" href="#how-to-bundle"><span class="octicon octicon-link"></span></a>How to bundle</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<pre><code>grunt bundle
+</code></pre>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/leeroybrun">leeroybrun</a></p>
@@ -67,6 +79,16 @@ $ git checkout gh-pages
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-23669856-4");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
