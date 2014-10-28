@@ -3,9 +3,9 @@ Shazam2Spotify
 
 Chrome extension used to export your Shazam tags to a Spotify playlist.
 
-[![ScreenShot](https://raw.github.com/leeroybrun/WebMole/chrome-shazam2spotify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
+[![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
 
-<p align="center"><img src="https://raw.github.com/leeroybrun/WebMole/chrome-shazam2spotify/master/video_screenshot.png" alt=""/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/video_screenshot.png" alt=""/></p>
 
 ## Install
 
