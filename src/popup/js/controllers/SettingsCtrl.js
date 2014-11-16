@@ -28,6 +28,11 @@ angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $lo
 		$scope.spotify.loginStatus = status;
 	});
 
+	$scope.resetAll = function() {
+		chrome.storage.local.clear();
+		chrome.storage.sync.clear();
+	};
+
 	$scope.return = function() {
 		$location.path('/');
 	};

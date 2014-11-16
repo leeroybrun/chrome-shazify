@@ -88,5 +88,13 @@
   "cancel": {
     "message": "Cancel",
     "description": ""
+  },
+  "clearData": {
+    "message": "Clear all data",
+    "description": ""
+  },
+  "clearDataText": {
+    "message": "If you have some troubles with the extension, you can clear all it's stored data here.",
+    "description": ""
   }
 }

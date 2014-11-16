@@ -88,5 +88,13 @@
   "cancel": {
     "message": "Annuler",
     "description": ""
+  },
+  "clearData": {
+    "message": "Effacer toutes les données",
+    "description": ""
+  },
+  "clearDataText": {
+    "message": "Si vous avez des problèmes avec l'extension, vous pouvez effacer toutes les données enregistrées ici.",
+    "description": ""
   }
 }
