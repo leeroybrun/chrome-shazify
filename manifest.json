@@ -19,6 +19,7 @@
     "tabs",
     "identity",
     "storage",
+    "background",
     "http://www.shazam.com/*",
     "https://www.shazam.com/*",
     "https://api.spotify.com/*",
