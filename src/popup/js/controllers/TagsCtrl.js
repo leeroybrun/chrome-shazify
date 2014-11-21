@@ -1,12 +1,12 @@
-angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, ShazamService, SpotifyService, TagsService) {
+angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, BackgroundService) {
 	$scope.updating = true;
 
-	$scope.tags = TagsService.list;
+	$scope.tags = BackgroundService.Tags.list;
 
 	$scope.updateTags = function(callback) {
 		$scope.updating = true;
 
-		ShazamService.updateTags(function(err) {
+		BackgroundService.Shazam.updateTags(function(err) {
 			$scope.updating = false;
 
 			if(err) {
@@ -28,9 +28,9 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 			track: ''
 		},
 		send: function() {
-			var query = SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
+			var query = BackgroundService.Spotify.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
 
-			SpotifyService.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
+			BackgroundService.Spotify.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
 				if(error) {
 					$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
 				} else {
@@ -55,12 +55,12 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 	};
 
 	function checkLogin(callback) {
-		ShazamService.loginStatus(function(status) {
+		BackgroundService.Shazam.loginStatus(function(status) {
 			if(status === false) {
 				return callback(false);
 			}
 
-			SpotifyService.loginStatus(function(status) {
+			BackgroundService.Spotify.loginStatus(function(status) {
 				if(status === false) {
 					return callback(false);
 				}
@@ -73,12 +73,18 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 	var refreshTags = function() {
 		checkLogin(function(status) {
 			if(status === true) {
-				SpotifyService.playlist.get(function(err) {
-					TagsService.load(function() {
-						$scope.tags = TagsService.list;
+				BackgroundService.Spotify.playlist.get(function(err) {
+					if(err) {
+						$location.path('/settings');
+						$scope.$apply();
+						return;
+					}
+
+					BackgroundService.Tags.load(function() {
+						$scope.tags = Tags.list;
 
 						$scope.updateTags(function() {
-							SpotifyService.playlist.searchAndAddTags(function() {
+							BackgroundService.Spotify.playlist.searchAndAddTags(function() {
 								// Tags added
 							});
 						});

@@ -1,31 +1,33 @@
-angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, ShazamService, SpotifyService) {
+angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, BackgroundService) {
 	$scope.shazam = {
 		loginStatus: false,
-		openLogin: ShazamService.openLogin
+		openLogin: BackgroundService.Shazam.openLogin
 	};
 
-	ShazamService.loginStatus(function(status) {
+	BackgroundService.Shazam.loginStatus(function(status) {
 		$scope.shazam.loginStatus = status;
+		$scope.$apply();
 	});
 
 	$scope.spotify = {
 		loginStatus: false,
 		openLogin: function() {
-			SpotifyService.openLogin(function(status) {
+			BackgroundService.Spotify.openLogin(function(status) {
 				$scope.spotify.loginStatus = status;
 				$scope.$apply();
 			});
 		},
 		disconnect: function() {
-			SpotifyService.disconnect(function() {
+			BackgroundService.Spotify.disconnect(function() {
 				$scope.spotify.loginStatus = false;
 				$scope.$apply();
 			});
 		}
 	};
 
-	SpotifyService.loginStatus(function(status) {
+	BackgroundService.Spotify.loginStatus(function(status) {
 		$scope.spotify.loginStatus = status;
+		$scope.$apply();
 	});
 
 	$scope.resetAll = function() {

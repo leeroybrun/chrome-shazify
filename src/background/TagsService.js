@@ -1,4 +1,4 @@
-var Tags = {
+Tags = {
 	list: [],
 
 	add: function(newTag, callback) {

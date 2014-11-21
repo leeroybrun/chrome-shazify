@@ -18,16 +18,18 @@ var Spotify = {
 			async.waterfall([
 				function checkUserId(cb) {
 					if(!userId) {
-						console.log('No userId stored, need to get one.');
+						Logger.info('[Spotify] No userId stored, need to fetch it.');
 
 						Spotify.call({
 							endpoint: '/v1/me',
 							method: 'GET'
 						}, function(err, data) {
-							if(err) { console.error(err); return cb(err); }
-							if(data && data.id) { console.error(data); return cb(new Error('Cannot get user ID')); }
+							if(err) { Logger.error(err); return cb(err); }
+							if(data && data.id) { Logger.error(data); return cb(new Error('Cannot get user ID')); }
 
 							userId = data.id;
+
+							Logger.info('[Spotify] User ID : '+ userId);
 
 							cb();
 						});
@@ -38,12 +40,14 @@ var Spotify = {
 
 				function checkPlaylistId(cb) {
 					if(!playlistId) {
-						console.log('No playlistId stored, need to getOrCreate.');
+						Logger.info('[Spotify] No playlistId stored, need to get or create one.');
 						Spotify.playlist.getOrCreate(function(err, data) {
 							if(data && data.id && !err) {
 								playlistId = data.id;
+								Logger.info('[Spotify] PlaylistId: '+ playlistId);
 								cb();
 							} else {
+								Logger.error(err);
 								cb(new Error('Error creating/getting playlist'));
 							}
 						});
@@ -68,7 +72,7 @@ var Spotify = {
 					method: 'GET',
 					endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId
 				}, function(err, data) {
-					if(err) { console.error(err); }
+					if(err) { Logger.error(err); }
 
 					callback(err, data);
 				});
@@ -81,7 +85,7 @@ var Spotify = {
 				var playlistId = items.playlistId;
 
 				if(playlistId) {
-					console.log('PlaylistId exists in storage: '+ playlistId);
+					Logger.info('[Spotify] PlaylistId exists in storage: '+ playlistId);
 					return Spotify.playlist.get(callback);
 				}
 
@@ -93,7 +97,7 @@ var Spotify = {
 						'public': false
 					}
 				}, function(err, data) {
-					if(err) { console.error(err); return callback(err); }
+					if(err) { Logger.error(err); return callback(err); }
 
 					Spotify.data.set({playlistId: data.id}, function() {
 						callback(null, data);
@@ -141,7 +145,9 @@ var Spotify = {
 		searchAndAddTags: function(callback) {
 			var tracksAdded = [];
 
-			async.eachSeries(TagsService.list, function(tag, cbi) {
+			Logger.info('[Spotify] Searching tags on Spotify.');
+
+			async.eachSeries(Tags.list, function(tag, cbi) {
 				if(tag.status > 1) { return cbi(); }
 
 				tag.query = tag.query || 'track:'+ tag.name.replace(' ', '+') +' artist:'+ tag.artist.replace(' ', '+');
@@ -153,7 +159,7 @@ var Spotify = {
 					cbi();
 				});
 			}, function(err) {
-				TagsService.save();
+				Tags.save();
 				Spotify.playlist.addTracks(tracksAdded, function(err) {
 					callback(err);
 				});
@@ -161,6 +167,8 @@ var Spotify = {
 		},
 
 		searchAndAddTag: function(tag, query, shouldSave, callback) {
+			Logger.info('[Spotify] Searching for tag "'+ query +'"...');
+
 			Spotify.call({
 				endpoint: '/v1/search',
 				method: 'GET',
@@ -170,16 +178,18 @@ var Spotify = {
 					limit: 1
 				}
 			}, function(err, data) {
-				if(err) { console.error(err); return callback(err); }
-				if(data.tracks.total === 0) { tag.status = 2; return callback(new Error('Not found')); }
+				if(err) { Logger.info('[Spotify] Error searching tag "'+ query +'".'); Logger.error(err); return callback(err); }
+				if(data.tracks.total === 0) { tag.status = 2; Logger.info('[Spotify] Tag "'+ query +'" not found.'); return callback(new Error('Not found')); }
 
 				var track = data.tracks.items[0];
 
 				tag.spotifyId = track.id;
 				tag.status = 3;
 
+				Logger.info('[Spotify] Tag found "'+ track.id +'".');
+
 				if(shouldSave) {
-					TagsService.save();
+					Tags.save();
 					Spotify.playlist.addTracks([tag.spotifyId], function(err) {
 						callback(err);
 					});
@@ -214,20 +224,30 @@ var Spotify = {
 						if(alreadyInPlaylist.indexOf(id) == -1) {
 							tracksPaths.push('spotify:track:'+ id);
 						} else {
-							console.log('Track '+ id +' already in playlist.');
+							Logger.info('[Spotify] Track '+ id +' already in playlist.');
 						}
 					});
 
 					// We don't have any tracks to add anymore
 					if(tracksPaths.length === 0) {
+						Logger.info('[Spotify] No tags to add to playlist.');
 						return callback();
 					}
+
+					Logger.info('[Spotify] Saving tracks to playlist '+playlistId+' :');
+					Logger.info(tracksPaths);
 
 					Spotify.call({
 						method: 'POST',
 						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
 						data: tracksPaths
 					}, function(err, data) {
+						if(err) { 
+							Logger.info('[Spotify] Error saving tracks to playlist.'); 
+							Logger.error(err);
+						} else {
+							Logger.info('[Spotify] Tracks saved to playlist.');
+						}
 						callback(err);
 					});
 				});
@@ -260,7 +280,7 @@ var Spotify = {
 
 	findInPagedResult: function(callOptions, checkFind, callback) {
 		Spotify.call(callOptions, function(err, data) {
-			if(err) { console.error(err); }
+			if(err) { Logger.error(err); }
 
 			checkFind(data.items, function(found) {
 				if(found) {
@@ -289,18 +309,23 @@ var Spotify = {
 			Spotify.data.get('accessToken', function(items) {
 				var accessToken = items.accessToken;
 
-				$http({
-					url: (options.endpoint && !options.url) ? 'https://api.spotify.com'+ options.endpoint : options.url,
+				var url = (options.endpoint && !options.url) ? 'https://api.spotify.com'+ options.endpoint : options.url;
+
+				if(options.params) {
+					url += '?'+ $.param(options.params);
+				}
+
+				$.ajax({
+					url: url,
 					method: options.method,
 					data: (options.data) ? options.data : null,
-					params: (options.params) ? options.params : null,
 					headers: { 'Authorization': 'Bearer '+ accessToken }
 				})
-					.success(function(data) {
+					.done(function(data) {
 						callback(null, data);
 					})
-					.error(function(data, status) {
-						if(status === 401) {
+					.fail(function(jqXHR, textStatus) {
+						if(jqXHR.status === 401) {
 							Spotify.refreshToken(function(status) {
 								if(status === true) {
 									// Refresh/login successfull, retry call
@@ -312,7 +337,7 @@ var Spotify = {
 							});
 						} else {
 							callback(new Error('Error calling API'));
-							console.error('Error calling API : ', options, data, status);
+							Logger.error('[Spotify] Error calling API : '+textStatus+'.');
 						}
 					});
 			});
@@ -336,7 +361,7 @@ var Spotify = {
 
 			// Token expired, we need to get one new with the refreshToken
 			if(new Date(new Date(items.tokenTime).getTime()+(items.expiresIn*1000)) <= new Date()) {
-				console.log('Token expired, we need to refresh it.');
+				Logger.info('[Spotify] Token expired, we need to refresh it.');
 				Spotify.refreshToken(callback);
 			} else {
 				callback(true);
@@ -345,59 +370,65 @@ var Spotify = {
 	},
 
 	refreshToken: function(callback) {
+		Logger.info('[Spotify] Refreshing token...');
+
 		Spotify.data.get('refreshToken', function(items) {
 			if(items.refreshToken) {
-				$http({
+				$.ajax({
 					url: Spotify.getUrl.token(),
 					method: 'POST',
 					headers: {
 						'Content-Type':  'application/x-www-form-urlencoded; charset=UTF-8',
 						'Authorization': 'Basic '+ window.btoa(Spotify.api.clientId+':'+Spotify.api.clientSecret)
 					},
-					data: $.param({
+					data: {
 						grant_type: 'refresh_token',
 						refresh_token: items.refreshToken
-					})
+					}
 				})
-					.success(function(data) {
+					.done(function(data) {
 						Spotify.saveAccessToken(data, function(status) {
 							if(status === true) {
+								Logger.info('[Spotify] Token refresh successful.');
 								callback(true);
 							} else {
-								console.error('Error while refreshing token... open login.');
+								Logger.error('[Spotify] Error while refreshing token... open login.');
 								Spotify.openLogin(true, callback);
 							}
 						});
 					})
-					.error(function(data, status) {
-						console.error('Error getting token : ', data, status);
+					.fail(function(jqXHR, textStatus) {
+						Logger.error('[Spotify] Error getting token : '+textStatus+'.');
 						callback(false);
 					});
 			} else {
-				console.log('No refresh token stored... open login.');
+				Logger.info('[Spotify] No refresh token stored... open login.');
 				Spotify.openLogin(true, callback);
 			}
 		});
 	},
 
 	getAccessToken: function(authCode, callback) {
-		$http({
+		Logger.info('[Spotify] Getting access token...');
+
+		$.ajax({
 			url: Spotify.getUrl.token(),
 			method: 'POST',
 			headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-			data: $.param({
+			data: {
 				grant_type: 'authorization_code',
 				code: authCode,
 				redirect_uri: Spotify.getUrl.redirect(),
 				client_id: Spotify.api.clientId,
 				client_secret: Spotify.api.clientSecret
-			})
+			}
 		})
-			.success(function(data) {
+			.done(function(data) {
+				Logger.info('[Spotify] Access token successfuly fetched.');
 				Spotify.saveAccessToken(data, callback);
 			})
-			.error(function(data, status) {
-				console.error('Error getting token : ', data, status);
+			.fail(function(jqXHR, textStatus) {
+				Logger.error('[Spotify] Error getting access token : '+ textStatus +'.');
 				callback(false);
 			});
 	},
@@ -421,7 +452,8 @@ var Spotify = {
 				});
 			});
 		} else {
-			console.error('Error getting token : ', data);
+			Logger.error(data);
+			Logger.error('[Spotify] Error getting access token.');
 			callback(false);
 		}
 	},
@@ -435,21 +467,20 @@ var Spotify = {
 			callback = function(){};
 		}
 
-		chrome.identity.launchWebAuthFlow({'url': Spotify.getUrl.authorize(), 'interactive': interactive}, function(redirectUrl) {
-			console.log('redirectUrl: ', redirectUrl);
+		Logger.info('[Spotify] Starting login process...');
 
+		chrome.identity.launchWebAuthFlow({'url': Spotify.getUrl.authorize(), 'interactive': interactive}, function(redirectUrl) {
 			if(!redirectUrl) {
 				callback(false);
-				return console.error('Authorization failed : redirect URL empty ('+ redirectUrl +')');
+				return Logger.error('[Spotify] Authorization failed : redirect URL empty.');
 			}
 
 			var params = Helper.getUrlVars(redirectUrl);
 
-			console.log('AuthWebFlow returned params: ', params);
-
 			if(params.error || !params.code) {
-				callback(false);
-				return console.error('Authorization has failed.', params.error);
+				Logger.error('[Spotify] Authorization has failed.');
+				Logger.error(params.error);
+				return callback(false);
 			}
 
 			Spotify.data.set({'authCode': params.code}, function() {
@@ -463,7 +494,7 @@ var Spotify = {
 						endpoint: '/v1/me',
 						method: 'GET'
 					}, function(err, data) {
-						if(err) { console.err('Error getting user infos', err); }
+						if(err) { Logger.error(err); Logger.error('[Spotify] Error getting user infos.'); }
 						
 						Spotify.data.set({'userId': data.id}, function() {
 							callback(true);

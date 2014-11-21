@@ -1,53 +1,30 @@
 var Logger = {
 	logs: [],
 
-	add: function(newTag, callback) {
-		callback = callback || function(){};
+	info: function(data) {
+		console.log(data);
+		Logger.add('info', data);
+	},
 
-		newTag.spotifyId = newTag.spotifyId || null;
-		newTag.status = newTag.status || 1; // Status : 1 = just added, 2 = not found in spotify, 3 = found & added to playlist
+	error: function(data) {
+		console.error(data);
+		Logger.add('error', data);
+	},
 
-		newTag.query = newTag.query || '';
+	add: function(type, data) {
+		var log = {
+			type: type,
+			date: new Date(),
+			message: ''
+		};
 
-		var found = false;
-		for(var i in Tags.list) {
-			if(Tags.list[i].id == newTag.id) {
-				found = true;
-				$.extend(Tags.list[i], newTag); // Update existing tag
-				break;
-			}
+		if(data instanceof Error) {
+			log.message = data.toString();
+			log.stack = data.stack;
+		} else {
+			log.message = data;
 		}
 
-		if(!found) {
-			Tags.list.push(newTag);
-		}
-
-		Tags.list.sort(function (a, b) {
-			if (a.date > b.date) { return -1; }
-			if (a.date < b.date) { return 1; }
-			return 0;
-		});
-
-		callback();
-	},
-
-	save: function(callback) {
-		callback = callback || function(){};
-
-		Logger.data.set({'logsList': Logger.logs}, function() {
-			callback();
-		});
-	},
-	
-	load: function(callback) {
-		callback = callback || function(){};
-		
-		Logger.data.get('logsList', function(items) {
-			Logger.logs = items.logsList || [];
-
-			callback();
-		});
-	},
-
-	data: new StorageHelper('Logs')
+		Logger.logs.push(log);
+	}
 };
