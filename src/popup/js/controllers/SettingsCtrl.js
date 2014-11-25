@@ -30,9 +30,22 @@ angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $lo
 		$scope.$apply();
 	});
 
-	$scope.resetAll = function() {
-		chrome.storage.local.clear();
-		chrome.storage.sync.clear();
+	// Advanced settings
+	$scope.advanced = {
+		hidden: true,
+
+		toggle: function() {
+			$scope.advanced.hidden = !$scope.advanced.hidden;
+		},
+
+		clearExtData: function() {
+			chrome.storage.local.clear();
+			chrome.storage.sync.clear();
+		},
+
+		exportLogs: function() {
+			// TODO: export the logs
+		}
 	};
 
 	$scope.return = function() {

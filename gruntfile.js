@@ -25,15 +25,14 @@ module.exports = function(grunt) {
 					],
 					'background/background.js': [
 						'src/background/lib/*.js',
-						'src/background/header.js',
+						'src/background/background.js',
 						'src/background/Helper.js',
 						'src/background/ChromeHelper.js',
 						'src/background/LoggerService.js',
 						'src/background/StorageHelper.js',
 						'src/background/TagsService.js',
-						'src/background/ShazamService.js',
 						'src/background/SpotifyService.js',
-						'src/background/background.js',
+						'src/background/ShazamService.js',
 					]
 				}
 			}
@@ -84,6 +83,7 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, src: ['_locales/**'], dest: 'build/'},
                     {expand: true, src: ['icons/**'], dest: 'build/'},
+                    {expand: true, src: ['background/**'], dest: 'build/'},
                     {expand: true, src: ['popup/**'], dest: 'build/'},
                     {expand: true, src: ['LICENCE'], dest: 'build/'},
                     {expand: true, src: ['manifest.json'], dest: 'build/'},

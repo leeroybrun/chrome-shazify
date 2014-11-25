@@ -89,12 +89,24 @@
     "message": "Annuler",
     "description": ""
   },
+  "advancedSettings": {
+    "message": "Paramètres avancés",
+    "description": ""
+  },
   "clearData": {
     "message": "Effacer toutes les données",
     "description": ""
   },
   "clearDataText": {
     "message": "Si vous avez des problèmes avec l'extension, vous pouvez effacer toutes les données enregistrées ici.",
+    "description": ""
+  },
+  "exportLogs": {
+    "message": "Exporter les logs",
+    "description": ""
+  },
+  "exportLogsText": {
+    "message": "Afin de déceler et débugger d'éventuels problèmes, vous pouvez exporter les logs de l'application.",
     "description": ""
   }
 }

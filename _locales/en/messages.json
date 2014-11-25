@@ -89,12 +89,24 @@
     "message": "Cancel",
     "description": ""
   },
+  "advancedSettings": {
+    "message": "Advanced settings",
+    "description": ""
+  },
   "clearData": {
     "message": "Clear all data",
     "description": ""
   },
   "clearDataText": {
     "message": "If you have some troubles with the extension, you can clear all it's stored data here.",
+    "description": ""
+  },
+  "exportLogs": {
+    "message": "Export logs",
+    "description": ""
+  },
+  "exportLogsText": {
+    "message": "If you need to debug the extension, you can export the logs here.",
     "description": ""
   }
 }

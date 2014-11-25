@@ -38,6 +38,8 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 					$scope.newSearch.tag = null;
 					$scope.newSearch.show = false;
 				}
+
+				$scope.$apply();
 			});
 		},
 		cancel: function() {
@@ -81,11 +83,12 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 					}
 
 					BackgroundService.Tags.load(function() {
-						$scope.tags = Tags.list;
+						$scope.tags = BackgroundService.Tags.list;
+						$scope.$apply();
 
 						$scope.updateTags(function() {
 							BackgroundService.Spotify.playlist.searchAndAddTags(function() {
-								// Tags added
+								$scope.$apply();
 							});
 						});
 					});

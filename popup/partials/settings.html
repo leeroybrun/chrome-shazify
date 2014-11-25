@@ -75,8 +75,14 @@
 		</div>
 	</div>
 	<div class="advanced-settings">
-		<h3 chrome-translate>clearData</h3>
-		<p chrome-translate>clearDataText</p>
-		<p><a class="pure-button pure-button-warning" ng-click="resetAll()" chrome-translate>clearData</a></p>
+		<a ng-click="advanced.toggle()" class="clickable"><span chrome-translate>advancedSettings</span> <span class="arrow" ng-if="advanced.hidden">&#x25BC;</span><span class="arrow" ng-if="!advanced.hidden">&#x25B2;</span></a>
+		<div class="advanced-content" ng-if="!advanced.hidden">
+			<h3 chrome-translate>clearData</h3>
+			<p chrome-translate>clearDataText</p>
+			<p><a class="pure-button pure-button-warning" ng-click="advanced.clearExtData()" chrome-translate>clearData</a></p>
+			<h3 chrome-translate>exportLogs</h3>
+			<p chrome-translate>exportLogsText</p>
+			<p><a class="pure-button" ng-click="advanced.exportLogs()" chrome-translate>exportLogs</a></p>
+		</div>
 	</div>
 </div>

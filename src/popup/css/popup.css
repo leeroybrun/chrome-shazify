@@ -401,3 +401,9 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		background-color: #f2dede;
 		border-color: #ebccd1;
 	}
+
+	.advanced-settings {
+		margin-top: 20px;
+		padding-top: 20px;
+		border-top: 1px solid #e0e0e0;
+	}

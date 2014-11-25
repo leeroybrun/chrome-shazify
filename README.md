@@ -8,9 +8,11 @@ Chrome extension used to export your Shazam tags to a Spotify playlist.
 
 ### Roadmap for 0.2.0
 
-- Add all the processing part to the background script. The popup will only remain here for displaying tags and calling background functions.
-- Add logging to background script, and the possibility to export/view logs
-- Add and advanced section (hidden at start, need to click it to display) for settings with : extension cache clear, spotify playlist removal, all clear (= the two) -> always close the extension when done
+- Add possibility to export/view logs
+- Split tags addition to playlist if > 100
+- New UI (black/dark, same as Spotify)
+- Add intro explaining how it works
+- New screenshots and video for new UI and intro
 
 ## How it works
 
