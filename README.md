@@ -8,7 +8,6 @@ Chrome extension used to export your Shazam tags to a Spotify playlist.
 
 ### Roadmap for 0.2.0
 
-- Add possibility to export/view logs
 - Split tags addition to playlist if > 100
 - New UI (black/dark, same as Spotify)
 - Add intro explaining how it works

@@ -225,8 +225,10 @@
 					}, function(data, cbFind) {
 						// Check if tracks are already in playlist
 						data.forEach(function(track) {
-							if(tracksIds.indexOf(track.track.id) != -1) {
-								alreadyInPlaylist.push(track.track.id);
+							var index = tracksIds.indexOf(track.track.id);
+							if(index != -1) {
+								tracksIds.splice(index, 1);
+								Logger.info('[Spotify] Track '+ track.track.id +' already in playlist.');
 							}
 						});
 
@@ -234,37 +236,65 @@
 					}, function() {
 						var tracksPaths = [];
 						tracksIds.forEach(function(id) {
-							if(alreadyInPlaylist.indexOf(id) == -1) {
-								tracksPaths.push('spotify:track:'+ id);
-							} else {
-								Logger.info('[Spotify] Track '+ id +' already in playlist.');
-							}
+							tracksPaths.push('spotify:track:'+ id);
 						});
 
-						// We don't have any tracks to add anymore
-						if(tracksPaths.length === 0) {
-							Logger.info('[Spotify] No tags to add to playlist.');
-							return callback();
-						}
+						Spotify.playlist.addTracksPaths(tracksPaths, callback);						
+					});
+				});
+			},
 
-						Logger.info('[Spotify] Saving tracks to playlist '+playlistId+' :');
-						Logger.info(tracksPaths);
+			addTracksPaths: function(tracksPaths, callback) {
+				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
+					if(err) { return callback(err); }
 
-						// TODO: if tracks > 100, we need to split it in multiple requests
+					Logger.info('[Spotify] Going to add tracks to playlist '+ playlistId +'...');
 
-						Spotify.call({
-							method: 'POST',
-							endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
-							data: JSON.stringify({ uris: tracksPaths })
-						}, function(err, data) {
-							if(err) { 
-								Logger.info('[Spotify] Error saving tracks to playlist.'); 
-								Logger.error(err);
+					// Spotify API allow only to add 100 tracks per requests, so we need to split it
+					var remainingTracks  = tracksPaths.slice(99);
+					if(remainingTracks.length > 0) {
+						Logger.info('[Spotify] Due to Spotify limitation (max 100 tracks addition/request), we will split this request.');
+						Logger.info('[Spotify] Starting to add the first 100 tracks.');
+						Logger.info('[Spotify] Then, we will have '+ remainingTracks.length +' tracks remaining to add.');
+
+						tracksPaths = tracksPaths.slice(0, 99);
+					}
+					
+					// We don't have any tracks to add anymore
+					if(tracksPaths.length === 0) {
+						Logger.info('[Spotify] No tags to add to playlist.');
+						return callback();
+					}
+
+					Logger.info('[Spotify] Saving tracks to playlist '+playlistId+' :');
+					Logger.info(tracksPaths);
+
+					Spotify.call({
+						method: 'POST',
+						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
+						data: JSON.stringify({ uris: tracksPaths })
+					}, function(err, data) {
+						if(err) { 
+							Logger.info('[Spotify] Error saving tracks to playlist.'); 
+							Logger.error(err);
+
+							return callback(err);
+						} else {
+							Logger.info('[Spotify] Tracks saved to playlist.');
+
+							// If we have remaining tracks to add, call the method again
+							if(remainingTracks.length > 0) {
+								Logger.info('[Spotify] Waiting 2s before processing the next batch of tracks.');
+								
+								setTimeout(function() {
+									Spotify.playlist.addTracksPaths(remainingTracks, callback);
+								}, 2000);
 							} else {
-								Logger.info('[Spotify] Tracks saved to playlist.');
+								// All tracks added, finished !
+								Logger.info('[Spotify] All done !');
+								callback();
 							}
-							callback(err);
-						});
+						}						
 					});
 				});
 			}
@@ -485,9 +515,16 @@
 			Logger.info('[Spotify] Starting login process...');
 
 			chrome.identity.launchWebAuthFlow({'url': Spotify.getUrl.authorize(), 'interactive': interactive}, function(redirectUrl) {
+				if(chrome.runtime.lastError) {
+					Logger.error('[Spotify] Authorization has failed : '+ chrome.runtime.lastError.message);
+
+					return callback(false);
+				}
+
 				if(!redirectUrl) {
-					callback(false);
-					return Logger.error('[Spotify] Authorization failed : redirect URL empty.');
+					Logger.error('[Spotify] Authorization failed : redirect URL empty.');
+
+					return callback(false);
 				}
 
 				var params = Helper.getUrlVars(redirectUrl);
@@ -495,6 +532,7 @@
 				if(params.error || !params.code) {
 					Logger.error('[Spotify] Authorization has failed.');
 					Logger.error(params.error);
+					
 					return callback(false);
 				}
 

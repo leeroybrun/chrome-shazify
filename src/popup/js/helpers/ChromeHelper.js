@@ -19,6 +19,42 @@ angular.module('Shazam2Spotify').factory('ChromeHelper', function() {
 		      chrome.tabs.create({"url":url, "selected":true});
 		    }
 		  });
+		},
+
+		exportData: function(fileName, data) {
+			window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+
+			window.requestFileSystem(window.TEMPORARY, 5*1024*1024, function(fs) {
+				fs.root.getFile(fileName, {create: true}, function(fileEntry) { // test.bin is filename
+				    fileEntry.createWriter(function(fileWriter) {
+				    	
+				        var truncated = false;
+				        fileWriter.onwriteend = function(err) {
+				        	if (!truncated) {
+					            truncated = true;
+					            this.truncate(this.position);
+					            return;
+					        }
+
+				            ChromeHelper.focusOrCreateTab(fileEntry.toURL());
+				        };
+
+				        fileWriter.onerror = function(error) {
+					        console.error(error);
+					    };
+
+				        var blob = new Blob([data], {type: 'text/plain'});
+				        fileWriter.write(blob);
+
+				    }, function(error) {
+						console.error(error);
+					});
+				}, function(error) {
+					console.error(error);
+				});
+			}, function(error) {
+				console.error(error);
+			});
 		}
 	};
 

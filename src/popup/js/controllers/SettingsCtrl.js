@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, BackgroundService) {
+angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, ChromeHelper, BackgroundService) {
 	$scope.shazam = {
 		loginStatus: false,
 		openLogin: BackgroundService.Shazam.openLogin
@@ -38,13 +38,18 @@ angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $lo
 			$scope.advanced.hidden = !$scope.advanced.hidden;
 		},
 
-		clearExtData: function() {
+		clearExtData: function() {			
 			chrome.storage.local.clear();
 			chrome.storage.sync.clear();
+			
+			BackgroundService.Logger.info('[settings] Extension data cleaned.');
+
+			window.close();
 		},
 
 		exportLogs: function() {
-			// TODO: export the logs
+			var logsData = BackgroundService.Logger.exportLogs();
+			ChromeHelper.exportData('logs.txt', logsData);
 		}
 	};
 
