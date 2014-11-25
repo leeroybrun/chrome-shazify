@@ -9,6 +9,10 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate'])
 				templateUrl: 'partials/settings.html',
 				controller: 'SettingsCtrl'
 			})
+			.when('/intro', {
+				templateUrl: 'partials/intro.html',
+				controller: 'IntroCtrl'
+			})
 			.otherwise({redirectTo: '/'});
 
 		// Load SVG icons (dirty, should not use jQuery...)
