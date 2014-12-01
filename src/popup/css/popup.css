@@ -63,8 +63,20 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	  height: 100%;
 	}
 
+	.iconmelon.red {
+		fill:#A94442;
+	}
+
+	.iconmelon.green {
+		fill:#3c763d;
+	}
+
 	.clickable {
 		cursor:pointer;
+	}
+
+	.ng-hide {
+		display:none !important;
 	}
 
 	* {
@@ -246,7 +258,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.topbar h2 {
 		margin-top:0;
 		margin-bottom:0;
-		font-weight:normal;
+		font-weight:300;
 		font-size:20px;
 	}
 
@@ -266,6 +278,124 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.topbar .left .iconmelon {
 		margin-left:0;
 		margin-right:10px;
+	}
+
+/* Intro */
+
+	.intro-steps {
+		width:300px;
+		height:460px;
+	}
+
+	.intro-steps .step {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		overflow: hidden;
+		-webkit-backface-visibility: hidden;
+		-moz-backface-visibility: hidden;
+		backface-visibility: hidden;
+		-webkit-transform: translate3d(0, 0, 0);
+		-moz-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+		-webkit-transform-style: preserve-3d;
+		-moz-transform-style: preserve-3d;
+		transform-style: preserve-3d;
+	}
+
+	.intro-steps .step.ng-enter {
+		-webkit-animation: moveFromRight .6s ease both;
+		animation: moveFromRight .6s ease both;
+	}
+
+	.intro-steps .step.ng-leave {
+		-webkit-animation: moveToLeft .6s ease both;
+		animation: moveToLeft .6s ease both;
+	}
+
+	@-webkit-keyframes moveToLeft {
+		from { }
+		to { -webkit-transform: translateX(-100%); }
+	}
+	@keyframes moveToLeft {
+		from { }
+		to { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+	}
+
+	@-webkit-keyframes moveFromLeft {
+		from { -webkit-transform: translateX(-100%); }
+	}
+	@keyframes moveFromLeft {
+		from { -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+	}
+
+	@-webkit-keyframes moveToRight { 
+		from { }
+		to { -webkit-transform: translateX(100%); }
+	}
+	@keyframes moveToRight { 
+		from { }
+		to { -webkit-transform: translateX(100%); transform: translateX(100%); }
+	}
+
+	@-webkit-keyframes moveFromRight {
+		from { -webkit-transform: translateX(100%); }
+	}
+	@keyframes moveFromRight {
+		from { -webkit-transform: translateX(100%); transform: translateX(100%); }
+	}
+
+	.intro-steps .step .content {
+		width:220px;
+		margin:50px auto;
+		text-align:center;
+		font-size:18px;
+		font-weight:300;
+		line-height:1.3;
+	}
+
+	.intro-steps .step h1 {
+		font-size:30px;
+		font-weight:300;
+		margin-top:0;
+	}
+
+	.intro-steps .step .pure-button {
+		font-size:16px;
+	}
+
+	.intro-steps .step h1 .iconmelon {
+		display:inline-block;
+	}
+
+	.intro-steps .step p {
+		margin:22px 0;
+	}
+
+	.intro-steps .step .buttons {
+		position:absolute;
+		bottom:40px;
+		left:50%;
+		margin-left:-150px;
+		width:300px;
+	}
+
+	.intro-steps .step .buttons p {
+		margin:15px 0;
+	}
+
+	.intro-steps .step .buttons a {
+		display:inline-block;
+	}
+
+	.intro-steps .step .buttons a.hidden {
+		visibility:hidden;
+	}
+
+	.intro-steps .step .buttons a:last-child {
+		margin-bottom:0;
 	}
 
 /* Tags */
@@ -364,6 +494,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.tag .tag-artist {
 		opacity:0.8;
+		font-weight:normal;
 	}
 
 /* Settings */
@@ -380,6 +511,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		width:142px;
 		text-align:center;
 		font-size:14px;
+		font-weight:300;
 	}
 
 	.login-status .iconmelon {

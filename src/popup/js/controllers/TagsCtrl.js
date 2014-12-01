@@ -1,23 +1,7 @@
-angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, BackgroundService) {
+angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage) {
 	$scope.updating = true;
 
 	$scope.tags = BackgroundService.Tags.list;
-
-	$scope.updateTags = function(callback) {
-		$scope.updating = true;
-
-		BackgroundService.Shazam.updateTags(function(err) {
-			$scope.updating = false;
-
-			if(err) {
-				$scope.$apply(function() {
-					$location.path('/settings');
-				});
-			}
-			
-			callback();
-		});
-	};
 
 	$scope.newSearch = {
 		show: false,
@@ -73,6 +57,8 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 	}
 
 	var refreshTags = function() {
+		$scope.updating = true;
+		
 		checkLogin(function(status) {
 			if(status === true) {
 				BackgroundService.Spotify.playlist.get(function(err) {
@@ -84,10 +70,30 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 
 					BackgroundService.Tags.load(function() {
 						$scope.tags = BackgroundService.Tags.list;
-						$scope.$apply();
 
-						$scope.updateTags(function() {
+						// Dirty is dirty... refresh scope every 2s to view tags updating progress
+						var interval = $interval(function() {
+							$scope.$apply();
+						}, 2000);
+
+						BackgroundService.Shazam.updateTags(function(err) {
+							$interval.cancel(interval);
+							$scope.$apply();
+
+							if(err) {
+								return $scope.$apply(function() {
+									$location.path('/settings');
+								});
+							}
+
+							// Dirty is dirty... refresh scope every 2s to view tags updating progress
+							interval = $interval(function() {
+								$scope.$apply();
+							}, 2000);
+
 							BackgroundService.Spotify.playlist.searchAndAddTags(function() {
+								$scope.updating = false;
+								$interval.cancel(interval);
 								$scope.$apply();
 							});
 						});
@@ -102,5 +108,13 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 
 	$scope.refreshTags = refreshTags;
 
-	refreshTags();
+	// Do we need to show intro ?
+	PopupStorage.get('introStep', function(items) {
+		if(items.introStep && items.introStep >= 4) {
+			refreshTags();
+		} else {
+			$location.path('/intro');
+			$scope.$apply();
+		}
+	});
 });

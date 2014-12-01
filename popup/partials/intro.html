@@ -1,0 +1,53 @@
+<div class="intro-steps" ng-switch="currentStep">
+	<div class="step step-1" ng-switch-when="1">
+		<div class="content">
+			<h1 chrome-translate>introWelcome</h1>
+			<div chrome-translate>introWelcomeText</div>
+			<div class="buttons">
+				<p><a class="pure-button next" ng-click="goTo(2, shazam.loginStatus)" chrome-translate>introStart</a></p>
+			</div>
+		</div>
+	</div>
+	<div class="step step-2" ng-switch-when="2">
+		<div class="content">
+			<h1>
+				<span class="iconmelon" ng-class="{red: !spotify.loginStatus, green: spotify.loginStatus}">
+					<svg viewBox="0 0 32 32">
+						<g filter="">
+							<use xlink:href="#unlock" ng-if="!shazam.loginStatus"></use>
+							<use xlink:href="#lock" ng-if="shazam.loginStatus"></use>
+						</g>
+					</svg>
+				</span>
+				Shazam
+			</h1>
+			<div chrome-translate ng-if="!shazam.loginStatus">introShazamLoggedOutText</div>
+			<div chrome-translate ng-if="shazam.loginStatus">introShazamLoggedInText</div>
+			<div class="buttons">
+				<p ng-if="!shazam.loginStatus"><a class="pure-button pure-button-primary next" ng-click="shazam.openLogin()" chrome-translate>introOpenShazamLogin</a></p>
+				<p ng-if="shazam.loginStatus"><a class="pure-button next" ng-click="goTo(3)" chrome-translate>introNext</a></p>
+			</div>
+		</div>
+	</div>
+	<div class="step step-3" ng-switch-when="3">
+		<div class="content">
+			<h1>
+				<span class="iconmelon" ng-class="{red: !spotify.loginStatus, green: spotify.loginStatus}">
+					<svg viewBox="0 0 32 32">
+						<g filter="">
+							<use xlink:href="#unlock" ng-if="!spotify.loginStatus"></use>
+							<use xlink:href="#lock" ng-if="spotify.loginStatus"></use>
+						</g>
+					</svg>
+				</span>
+				Spotify
+			</h1>
+			<div chrome-translate ng-if="!spotify.loginStatus">introSpotifyLoggedOutText</div>
+			<div chrome-translate ng-if="spotify.loginStatus">introSpotifyLoggedInText</div>
+			<div class="buttons">
+				<p ng-if="!spotify.loginStatus"><a class="pure-button pure-button-primary" ng-click="spotify.openLogin()" chrome-translate>introOpenSpotifyLogin</a></p>
+				<p ng-if="spotify.loginStatus"><a class="pure-button next" ng-click="goToTags()" chrome-translate>introEnd</a></p>
+			</div>
+		</div>
+	</div>
+</div>

@@ -129,10 +129,10 @@
 					Spotify.call({
 						method: 'POST',
 						endpoint: '/v1/users/'+ userId +'/playlists',
-						data: {
+						data: JSON.stringify({
 							'name': Spotify.playlist.name,
 							'public': false
-						}
+						})
 					}, function(err, data) {
 						if(err) { Logger.error(err); return callback(err); }
 

@@ -6,13 +6,6 @@ Chrome extension used to export your Shazam tags to a Spotify playlist.
 [![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
 ```
 
-### Roadmap for 0.2.0
-
-- Split tags addition to playlist if > 100
-- New UI (black/dark, same as Spotify)
-- Add intro explaining how it works
-- New screenshots and video for new UI and intro
-
 ## How it works
 
 <p align="center"><a href="https://www.youtube.com/watch?v=Zi1VRJqEI0Q"><img src="https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/video_screenshot.png" alt=""/></a></p>
@@ -53,3 +46,18 @@ grunt build
 
 ```
 grunt bundle
+
+
+### Disclaimer
+
+Some parts of the code are really messy. This should be cleaned in the next version (0.3.0).
+
+### Roadmap for 0.2.0
+
+- Show info about new version and how to report bugs, when the ext has been updated
+
+### Roadmap for 0.3.0
+
+- Clear code
+    - Spotify service
+    - $scope.$apply everywhere because of data comming from background page. Should create Angular services for each background service and put $apply calls in it ?

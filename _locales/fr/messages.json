@@ -3,6 +3,52 @@
     "message":"Exportez vos tags Shazam dans une playlist Spotify",
     "description":"The description of the application, displayed in the web store."
   },
+
+  "introWelcome": {
+    "message": "Bienvenue",
+    "description": ""
+  },
+  "introWelcomeText": {
+    "message": "<p>D’ici quelques secondes, vos tags Shazam seront synchronisés vers Spotify.</p><p>Pour commencer, nous devons connecter les différents services.</p>",
+    "description": ""
+  },
+  "introStart": {
+    "message": "Commencer >",
+    "description": ""
+  },
+  "introNext": {
+    "message": "Continuer >",
+    "description": ""
+  },
+  "introShazamLoggedOutText": {
+    "message": "<p>Commencons par nous connecter à Shazam.</p><p>Ouvrez la page de connexion et cliquez sur le bouton « Connexion ».</p><p>Une fois connecté, ouvrez à nouveau Shazam2Spotify.</p>",
+    "description": ""
+  },
+  "introShazamLoggedInText": {
+    "message": "<p>Félicitations !</p><p>Vous êtes bien connecté<br />à Shazam.</p><p>Passons maintenant à la suite...</p>",
+    "description": ""
+  },
+  "introOpenShazamLogin": {
+    "message": "Ouvrir la page de connexion",
+    "description": ""
+  },
+  "introSpotifyLoggedOutText": {
+    "message": "<p>Pour terminer, vous devez nous autoriser à créer et gérer une playlist Spotify.</p><p>Cliquez sur le bouton ci-dessous, puis suivez les instructions affichées.</p>",
+    "description": ""
+  },
+  "introSpotifyLoggedInText": {
+    "message": "<p>Nous sommes prêts à synchroniser vos tags Shazam dans Spotify.</p><p>La première synchronisation va maintenant s’effectuer.</p><p>Il vous suffira ensuite d’ouvrir à nouveau l’extension pour les<br />mettre à jour.</p>",
+    "description": ""
+  },
+  "introOpenSpotifyLogin": {
+    "message": "Autoriser l’application",
+    "description": ""
+  },
+  "introEnd": {
+    "message": "Lancer la synchronisation >",
+    "description": ""
+  },
+
   "myTags": {
   	"message": "Mes tags Shazam",
   	"description": ""

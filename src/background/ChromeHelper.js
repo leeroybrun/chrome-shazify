@@ -19,6 +19,12 @@
 		      chrome.tabs.create({"url":url, "selected":true});
 		    }
 		  });
+		},
+
+		clearStorage: function() {
+			chrome.storage.local.clear();
+			chrome.storage.sync.clear();
+			chrome.runtime.reload();
 		}
 	};
 
