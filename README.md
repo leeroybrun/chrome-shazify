@@ -4,7 +4,6 @@ Shazam2Spotify
 Chrome extension used to export your Shazam tags to a Spotify playlist.
 
 [![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
-```
 
 ## How it works
 
@@ -46,7 +45,7 @@ grunt build
 
 ```
 grunt bundle
-
+```
 
 ### Disclaimer
 
