@@ -1,5 +1,7 @@
-angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage) {
+angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService) {
 	$scope.updating = true;
+
+	$scope.login = LoginService;
 
 	$scope.tags = BackgroundService.Tags.list;
 
@@ -41,12 +43,12 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 	};
 
 	function checkLogin(callback) {
-		BackgroundService.Shazam.loginStatus(function(status) {
+		LoginService.shazam.loginStatus(function(status) {
 			if(status === false) {
 				return callback(false);
 			}
 
-			BackgroundService.Spotify.loginStatus(function(status) {
+			LoginService.spotify.loginStatus(function(status) {
 				if(status === false) {
 					return callback(false);
 				}

@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').controller('IntroCtrl', function($scope, $location, PopupStorage, BackgroundService) {
+angular.module('Shazam2Spotify').controller('IntroCtrl', function($scope, $location, PopupStorage, BackgroundService, LoginService) {
 	$scope.currentStep = 1;
 
 	$scope.goTo = function(step) {
@@ -31,28 +31,5 @@ angular.module('Shazam2Spotify').controller('IntroCtrl', function($scope, $locat
 		}
 	});
 
-	$scope.shazam = {
-		loginStatus: false,
-		openLogin: BackgroundService.Shazam.openLogin
-	};
-
-	BackgroundService.Shazam.loginStatus(function(status) {
-		$scope.shazam.loginStatus = status;
-		$scope.$apply();
-	});
-
-	$scope.spotify = {
-		loginStatus: false,
-		openLogin: function() {
-			BackgroundService.Spotify.openLogin(function(status) {
-				$scope.spotify.loginStatus = status;
-				$scope.$apply();
-			});
-		}
-	};
-
-	BackgroundService.Spotify.loginStatus(function(status) {
-		$scope.spotify.loginStatus = status;
-		$scope.$apply();
-	});
+	$scope.login = LoginService;
 });

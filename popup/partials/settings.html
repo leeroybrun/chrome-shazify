@@ -1,5 +1,5 @@
 <div class="topbar">
-	<a class="pure-button right" ng-click="return()" ng-if="spotify.loginStatus && shazam.loginStatus" chrome-translate>backToTags</a>
+	<a class="pure-button right" ng-click="return()" ng-if="login.spotify.status && login.shazam.status" chrome-translate>backToTags</a>
 	<div class="left">
 		<a class="iconmelon" href="#/">
 			<svg viewBox="0 0 32 32">
@@ -14,64 +14,46 @@
 <div class="settings">
 	<h3 chrome-translate>loginStatus</h3>
 	<div class="login-status">
-		<div class="status on" ng-if="shazam.loginStatus">
+		<div class="status" ng-class="{on: login.shazam.status, off: !login.shazam.status}">
 			<span>Shazam</span>
-			<div class="iconmelon" href="#/">
+			<div class="iconmelon">
 				<svg viewBox="0 0 32 32">
 					<g filter="">
-						<use xlink:href="#lock"></use>
+						<use xlink:href="#lock" ng-if="login.shazam.status"></use>
+						<use xlink:href="#unlock" ng-if="!login.shazam.status"></use>
 					</g>
 				</svg>
 			</div>
 		</div>
-		<div class="status off" ng-if="!shazam.loginStatus">
-			<span>Shazam</span>
-			<div class="iconmelon" href="#/">
-				<svg viewBox="0 0 32 32">
-					<g filter="">
-						<use xlink:href="#unlock"></use>
-					</g>
-				</svg>
-			</div>
-		</div>
-		<div class="status on" ng-if="spotify.loginStatus">
+		<div class="status" ng-class="{on: login.spotify.status, off: !login.spotify.status}">
 			<span>Spotify</span>
-			<div class="iconmelon" href="#/">
+			<div class="iconmelon">
 				<svg viewBox="0 0 32 32">
 					<g filter="">
-						<use xlink:href="#lock"></use>
-					</g>
-				</svg>
-			</div>
-		</div>
-		<div class="status off" ng-if="!spotify.loginStatus">
-			<span>Spotify</span>
-			<div class="iconmelon" href="#/">
-				<svg viewBox="0 0 32 32">
-					<g filter="">
-						<use xlink:href="#unlock"></use>
+						<use xlink:href="#lock" ng-if="login.spotify.status"></use>
+						<use xlink:href="#unlock" ng-if="!login.spotify.status"></use>
 					</g>
 				</svg>
 			</div>
 		</div>
 	</div>
 	<div class="shazam-login">
-		<div class="login-shazam pending" ng-if="!shazam.loginStatus">
+		<div class="login-shazam pending" ng-if="!login.shazam.status">
 			<h3>Shazam</h3>
 			<p chrome-translate>promptShazamLogin</p>
 
-			<p><a class="pure-button pure-button-primary" ng-click="shazam.openLogin()" chrome-translate>openShazamLogin</a></p>
+			<p><a class="pure-button pure-button-primary" ng-click="login.shazam.openLogin()" chrome-translate>openShazamLogin</a></p>
 		</div>
 	</div>
 	<div class="spotify-login">
 		<h3>Spotify</h3>
-		<div class="login-spotify pending" ng-if="!spotify.loginStatus">
+		<div class="login-spotify pending" ng-if="!login.spotify.status">
 			<p chrome-translate>promptSpotifyLogin</p>
 
-			<p><a class="pure-button pure-button-primary" ng-click="spotify.openLogin()" chrome-translate>authSpotify</a></p>
+			<p><a class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" chrome-translate>authSpotify</a></p>
 		</div>
-		<div class="login-spotify success" ng-if="spotify.loginStatus">
-			<p><a class="pure-button button-warning" ng-click="spotify.disconnect()" chrome-translate>logout</a></p>
+		<div class="login-spotify success" ng-if="login.spotify.status">
+			<p><a class="pure-button button-warning" ng-click="login.spotify.disconnect()" chrome-translate>logout</a></p>
 		</div>
 	</div>
 	<div class="advanced-settings">
