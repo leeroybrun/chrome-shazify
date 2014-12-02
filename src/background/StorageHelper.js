@@ -65,5 +65,9 @@
 		});
 	};
 
+	StorageHelper.prototype.clearCache = function() {
+		this.cache = {};
+	};
+
 	window.s2s.StorageHelper = StorageHelper;
 })(window.s2s.Logger);

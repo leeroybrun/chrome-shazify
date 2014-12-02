@@ -39,11 +39,12 @@ angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $lo
 		},
 
 		clearExtData: function() {
-			BackgroundService.ChromeHelper.clearStorage();
-			
-			BackgroundService.Logger.info('[settings] Extension data cleaned.');
+			BackgroundService.Logger.info('[core] Cleaning extension\'s popup data.');
 
-			window.close();
+			chrome.storage.local.clear();
+			chrome.storage.sync.clear();
+			
+			chrome.extension.sendMessage({greeting: 'clearStorage'});
 		},
 
 		exportLogs: function() {
