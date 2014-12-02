@@ -53,9 +53,11 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 
 ### Roadmap for 0.2.0
 
-- Prevent relaunching tags updating when we sync, close and open again
+- Check if LoginService is working as expected
+- Create TagService in Angular side
+    - Prevent relaunching tags updating when we sync, close and open again
 - Add analytics
-- When "Export logs", close perviously opened log or reload ?
+- When "Export logs", close perviously opened log tab or reload ?
 - Show info about new version and how to report bugs, when the ext has been updated
 
 ### Roadmap for 0.3.0
