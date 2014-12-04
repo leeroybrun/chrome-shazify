@@ -8,7 +8,7 @@ $(document).ready(function() {
 		s2s.Logger.info('[init] '+ s2s.Tags.list.length +' tags loaded.');
 	});
 
-	s2s.Icon.load();
+	s2s.CanvasIcon.load();
 
 	s2s.updating = false;
 
@@ -21,13 +21,13 @@ $(document).ready(function() {
 		s2s.Logger.info('[core] Updating tags...');
 
 		s2s.updating = true;
-		s2s.Icon.startRotation();
+		s2s.CanvasIcon.startRotation();
 
 		s2s.Spotify.playlist.get(function(err) {
 			if(err) {
 				s2s.Logger.info('[core] Error getting playlist. Tags update aborted.');
 				s2s.updating = false;
-				s2s.Icon.stopRotation();
+				s2s.CanvasIcon.stopRotation();
 				return callback(err);
 			}
 
@@ -38,7 +38,7 @@ $(document).ready(function() {
 				if(err) {
 					s2s.Logger.info('[core] Error fetching Shazam tags. Tags update aborted.');
 					s2s.updating = false;
-				s2s.Icon.stopRotation();
+					s2s.CanvasIcon.stopRotation();
 					return callback(err);
 				}
 
@@ -49,8 +49,8 @@ $(document).ready(function() {
 					s2s.Logger.info('[core] All done ! Tags updated.');
 
 					s2s.updating = false;
-					s2s.Icon.stopRotation();
-					
+					s2s.CanvasIcon.stopRotation();
+
 					callback();
 				});
 			});

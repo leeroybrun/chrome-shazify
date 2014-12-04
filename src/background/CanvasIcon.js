@@ -1,5 +1,5 @@
 (function(){
-	var Icon = {
+	var CanvasIcon = {
 		load: function() {
 			var icon = this;
 
@@ -35,11 +35,11 @@
 		startRotation: function() {
 			if(!this.loaded) {
 				if(!this.img) {
-					Icon.load();
+					CanvasIcon.load();
 				}
 
 				setTimeout(function() {
-					Icon.startRotation();
+					CanvasIcon.startRotation();
 				}, 2000);
 
 				return;
@@ -74,5 +74,5 @@
 		}
 	};
 
-	window.s2s.Icon = Icon;
+	window.s2s.CanvasIcon = CanvasIcon;
 })();

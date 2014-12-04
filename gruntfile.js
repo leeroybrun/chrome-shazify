@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 						'src/background/background.js',
 						'src/background/Helper.js',
 						'src/background/ChromeHelper.js',
-						'src/background/Icon.js',
+						'src/background/CanvasIcon.js',
 						'src/background/LoggerService.js',
 						'src/background/StorageHelper.js',
 						'src/background/TagsService.js',
