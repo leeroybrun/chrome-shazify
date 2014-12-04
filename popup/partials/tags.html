@@ -1,13 +1,13 @@
 <div class="topbar">
 	<div class="right">
-		<a class="iconmelon clickable" ng-click="refreshTags()" ng-if="!updating">
+		<a class="iconmelon clickable" ng-click="refreshTags()" ng-if="updating() === false">
 			<svg viewBox="0 0 32 32">
 				<g filter="">
 					<use xlink:href="#rotate"></use>
 				</g>
 			</svg>
 		</a>
-		<a class="iconmelon" ng-if="updating">
+		<a class="iconmelon" ng-if="updating() === true">
 			<svg viewBox="0 0 32 32">
 				<g filter="">
 					<use xlink:href="#rotate"></use>
@@ -26,7 +26,7 @@
 	<h2 chrome-translate>myTags</h2>
 </div>
 <div class="tags-list">
-	<div class="updating" ng-if="updating">
+	<div class="updating" ng-if="updating() === true">
 		<div class="content">
 			<div class="iconmelon">
 				<svg viewBox="0 0 32 32">
@@ -49,7 +49,7 @@
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
-	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags">
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags()">
 		<div class="tag-status">
 			<div class="success" ng-if="tag.status == 3">
 				<div class="iconmelon">

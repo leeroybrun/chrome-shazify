@@ -1,9 +1,8 @@
-angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService) {
-	$scope.updating = true;
-
+angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService) {
 	$scope.login = LoginService;
 
-	$scope.tags = BackgroundService.Tags.list;
+	$scope.updating = function() { return TagsService.updating(); };
+	$scope.tags = function() { return TagsService.list(); };
 
 	$scope.newSearch = {
 		show: false,
@@ -42,69 +41,14 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 		$scope.newSearch.show = true;
 	};
 
-	function checkLogin(callback) {
-		LoginService.shazam.loginStatus(function(status) {
-			if(status === false) {
-				return callback(false);
-			}
-
-			LoginService.spotify.loginStatus(function(status) {
-				if(status === false) {
-					return callback(false);
-				}
-
-				callback(true);
-			});
-		});
-	}
-
 	var refreshTags = function() {
-		$scope.updating = true;
-		
-		checkLogin(function(status) {
-			if(status === true) {
-				BackgroundService.Spotify.playlist.get(function(err) {
-					if(err) {
-						$location.path('/settings');
-						$scope.$apply();
-						return;
-					}
-
-					BackgroundService.Tags.load(function() {
-						$scope.tags = BackgroundService.Tags.list;
-
-						// Dirty is dirty... refresh scope every 2s to view tags updating progress
-						var interval = $interval(function() {
-							$scope.$apply();
-						}, 2000);
-
-						BackgroundService.Shazam.updateTags(function(err) {
-							$interval.cancel(interval);
-							$scope.$apply();
-
-							if(err) {
-								return $scope.$apply(function() {
-									$location.path('/settings');
-								});
-							}
-
-							// Dirty is dirty... refresh scope every 2s to view tags updating progress
-							interval = $interval(function() {
-								$scope.$apply();
-							}, 2000);
-
-							BackgroundService.Spotify.playlist.searchAndAddTags(function() {
-								$scope.updating = false;
-								$interval.cancel(interval);
-								$scope.$apply();
-							});
-						});
-					});
-				});
-			} else {
-				$location.path('/settings');
-				$scope.$apply();
+		TagsService.updateTags(function(err) {
+			if(err) {
+				return $location.path('/settings');
 			}
+
+			// Tags updated !
+			console.log('Tags updated !');
 		});
 	};
 

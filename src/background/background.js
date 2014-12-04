@@ -8,6 +8,48 @@ $(document).ready(function() {
 		s2s.Logger.info('[init] '+ s2s.Tags.list.length +' tags loaded.');
 	});
 
+	s2s.updating = false;
+
+	s2s.updateTags = function(callback) {
+		if(s2s.updating) {
+			s2s.Logger.info('[core] Tags update already in progress.');
+			return callback('update_already_in_progress');
+		}
+
+		s2s.Logger.info('[core] Updating tags...');
+
+		s2s.updating = true;
+
+		s2s.Spotify.playlist.get(function(err) {
+			if(err) {
+				s2s.Logger.info('[core] Error getting playlist. Tags update aborted.');
+				s2s.updating = false;
+				return callback(err);
+			}
+
+			s2s.Logger.info('[core] Spotify playlist got.');
+			s2s.Logger.info('[core] Fetching last tags from Shazam.');
+
+			s2s.Shazam.updateTags(function(err) {
+				if(err) {
+					s2s.Logger.info('[core] Error fetching Shazam tags. Tags update aborted.');
+					s2s.updating = false;
+					return callback(err);
+				}
+
+				s2s.Logger.info('[core] Tags updated from Shazam.');
+				s2s.Logger.info('[core] Now updating Spotify playlist.');
+
+				s2s.Spotify.playlist.searchAndAddTags(function() {
+					s2s.Logger.info('[core] All done ! Tags updated.');
+
+					s2s.updating = false;
+					callback();
+				});
+			});
+		});
+	};
+
 	// When we receive a "clearStorage" message, we need to close popup and then clear storage
 	chrome.extension.onMessage.addListener(function(request,sender,sendResponse)
 	{

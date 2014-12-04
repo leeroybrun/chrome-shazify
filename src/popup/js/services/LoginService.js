@@ -26,7 +26,7 @@ angular.module('Shazam2Spotify').factory('LoginService', function(BackgroundServ
 				callback = callback || function(){};
 
 				// Do we have checked login status <= 5 min ago ?
-				if((new Date()).getTime() <= (lastCheck + 5 * 60 * 1000)) {
+				if((new Date()).getTime() <= (LoginService.shazam.lastCheck + 5 * 60 * 1000)) {
 					return callback(LoginService.shazam.status);
 				}
 

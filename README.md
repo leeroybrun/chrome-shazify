@@ -55,7 +55,9 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 
 - Check if LoginService is working as expected
 - Create TagService in Angular side
-    - Prevent relaunching tags updating when we sync, close and open again
+    - Prevent relaunching tags updating when we sync, close and open again -> should be OK
+    - Find a way to have the tags updating since first sync start in UI
+	- When tags update in progress, change icon (rotating ? canvas ? https://developer.chrome.com/extensions/browserAction)
 - Add analytics
 - When "Export logs", close perviously opened log tab or reload ?
 - Show info about new version and how to report bugs, when the ext has been updated
