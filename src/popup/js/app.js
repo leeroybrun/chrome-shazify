@@ -24,4 +24,8 @@ angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate', 'angulartics', 'angula
 				$("body").prepend(data);
 			}
 		});
+
+		addEventListener('unload', function (event) {
+		    chrome.extension.getBackgroundPage().s2s.Logger.info('[core] Popup closed.');
+		}, true);
 	}]);
