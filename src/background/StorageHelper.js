@@ -42,12 +42,15 @@
 			try {
 				callback(data);
 			} catch(e) {
+				Logger.error('An error occured in storage.get callback:');
 				Logger.error(e);
 			}
 		});
 	};
 
 	StorageHelper.prototype.set = function(objects, callback) {
+		callback = callback || function(){};
+
 		var data = {};
 		for(var key in objects) {
 			this.cache[key] = objects[key];
@@ -61,7 +64,12 @@
 				console.error('An error occured during storage set: ', error);
 			}
 
-			callback(error);
+			try {
+				callback(error);
+			} catch(e) {
+				Logger.error('An error occured in storage.set callback:');
+				Logger.error(e);
+			}
 		});
 	};
 
