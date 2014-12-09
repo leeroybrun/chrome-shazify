@@ -56,7 +56,6 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 - Create TagService in Angular side
     - Try tags updating refresh (interval) on Windows
 - Add analytics
-- When "Export logs", close perviously opened log tab or reload ?
 - Show info about new version and how to report bugs, when the ext has been updated
 
 ### Roadmap for 0.3.0
