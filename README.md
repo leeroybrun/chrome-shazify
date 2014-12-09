@@ -56,6 +56,14 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 - Create TagService in Angular side
     - Try tags updating refresh (interval) on Windows
 - Add analytics
+	- Add custom events
+		- Intro
+		- Refresh
+		- Export logs
+		- Clean data
+		- Logout/login in settings
+- Intro
+	- When clicking on Spotify auth button, show loader
 - Show info about new version and how to report bugs, when the ext has been updated
 
 ### Roadmap for 0.3.0
