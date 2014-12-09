@@ -1,15 +1,25 @@
-angular.module('Shazam2Spotify').factory('TagsService', function($timeout, BackgroundService, LoginService) {
+angular.module('Shazam2Spotify').factory('TagsService', function($timeout, $interval, BackgroundService, LoginService) {
 	// Tags list : http://stackoverflow.com/a/18569690/1160800
 
 	var TagsService = {
-		list: function() { return BackgroundService.Tags.list; },
+		list: BackgroundService.Tags.list,
+		updateListInterval: null,
 		updating: function() { return BackgroundService.updating; },
 		updateTags: function(callback) {
-			if(TagsService.updating()) {
-				/*$timeout(function() {
-					TagsService.updateTags(callback);
-				}, 2000);*/
+			// We define an interval to update the list while tags' updating is in progress
+			if(TagsService.updateListInterval === null) {
+				TagsService.updateListInterval = $interval(function() {
+					// The intervall will automatically trigger a scope update, so we don't need to redefine the list
+					//TagsService.list = BackgroundService.Tags.list;
 
+					if(TagsService.updating() === false) {
+						$interval.cancel(TagsService.updateListInterval);
+						TagsService.updateListInterval = null;
+					}
+				}, 2000);
+			}
+
+			if(TagsService.updating()) {
 				return;
 			}
 
@@ -19,7 +29,7 @@ angular.module('Shazam2Spotify').factory('TagsService', function($timeout, Backg
 				}
 
 				BackgroundService.updateTags(function(err) {
-					if(err && err == 'update_already_in_progress') {
+					if(err && err == 'already_in_progress') {
 						err = null;
 					}
 

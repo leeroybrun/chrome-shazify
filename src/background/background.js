@@ -15,7 +15,7 @@ $(document).ready(function() {
 	s2s.updateTags = function(callback) {
 		if(s2s.updating) {
 			s2s.Logger.info('[core] Tags update already in progress.');
-			return callback('update_already_in_progress');
+			return callback('already_in_progress');
 		}
 
 		s2s.Logger.info('[core] Updating tags...');

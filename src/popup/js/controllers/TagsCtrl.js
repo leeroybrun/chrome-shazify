@@ -2,7 +2,7 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 	$scope.login = LoginService;
 
 	$scope.updating = function() { return TagsService.updating(); };
-	$scope.tags = function() { return TagsService.list(); };
+	$scope.tags = function() { return TagsService.list; };
 
 	$scope.newSearch = {
 		show: false,
