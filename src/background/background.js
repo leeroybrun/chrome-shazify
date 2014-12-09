@@ -90,6 +90,7 @@ $(document).ready(function() {
 	        s2s.Tags.data.clearCache();
 	        s2s.Shazam.data.clearCache();
 	        s2s.Spotify.data.clearCache();
+	        s2s.CanvasIcon.stopRotation();
 	    }
 	});	
 });
