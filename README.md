@@ -55,6 +55,7 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 
 - Create TagService in Angular side
     - Try tags updating refresh (interval) on Windows
+    - Move individual tag search to TagsService
 - Add analytics
 	- Add custom events
 		- Intro
