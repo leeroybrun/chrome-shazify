@@ -13,18 +13,14 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 			track: ''
 		},
 		send: function() {
-			var query = BackgroundService.Spotify.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
-
-			BackgroundService.Spotify.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
-				if(error) {
+			TagsService.searchTag($scope.newSearch.query.track, $scope.newSearch.query.artist, $scope.newSearch.tag, function(err) {
+				if(err) {
 					$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
 				} else {
 					$scope.newSearch.error = null;
 					$scope.newSearch.tag = null;
 					$scope.newSearch.show = false;
 				}
-
-				$scope.$apply();
 			});
 		},
 		cancel: function() {

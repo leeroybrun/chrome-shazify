@@ -38,6 +38,14 @@ angular.module('Shazam2Spotify').factory('TagsService', function($timeout, $inte
 					}, 0);
 				});
 			});
+		},
+		
+		searchTag: function(trackName, artist, tag, callback) {
+			BackgroundService.searchTag(trackName, artist, tag, function(error) {
+				$timeout(function() {
+					callback(error);
+				}, 0);
+			});
 		}
 	};
 	

@@ -57,6 +57,18 @@ $(document).ready(function() {
 		});
 	};
 
+	s2s.searchTag = function(trackName, artist, tag, callback) {
+		var query = s2s.Spotify.genQuery(trackName, artist);
+
+		s2s.Spotify.playlist.searchAndAddTag(tag, query, true, function(error) {
+			if(error) {
+				callback(true);
+			} else {
+				callback();
+			}
+		});
+	};
+
 	// When we receive a "clearStorage" message, we need to close popup and then clear storage
 	chrome.extension.onMessage.addListener(function(request,sender,sendResponse)
 	{
