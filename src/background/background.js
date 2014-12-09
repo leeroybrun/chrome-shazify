@@ -70,7 +70,7 @@ $(document).ready(function() {
 
 	        s2s.ChromeHelper.clearStorage();
 
-	        // Reload background script
+	        // Reload background script - disabled for now, it crash Chrome on Windows
 	        //window.location.reload();
 
 	        // Clear cached data from background script
