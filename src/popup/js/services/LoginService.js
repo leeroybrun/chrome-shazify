@@ -42,10 +42,14 @@ angular.module('Shazam2Spotify').factory('LoginService', function(BackgroundServ
 
 		spotify: {
 			status: false,
+			loginOpened: false,
 
 			openLogin: function() {
+				LoginService.spotify.loginOpened = true;
+
 				BackgroundService.Spotify.openLogin(function(status) {
 					$timeout(function() {
+						LoginService.spotify.loginOpened = false;
 						LoginService.spotify.status = status;
 					}, 0);
 				});

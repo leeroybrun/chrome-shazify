@@ -45,7 +45,7 @@
 			<div chrome-translate ng-if="!login.spotify.status">introSpotifyLoggedOutText</div>
 			<div chrome-translate ng-if="login.spotify.status">introSpotifyLoggedInText</div>
 			<div class="buttons">
-				<p ng-if="!login.spotify.status"><a class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" chrome-translate>introOpenSpotifyLogin</a></p>
+				<p ng-if="!login.spotify.status"><button class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" ng-disabled="login.spotify.loginOpened" chrome-translate>introOpenSpotifyLogin</button></p>
 				<p ng-if="login.spotify.status"><a class="pure-button next" ng-click="goToTags()" chrome-translate>introEnd</a></p>
 			</div>
 		</div>
