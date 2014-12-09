@@ -54,7 +54,6 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 ### Roadmap for 0.2.0
 
 - Create TagService in Angular side
-    - Prevent relaunching tags updating when we sync, close and open again -> should be OK
     - Try tags updating refresh (interval) on Windows
 - Add analytics
 - When "Export logs", close perviously opened log tab or reload ?
