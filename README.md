@@ -64,7 +64,6 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 		- Logout/login in settings
 - Intro
 	- When clicking on Spotify auth button, show loader
-	- Error in response to storage.set: TypeError: undefined is not a function
 - Find better alternative to Helvetica Neue (for Windows)
 - Show info about new version and how to report bugs, when the ext has been updated
 
