@@ -92,5 +92,25 @@ $(document).ready(function() {
 	        s2s.Spotify.data.clearCache();
 	        s2s.CanvasIcon.stopRotation();
 	    }
-	});	
+	});
+
+	// Check for install/update
+	chrome.runtime.onInstalled.addListener(function(details){
+	    if(details.reason == 'install') {
+	        s2s.Logger.info('[core] Extension installed.');
+	    } else if(details.reason == 'update') {
+	        var thisVersion = chrome.runtime.getManifest().version;
+	        s2s.Logger.info('[core] Extension updated from '+ details.previousVersion +' to '+ thisVersion +'.');
+	        
+	        // Only open update page for major versions
+	        var majorUpdates = ['0.2.0'];
+	        if(majorUpdates.indexOf(thisVersion) != -1) {
+	        	var supportedLocales = ['en', 'fr'];
+	        	var locale = chrome.i18n.getMessage('@@ui_locale');
+	        	locale = (supportedLocales.indexOf(locale) != -1) ? locale : supportedLocales[0];
+
+	        	chrome.tabs.create({'url': chrome.extension.getURL('static/update-'+ thisVersion +'-'+ locale +'.html'), 'selected': true});
+	        }
+	    }
+	});
 });
