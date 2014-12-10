@@ -61,7 +61,7 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 		- Clean data
 		- Logout/login in settings
 - Intro
-	- When clicking on Spotify auth button, show loader
+	- When clicking on Spotify auth button, show loader (http://spiffygif.com/)
 - Show info about new version and how to report bugs, when the ext has been updated
 
 ### Roadmap for 0.3.0
