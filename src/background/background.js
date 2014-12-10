@@ -95,7 +95,7 @@ $(document).ready(function() {
 	});
 
 	// Check for install/update
-	chrome.runtime.onInstalled.addListener(function(details){
+	chrome.runtime.onInstalled.addListener(function(details) {
 	    if(details.reason == 'install') {
 	        s2s.Logger.info('[core] Extension installed.');
 	    } else if(details.reason == 'update') {
