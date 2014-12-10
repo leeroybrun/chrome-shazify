@@ -258,8 +258,8 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.topbar h2 {
 		margin-top:0;
 		margin-bottom:0;
-		font-weight:300;
-		font-size:20px;
+		font-weight:400;
+		font-size:18px;
 	}
 
 	.topbar .right {
@@ -499,6 +499,10 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 /* Settings */
+
+	.settings h3 {
+		font-weight:500;
+	}
 
 	.login-status {
 		overflow:hidden;
