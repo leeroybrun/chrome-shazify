@@ -47,16 +47,9 @@ grunt build
 grunt bundle
 ```
 
-### Disclaimer
-
-Some parts of the code are really messy. This should be cleaned in the next version (0.3.0).
-
 ### Roadmap for 0.2.0
 
-- Add analytics
-	- Try
 - Show info about new version and how to report bugs, when the ext has been updated
-- Replace "export" by "sync" in all extention texts
 
 ### Roadmap for 0.3.0
 
