@@ -4,7 +4,7 @@
 			<h1 chrome-translate>introWelcome</h1>
 			<div chrome-translate>introWelcomeText</div>
 			<div class="buttons">
-				<p><a class="pure-button next" ng-click="goTo(2)" chrome-translate>introStart</a></p>
+				<p><a class="pure-button next" ng-click="goTo(2)" chrome-translate analytics-on analytics-event="Start" analytics-category="Intro">introStart</a></p>
 			</div>
 		</div>
 	</div>
@@ -24,8 +24,8 @@
 			<div chrome-translate ng-if="!login.shazam.status">introShazamLoggedOutText</div>
 			<div chrome-translate ng-if="login.shazam.status">introShazamLoggedInText</div>
 			<div class="buttons">
-				<p ng-if="!login.shazam.status"><a class="pure-button pure-button-primary next" ng-click="login.shazam.openLogin()" chrome-translate>introOpenShazamLogin</a></p>
-				<p ng-if="login.shazam.status"><a class="pure-button next" ng-click="goTo(3)" chrome-translate>introNext</a></p>
+				<p ng-if="!login.shazam.status"><a class="pure-button pure-button-primary next" ng-click="login.shazam.openLogin()" chrome-translate analytics-on analytics-event="Open Shazam login" analytics-category="Intro">introOpenShazamLogin</a></p>
+				<p ng-if="login.shazam.status"><a class="pure-button next" ng-click="goTo(3)" chrome-translate analytics-on analytics-event="Go to Spotify slide" analytics-category="Intro">introNext</a></p>
 			</div>
 		</div>
 	</div>
@@ -45,8 +45,8 @@
 			<div chrome-translate ng-if="!login.spotify.status">introSpotifyLoggedOutText</div>
 			<div chrome-translate ng-if="login.spotify.status">introSpotifyLoggedInText</div>
 			<div class="buttons">
-				<p ng-if="!login.spotify.status"><button class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" ng-disabled="login.spotify.loginOpened" chrome-translate>introOpenSpotifyLogin</button></p>
-				<p ng-if="login.spotify.status"><a class="pure-button next" ng-click="goToTags()" chrome-translate>introEnd</a></p>
+				<p ng-if="!login.spotify.status"><button class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" ng-disabled="login.spotify.loginOpened" chrome-translate analytics-on analytics-event="Open Spotify login" analytics-category="Intro">introOpenSpotifyLogin</button></p>
+				<p ng-if="login.spotify.status"><a class="pure-button next" ng-click="goToTags()" chrome-translate analytics-on analytics-event="End" analytics-category="Intro">introEnd</a></p>
 			</div>
 		</div>
 	</div>

@@ -1,5 +1,5 @@
 <div class="topbar">
-	<a class="pure-button right" ng-click="return()" ng-if="login.spotify.status && login.shazam.status" chrome-translate>backToTags</a>
+	<a class="pure-button right" ng-click="return()" ng-if="login.spotify.status && login.shazam.status" chrome-translate analytics-on analytics-event="Back to tags" analytics-category="Settings">backToTags</a>
 	<div class="left">
 		<a class="iconmelon" href="#/">
 			<svg viewBox="0 0 32 32">
@@ -42,7 +42,7 @@
 			<h3>Shazam</h3>
 			<p chrome-translate>promptShazamLogin</p>
 
-			<p><a class="pure-button pure-button-primary" ng-click="login.shazam.openLogin()" chrome-translate>openShazamLogin</a></p>
+			<p><a class="pure-button pure-button-primary" ng-click="login.shazam.openLogin()" chrome-translate analytics-on analytics-event="Open Shazam login" analytics-category="Settings">openShazamLogin</a></p>
 		</div>
 	</div>
 	<div class="spotify-login">
@@ -50,21 +50,21 @@
 		<div class="login-spotify pending" ng-if="!login.spotify.status">
 			<p chrome-translate>promptSpotifyLogin</p>
 
-			<p><a class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" chrome-translate>authSpotify</a></p>
+			<p><a class="pure-button pure-button-primary" ng-click="login.spotify.openLogin()" chrome-translate analytics-on analytics-event="Open Spotify login" analytics-category="Settings">authSpotify</a></p>
 		</div>
 		<div class="login-spotify success" ng-if="login.spotify.status">
-			<p><a class="pure-button button-warning" ng-click="login.spotify.disconnect()" chrome-translate>logout</a></p>
+			<p><a class="pure-button button-warning" ng-click="login.spotify.disconnect()" chrome-translate analytics-on analytics-event="Spotify logout" analytics-category="Settings">logout</a></p>
 		</div>
 	</div>
 	<div class="advanced-settings">
-		<a ng-click="advanced.toggle()" class="clickable"><span chrome-translate>advancedSettings</span> <span class="arrow" ng-if="advanced.hidden">&#x25BC;</span><span class="arrow" ng-if="!advanced.hidden">&#x25B2;</span></a>
+		<a ng-click="advanced.toggle()" class="clickable" analytics-on analytics-event="Toggle advanced settings" analytics-category="Settings"><span chrome-translate>advancedSettings</span> <span class="arrow" ng-if="advanced.hidden">&#x25BC;</span><span class="arrow" ng-if="!advanced.hidden">&#x25B2;</span></a>
 		<div class="advanced-content" ng-if="!advanced.hidden">
 			<h3 chrome-translate>clearData</h3>
 			<p chrome-translate>clearDataText</p>
-			<p><a class="pure-button pure-button-warning" ng-click="advanced.clearExtData()" chrome-translate>clearData</a></p>
+			<p><a class="pure-button pure-button-warning" ng-click="advanced.clearExtData()" chrome-translate analytics-on analytics-event="Clear ext data" analytics-category="Settings">clearData</a></p>
 			<h3 chrome-translate>exportLogs</h3>
 			<p chrome-translate>exportLogsText</p>
-			<p><a class="pure-button" ng-click="advanced.exportLogs()" chrome-translate>exportLogs</a></p>
+			<p><a class="pure-button" ng-click="advanced.exportLogs()" chrome-translate analytics-on analytics-event="Export logs" analytics-category="Settings">exportLogs</a></p>
 		</div>
 	</div>
 </div>

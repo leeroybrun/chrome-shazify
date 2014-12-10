@@ -1,6 +1,6 @@
 <div class="topbar">
 	<div class="right">
-		<a class="iconmelon clickable" ng-click="refreshTags()" ng-if="updating() === false">
+		<a class="iconmelon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
 			<svg viewBox="0 0 32 32">
 				<g filter="">
 					<use xlink:href="#rotate"></use>
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 			<div class="error" ng-if="tag.status == 2">
-				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)">
+				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
 					<svg viewBox="0 0 32 32">
 						<g filter="">
 							<use xlink:href="#error"></use>
@@ -92,7 +92,7 @@
 			<input type="text" ng-model="newSearch.query.track"></p>
 			<p><label chrome-translate>artistField</label><br />
 			<input type="text" ng-model="newSearch.query.artist"></p>
-			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate>searchTrackButton</button><a class="pure-button pure-button-warning cancel-button" ng-click="newSearch.cancel()" chrome-translate>cancel</a></p>
+			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate analytics-on analytics-event="Start search" analytics-category="Retry search modal">searchTrackButton</button><a class="pure-button pure-button-warning cancel-button" ng-click="newSearch.cancel()" chrome-translate analytics-on analytics-event="Cancel" analytics-category="Retry search modal">cancel</a></p>
 			<p class="error-msg" ng-if="newSearch.error">{{newSearch.error}}</p>
 		</form>
 	</div>
