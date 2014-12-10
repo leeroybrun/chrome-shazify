@@ -47,6 +47,11 @@ grunt build
 grunt bundle
 ```
 
+### Roadmap for 0.2.0
+
+- New MyShazam version ? Cannot get tags list
+	- Download tags history : http://www.shazam.com/myshazam/download-history
+
 ### Roadmap for 0.3.0
 
 - Tags should have more states :
