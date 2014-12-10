@@ -63,9 +63,15 @@ Some parts of the code are really messy. This should be cleaned in the next vers
 - Intro
 	- When clicking on Spotify auth button, show loader (http://spiffygif.com/)
 - Show info about new version and how to report bugs, when the ext has been updated
+- Replace "export" by "sync" in all extention texts
 
 ### Roadmap for 0.3.0
 
-- Clear code
-    - Spotify service
-    - $scope.$apply everywhere because of data comming from background page. Should create Angular services for each background service and put $apply calls in it ?
+- Tags should have more states :
+	1 = just added
+	2 = not found in spotify
+	3 = found
+	4 = added to playlist
+
+	Tags addition to playlist should be a separate step from searching for it on Spotify.
+- Move all tags logic to TagsService (background) ? Spotify & Shazam services should only handle parsing/searching/adding
