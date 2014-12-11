@@ -46,3 +46,9 @@ grunt build
 ```
 grunt bundle
 ```
+
+## Roadmap for v0.2.0
+
+- Add custom update scripts, this let us manage how to handle updates per version
+	- Should call all update scripts from current version to new version
+	- Update script for v0.2.0 : clear data
