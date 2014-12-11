@@ -1,34 +1,47 @@
-(function(Logger){
+(function(Logger, ChromeHelper, Spotify, Shazam, Tags){
 	var UpdateService = {
 		update: function(initVersionTxt, finalVersionTxt) {
 			var rePoint = new RegExp('\\.', 'g');
 
+			// TODO: handle versions 0.2.10 -> 210 -> bigger than 0.3.1 -> 31 !
 			var initVersion = parseInt(initVersionTxt.replace(rePoint, ''));
 			var finalVersion = parseInt(finalVersionTxt.replace(rePoint, ''));
 
 			var startIndex = null;
 			var endIndex = null;
 
-			console.log(UpdateService._updates);
+			var updatesToApply = [];
 
-			for(var i = 0; i < UpdateService._updates.length && (startIndex === null || endIndex === null); i++) {
-				console.log(i, UpdateService._updates[i].version, initVersion, finalVersion, startIndex, endIndex);
+			// If initVersion is the same or bigger than final, nothing to do...
+			var shouldStop = initVersion >= finalVersion;
 
+			for(var i = 0; i < UpdateService._updates.length && shouldStop === false; i++) {
 				if(startIndex === null && UpdateService._updates[i].version > initVersion) {
 					startIndex = i;
 				}
 
-				console.log(i, UpdateService._updates[i].version, initVersion, finalVersion, startIndex, endIndex);
-
 				if(startIndex !== null && UpdateService._updates[i].version <= finalVersion) {
 					endIndex = i;
+
+					updatesToApply.push(UpdateService._updates[i]);
 				}
 
-				console.log(i, UpdateService._updates[i].version, initVersion, finalVersion, startIndex, endIndex);
+				shouldStop = (startIndex !== null && endIndex !== null && UpdateService._updates[i].version >= finalVersion);
 			}
 
 			if(startIndex !== null && endIndex !== null) {
-				Logger.info('[Updater] '+ (endIndex-startIndex+1) +' update scripts to call to go from v'+ initVersionTxt +' to v'+ finalVersionTxt +'.');
+				Logger.info('[Updater] '+ (endIndex-startIndex+1) +' update scripts ('+startIndex+'->'+endIndex+') to call to go from v'+ initVersionTxt +' to v'+ finalVersionTxt +'.');
+
+				async.eachSeries(updatesToApply, function(update, cbe) {
+					Logger.info('[Updater] Calling update script for v'+update.version);
+					update.perform(function(err) {
+						if(err) { Logger.error(err); }
+
+						cbe();
+					});
+				}, function() {
+					Logger.info('[Updater] All update scripts applied !');
+				});
 			} else {
 				Logger.info('[Updater] No update script defined to go from v'+ initVersionTxt +' to v'+ finalVersionTxt +'.');
 			}
@@ -43,17 +56,29 @@
 		},
 
 		_updates: [
-			{'version': 10, 'update': function(callback) {
+			{'version': 20, 'perform': function(callback) {
+		        s2s.Logger.info('[Update] Cleaning extension\'s background data.');
 
-			}},
-			{'version': 20, 'update': function(callback) {
+				var popups = chrome.extension.getViews({type: 'popup'});
+		        if(popups && popups.length) {
+		        	popups[0].window.close();
+		        }
 
-			}},
-			{'version': 30, 'update': function(callback) {
+		        ChromeHelper.clearStorage();
 
+		        // Clear cached data from background script
+		        Tags.data.clearCache();
+		        Spotify.data.clearCache();
+
+		        // Reload tags, will reset list & lastUpdate
+		        s2s.Tags.load();
+
+		        UpdateService.openUpdatePage('0.2.0');
+
+		        callback();
 			}}
 		]
 	};
 
 	window.s2s.UpdateService = UpdateService;
-})(window.s2s.Logger);
+})(window.s2s.Logger, window.s2s.ChromeHelper, window.s2s.Spotify, window.s2s.Shazam, window.s2s.Tags);
