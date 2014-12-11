@@ -62,7 +62,13 @@
 			Logger.info('[Tags] Updating since '+ Tags.lastUpdate +'.');
 
 			Shazam.getTags(Tags.lastUpdate, function(err, tags) {
-				if(!err) {
+				if(!err && Array.isArray(tags)) {
+					Logger.info('[Tags] Got '+ tags.length +' tags from Shazam.');
+
+					if(tags.length === 0) {
+						return callback();
+					}
+
 					Tags.lastUpdate = new Date();
 
 					async.eachSeries(tags, function(tag, cbe) {
@@ -72,6 +78,8 @@
 					}, function() {
 						Tags.updatePlaylist(callback);
 					});
+				} else {
+					callback(err);
 				}
 			});
 		},

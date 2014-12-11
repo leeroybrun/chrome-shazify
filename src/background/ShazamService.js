@@ -31,8 +31,6 @@
 			$.get('https://www.shazam.com/myshazam/download-history')
 				.done(function(data) {
 					if(data) {
-						Logger.info('[Shazam] Parsing tags...');
-
 						Shazam.parseTags(lastUpdate, data, callback);
 					} else {
 						Logger.error('[Shazam] Cannot download Shazam history.');
@@ -50,31 +48,41 @@
 
 		// Parse tags from tags history
 		parseTags: function(lastUpdate, data, callback) {
-			var tags = [];
+			Logger.info('[Shazam] Parsing tags...');
 
-			$(data).find('tr').each(function() {
-				if($('td', this).length === 0) {
-					return;
+			var tags = [];
+			var stopParsing = false;
+			var tagsEl = $(data).find('tr');
+
+			Logger.info('[Shazam] Start parsing of '+ tagsEl.length +' elements...');
+
+			for(var i = 0; i < tagsEl.length && stopParsing === false; i++) {
+				if($('td', tagsEl[i]).length === 0) {
+					continue;
 				}
 
-				var date = new Date($('td.time', this).text());
+				var date = new Date($('td.time', tagsEl[i]).text());
 
 				if(date > lastUpdate) {
-					var idMatch = (new RegExp('t([0-9]+)', 'g')).exec($('td:nth-child(1) a', this).attr('href'));
+					var idMatch = (new RegExp('t([0-9]+)', 'g')).exec($('td:nth-child(1) a', tagsEl[i]).attr('href'));
 					if(!idMatch) {
-						return;
+						continue;
 					}
 
 					var tag = {
 						shazamId: idMatch[1],
-						name: $('td:nth-child(1) a', this).text().trim(),
-						artist: $('td:nth-child(2)', this).text().trim(),
+						name: $('td:nth-child(1) a', tagsEl[i]).text().trim(),
+						artist: $('td:nth-child(2)', tagsEl[i]).text().trim(),
 						date: date
 					};
 
 					tags.push(tag);
+				} else {
+					// Tag's date is lower than last update date = the following tags were already fetched in previous updates
+					Logger.info('[Shazam] Stop parsing, we reached the last tag not already fetched.');
+					stopParsing = true;
 				}
-			});
+			}
 
 			callback(null, tags);
 		}
