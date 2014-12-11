@@ -1,9 +1,5 @@
-(function(StorageHelper, ChromeHelper, Tags, Logger, Spotify){
+(function(ChromeHelper, Logger){
 	var Shazam = {
-		newTags: [],
-
-		data: new StorageHelper('Shazam'),
-
 		openLogin: function() {
 			Logger.info('[Shazam] Opening login page...');
 			ChromeHelper.focusOrCreateTab('https://www.shazam.com/myshazam');
@@ -27,91 +23,53 @@
 				});
 		},
 
-		updateTags: function(path, callback) {
-			if(typeof callback === 'undefined' && typeof path === 'function') {
-				callback = path;
-				path = null;
-			}
+		getTags: function(lastUpdate, callback) {
+			Logger.info('[Shazam] Downloading tags history...');
+			$.get('https://www.shazam.com/myshazam/download-history')
+				.done(function(data) {
+					if(data) {
+						Logger.info('[Shazam] Parsing tags...');
 
-			callback = callback || function(){};
-			path = path || '/fragment/myshazam';
+						Shazam.parseTags(lastUpdate, data, callback);
+					} else {
+						Logger.error('[Shazam] Cannot download Shazam history.');
+						Logger.error('[Shazam] Data returned : "'+ data +'"');
 
-			function saveTags(error) {
-				if(error) {
-					Tags.save(function() {
-						callback(error);
-					});
-				} else {
-					Shazam.data.set({'lastTagsUpdate': (new Date()).toString()}, function() {
-						Tags.save(function() {
-							callback();
-						});
-					});
-				}
-			}
+						return callback(new Error('Cannot download Shazam history.'));
+					}
+				})
+				.fail(function(jqXHR, textStatus) {
+					Logger.info('[Shazam] Tags fetch error : '+textStatus+'.');
 
-			Shazam.data.get('lastTagsUpdate', function(items) {
-				var lastTagsUpdate = new Date(items.lastTagsUpdate) || new Date(0);
-				lastTagsUpdate = (!isNaN(lastTagsUpdate.valueOf())) ? lastTagsUpdate : new Date(0);
-
-				Logger.info('[Shazam] Updating tags since '+ lastTagsUpdate +'.');
-
-				$.get('https://www.shazam.com'+ path)
-					.done(function(data) {
-						if(data && typeof data === 'object' && data.feed.indexOf('ms-no-tags') == -1) {
-							var lastTagDate = new Date(parseInt($('<div/>').append(data.feed).find('article').last().find('.tl-date').attr('data-time')));
-
-							Logger.info('[Shazam] Parsing tags for '+ path +'.');
-
-							Shazam.parseTags(lastTagsUpdate, data.feed, function() {
-								if(data.previous && data.feed.indexOf('ms-no-tags') == -1 && lastTagDate > lastTagsUpdate) {
-									Logger.info('[Shazam] Tags parsed. Waiting 2s before next page...');
-									setTimeout(function() {
-										Shazam.updateTags(data.previous, callback);
-									}, 2000);
-								} else {
-									Logger.info('[Shazam] All tags fetched.');
-									saveTags(false);
-								}
-							});
-						} else {
-							Logger.info('[Shazam] All tags fetched.');
-							saveTags(false);
-						}
-					})
-					.fail(function(jqXHR, textStatus) {
-						Logger.info('[Shazam] Tags fetch error : '+textStatus+'.');
-						if(jqXHR.status === 401) {
-							saveTags(true);
-						} else {
-							saveTags(false);
-						}
-					});
-			});
+					return callback(new Error('Tags fetch error : '+textStatus));
+				});
 		},
 
-		parseTags: function(lastTagsUpdate, data, callback) {
-			$('<div/>').append(data).find('article').each(function() {
-				var date = parseInt($('.tl-date', this).attr('data-time'));
+		parseTags: function(lastUpdate, data, callback) {
+			var tags = [];
 
-				if(new Date(date) > lastTagsUpdate) {
+			$(data).find('tr').each(function() {
+				if($('td', this).length == 0) {
+					return;
+				}
+
+				var date = new Date($('td.time', this).text());
+
+				if(date > lastUpdate) {
 					var tag = {
-						id: $(this).attr('data-track-id'),
-						name: $('[data-track-title]', this).text().trim(),
-						artist: $('[data-track-artist]', this).text().trim().replace(/^by /, ''),
-						date: date,
-						image: $('img[itemprop="image"]', this).attr('src')
+						name: $('td:nth-child(1) a', this).text().trim(),
+						artist: $('td:nth-child(2)', this).text().trim(),
+						date: date
 					};
 
-					tag.query = Spotify.genQuery(tag.name, tag.artist);
-
-					Tags.add(tag);
+					tags.push(tag);
 				}
 			});
 
-			callback();
+			callback(null, tags);
 		}
+		
 	};
 
 	window.s2s.Shazam = Shazam;
-})(window.s2s.StorageHelper, window.s2s.ChromeHelper, window.s2s.Tags, window.s2s.Logger, window.s2s.Spotify);
+})(window.s2s.ChromeHelper, window.s2s.Logger);
