@@ -1,6 +1,6 @@
 {
   "name": "chrome-shazam2spotify",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Leeroy Brun <leeroy.brun@batiplus.ch>",
   "private": true,
   "description": "Chrome extension used to export your Shazam tags to a Spotify playlist",
