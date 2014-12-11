@@ -46,19 +46,3 @@ grunt build
 ```
 grunt bundle
 ```
-
-### Roadmap for 0.2.0
-
-- New MyShazam version ? Cannot get tags list
-	- Download tags history : http://www.shazam.com/myshazam/download-history
-
-### Roadmap for 0.3.0
-
-- Tags should have more states :
-	1 = just added
-	2 = not found in spotify
-	3 = found
-	4 = added to playlist
-
-	Tags addition to playlist should be a separate step from searching for it on Spotify.
-- Move all tags logic to TagsService (background) ? Spotify & Shazam services should only handle parsing/searching/adding
