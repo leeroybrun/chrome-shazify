@@ -34,6 +34,7 @@ module.exports = function(grunt) {
 						'src/background/SpotifyService.js',
 						'src/background/ShazamService.js',
 						'src/background/TagsService.js',
+						'src/background/UpdateService.js',
 					]
 				}
 			}
