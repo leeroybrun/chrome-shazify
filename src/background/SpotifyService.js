@@ -1,4 +1,4 @@
-(function(Helper, StorageHelper, Tags, Logger){
+(function(Helper, StorageHelper, Logger){
 	var Spotify = {
 		api: {
 			clientId: 'b0b7b50eac4642f482825c535bae2708',
@@ -143,8 +143,6 @@
 				});
 			},
 
-
-
 			getOrCreate: function(callback) {
 				Spotify.playlist.getExistingId(function(err, playlistId) {
 					if(err) {
@@ -155,64 +153,12 @@
 				});
 			},
 
-			searchAndAddTags: function(callback) {
-				var tracksAdded = [];
-
-				Logger.info('[Spotify] Searching tags on Spotify.');
-
-				async.eachSeries(Tags.list, function(tag, cbi) {
-					if(tag.status > 1) { return cbi(); }
-
-					tag.query = tag.query || 'track:'+ tag.name.replace(' ', '+') +' artist:'+ tag.artist.replace(' ', '+');
-
-					Spotify.playlist.searchAndAddTag(tag, tag.query, false, function(err) {
-						if(!err) {
-							tracksAdded.push(tag.spotifyId);
-						}
-						cbi();
-					});
-				}, function(err) {
-					Tags.save();
-					Spotify.playlist.addTracks(tracksAdded, function(err) {
-						callback(err);
-					});
-				});
-			},
-
-			searchAndAddTag: function(tag, query, shouldSave, callback) {
-				Logger.info('[Spotify] Searching for tag "'+ query +'"...');
-
-				Spotify.call({
-					endpoint: '/v1/search',
-					method: 'GET',
-					params: {
-						q: query,
-						type: 'track',
-						limit: 1
-					}
-				}, function(err, data) {
-					if(err) { Logger.info('[Spotify] Error searching tag "'+ query +'".'); Logger.error(err); return callback(err); }
-					if(data.tracks.total === 0) { tag.status = 2; Logger.info('[Spotify] Tag "'+ query +'" not found.'); return callback(new Error('Not found')); }
-
-					var track = data.tracks.items[0];
-
-					tag.spotifyId = track.id;
-					tag.status = 3;
-
-					Logger.info('[Spotify] Tag found "'+ track.id +'".');
-
-					if(shouldSave) {
-						Tags.save();
-						Spotify.playlist.addTracks([tag.spotifyId], function(err) {
-							callback(err);
-						});
-					} else {
-						callback();
-					}
-				});
-			},
-
 			addTracks: function(tracksIds, callback) {
+				if(tracksIds.length == 0) {
+					Logger.info('[Spotify] No tracks to add to playlist.');
+					return callback();
+				}
+
 				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
 					if(err) { return callback(err); }
 
@@ -239,12 +185,18 @@
 							tracksPaths.push('spotify:track:'+ id);
 						});
 
-						Spotify.playlist.addTracksPaths(tracksPaths, callback);						
+						Spotify.playlist._addTracksPaths(tracksPaths, callback);						
 					});
 				});
 			},
 
-			addTracksPaths: function(tracksPaths, callback) {
+			_addTracksPaths: function(tracksPaths, callback) {
+				// We don't have any tracks to add anymore
+				if(tracksPaths.length === 0) {
+					Logger.info('[Spotify] No tracks to add to playlist.');
+					return callback();
+				}
+
 				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
 					if(err) { return callback(err); }
 
@@ -258,12 +210,6 @@
 						Logger.info('[Spotify] Then, we will have '+ remainingTracks.length +' tracks remaining to add.');
 
 						tracksPaths = tracksPaths.slice(0, 99);
-					}
-					
-					// We don't have any tracks to add anymore
-					if(tracksPaths.length === 0) {
-						Logger.info('[Spotify] No tags to add to playlist.');
-						return callback();
 					}
 
 					Logger.info('[Spotify] Saving tracks to playlist '+playlistId+' :');
@@ -279,25 +225,48 @@
 							Logger.error(err);
 
 							return callback(err);
-						} else {
-							Logger.info('[Spotify] Tracks saved to playlist.');
+						}
 
-							// If we have remaining tracks to add, call the method again
-							if(remainingTracks.length > 0) {
-								Logger.info('[Spotify] Waiting 2s before processing the next batch of tracks.');
-								
-								setTimeout(function() {
-									Spotify.playlist.addTracksPaths(remainingTracks, callback);
-								}, 2000);
-							} else {
-								// All tracks added, finished !
-								Logger.info('[Spotify] All done !');
-								callback();
-							}
-						}						
+						Logger.info('[Spotify] Tracks saved to playlist.');
+
+						// If we have remaining tracks to add, call the method again
+						if(remainingTracks.length > 0) {
+							Logger.info('[Spotify] Waiting 2s before processing the next batch of tracks.');
+							
+							setTimeout(function() {
+								Spotify.playlist._addTracksPaths(remainingTracks, callback);
+							}, 2000);
+						} else {
+							// All tracks added, finished !
+							Logger.info('[Spotify] All done !');
+							callback();
+						}					
 					});
 				});
 			}
+		},
+
+		findTrack: function(query, callback) {
+			Logger.info('[Spotify] Searching for track "'+ query +'"...');
+
+			Spotify.call({
+				endpoint: '/v1/search',
+				method: 'GET',
+				params: {
+					q: query,
+					type: 'track',
+					limit: 1
+				}
+			}, function(err, data) {
+				if(err) { Logger.info('[Spotify] Error searching track "'+ query +'".'); Logger.error(err); return callback(err); }
+				if(data.tracks.total === 0) { Logger.info('[Spotify] Track "'+ query +'" not found.'); return callback(new Error('Not found')); }
+
+				var track = data.tracks.items[0];
+
+				Logger.info('[Spotify] Track found "'+ track.id +'".');
+
+				callback(null, track);
+			});
 		},
 
 		data: new StorageHelper('Spotify', 'sync'), // New storage, synced with other Chrome installs
@@ -574,4 +543,4 @@
 	};
 
 	window.s2s.Spotify = Spotify;
-})(window.s2s.Helper, window.s2s.StorageHelper, window.s2s.Tags, window.s2s.Logger);
+})(window.s2s.Helper, window.s2s.StorageHelper, window.s2s.Logger);
