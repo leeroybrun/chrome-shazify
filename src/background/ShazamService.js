@@ -56,7 +56,13 @@
 				var date = new Date($('td.time', this).text());
 
 				if(date > lastUpdate) {
+					var idMatch = (new RegExp('t([0-9]+)', 'g')).exec($('td:nth-child(1) a', this).attr('href'));
+					if(!idMatch) {
+						return;
+					}
+
 					var tag = {
+						shazamId: idMatch[1],
 						name: $('td:nth-child(1) a', this).text().trim(),
 						artist: $('td:nth-child(2)', this).text().trim(),
 						date: date
