@@ -1,23 +1,8 @@
-angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $timeout, ShazamService, SpotifyService, TagsService) {
-	$scope.updating = true;
+angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService) {
+	$scope.login = LoginService;
 
-	$scope.tags = TagsService.list;
-
-	$scope.updateTags = function(callback) {
-		$scope.updating = true;
-
-		ShazamService.updateTags(function(err) {
-			$scope.updating = false;
-
-			if(err) {
-				$scope.$apply(function() {
-					$location.path('/settings');
-				});
-			}
-			
-			callback();
-		});
-	};
+	$scope.updating = function() { return TagsService.updating(); };
+	$scope.tags = function() { return TagsService.list; };
 
 	$scope.newSearch = {
 		show: false,
@@ -28,10 +13,8 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 			track: ''
 		},
 		send: function() {
-			var query = SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist);
-
-			SpotifyService.playlist.searchAndAddTag($scope.newSearch.tag, query, true, function(error) {
-				if(error) {
+			TagsService.searchTag($scope.newSearch.query.track, $scope.newSearch.query.artist, $scope.newSearch.tag, function(err) {
+				if(err) {
 					$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
 				} else {
 					$scope.newSearch.error = null;
@@ -54,44 +37,26 @@ angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $locati
 		$scope.newSearch.show = true;
 	};
 
-	function checkLogin(callback) {
-		ShazamService.loginStatus(function(status) {
-			if(status === false) {
-				return callback(false);
-			}
-
-			SpotifyService.loginStatus(function(status) {
-				if(status === false) {
-					return callback(false);
-				}
-
-				callback(true);
-			});
-		});
-	}
-
 	var refreshTags = function() {
-		checkLogin(function(status) {
-			if(status === true) {
-				SpotifyService.playlist.get(function(err) {
-					TagsService.load(function() {
-						$scope.tags = TagsService.list;
-
-						$scope.updateTags(function() {
-							SpotifyService.playlist.searchAndAddTags(function() {
-								// Tags added
-							});
-						});
-					});
-				});
-			} else {
-				$location.path('/settings');
-				$scope.$apply();
+		TagsService.updateTags(function(err) {
+			if(err) {
+				return $location.path('/settings');
 			}
+
+			// Tags updated !
+			console.log('Tags updated !');
 		});
 	};
 
 	$scope.refreshTags = refreshTags;
 
-	refreshTags();
+	// Do we need to show intro ?
+	PopupStorage.get('introStep', function(items) {
+		if(items.introStep && items.introStep >= 4) {
+			refreshTags();
+		} else {
+			$location.path('/intro');
+			$scope.$apply();
+		}
+	});
 });

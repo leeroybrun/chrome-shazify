@@ -1,13 +1,13 @@
 <div class="topbar">
 	<div class="right">
-		<a class="iconmelon clickable" ng-click="refreshTags()" ng-if="!updating">
+		<a class="iconmelon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
 			<svg viewBox="0 0 32 32">
 				<g filter="">
 					<use xlink:href="#rotate"></use>
 				</g>
 			</svg>
 		</a>
-		<a class="iconmelon" ng-if="updating">
+		<a class="iconmelon" ng-if="updating() === true">
 			<svg viewBox="0 0 32 32">
 				<g filter="">
 					<use xlink:href="#rotate"></use>
@@ -26,7 +26,7 @@
 	<h2 chrome-translate>myTags</h2>
 </div>
 <div class="tags-list">
-	<div class="updating" ng-if="updating">
+	<div class="updating" ng-if="updating() === true">
 		<div class="content">
 			<div class="iconmelon">
 				<svg viewBox="0 0 32 32">
@@ -49,9 +49,9 @@
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
-	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags">
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags()">
 		<div class="tag-status">
-			<div class="success" ng-if="tag.status == 3">
+			<div class="success" ng-if="tag.status >= 3" ng-class="{'pending': tag.status == 3}">
 				<div class="iconmelon">
 					<svg viewBox="0 0 32 32">
 						<g filter="">
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 			<div class="error" ng-if="tag.status == 2">
-				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)">
+				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
 					<svg viewBox="0 0 32 32">
 						<g filter="">
 							<use xlink:href="#error"></use>
@@ -79,7 +79,8 @@
 				</div>
 			</div>
 		</div>
-		<img ng-src="{{tag.image}}" class="tag-image">
+		<img ng-if="tag.image" ng-src="{{tag.image}}" class="tag-image">
+		<img ng-if="!tag.image" src="img/placeholder.png" class="tag-image">
 		<div class="tag-name">{{tag.name}}</div>
 		<div class="tag-artist">{{tag.artist}}</div>
 	</div>
@@ -92,7 +93,7 @@
 			<input type="text" ng-model="newSearch.query.track"></p>
 			<p><label chrome-translate>artistField</label><br />
 			<input type="text" ng-model="newSearch.query.artist"></p>
-			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate>searchTrackButton</button><a class="pure-button pure-button-warning cancel-button" ng-click="newSearch.cancel()" chrome-translate>cancel</a></p>
+			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate analytics-on analytics-event="Start search" analytics-category="Retry search modal">searchTrackButton</button><a class="pure-button pure-button-warning cancel-button" ng-click="newSearch.cancel()" chrome-translate analytics-on analytics-event="Cancel" analytics-category="Retry search modal">cancel</a></p>
 			<p class="error-msg" ng-if="newSearch.error">{{newSearch.error}}</p>
 		</form>
 	</div>

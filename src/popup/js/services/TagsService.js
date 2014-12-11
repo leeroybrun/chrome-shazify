@@ -1,57 +1,53 @@
-angular.module('Shazam2Spotify').factory('TagsService', function(StorageHelper) {
-	var Tags = {
-		list: [],
+angular.module('Shazam2Spotify').factory('TagsService', function($timeout, $interval, BackgroundService, LoginService) {
+	// Tags list : http://stackoverflow.com/a/18569690/1160800
 
-		add: function(newTag, callback) {
-			callback = callback || function(){};
+	var TagsService = {
+		list: BackgroundService.Tags.list,
+		updateListInterval: null,
+		updating: function() { return BackgroundService.updating; },
+		updateTags: function(callback) {
+			// We define an interval to update the list while tags' updating is in progress
+			if(TagsService.updateListInterval === null) {
+				TagsService.updateListInterval = $interval(function() {
+					// The intervall will automatically trigger a scope update, so we don't need to redefine the list
+					//TagsService.list = BackgroundService.Tags.list;
 
-			newTag.spotifyId = newTag.spotifyId || null;
-			newTag.status = newTag.status || 1; // Status : 1 = just added, 2 = not found in spotify, 3 = found & added to playlist
+					if(TagsService.updating() === false) {
+						$interval.cancel(TagsService.updateListInterval);
+						TagsService.updateListInterval = null;
+					}
+				}, 2000);
+			}
 
-			newTag.query = newTag.query || '';
+			if(TagsService.updating()) {
+				return;
+			}
 
-			var found = false;
-			for(var i in Tags.list) {
-				if(Tags.list[i].id == newTag.id) {
-					found = true;
-					$.extend(Tags.list[i], newTag); // Update existing tag
-					break;
+			LoginService.checkLogin(function(status) {
+				if(status === false) {
+					return callback(new Error('Login error'));
 				}
-			}
 
-			if(!found) {
-				Tags.list.push(newTag);
-			}
+				BackgroundService.updateTags(function(err) {
+					if(err && err == 'already_in_progress') {
+						err = null;
+					}
 
-			Tags.list.sort(function (a, b) {
-				if (a.date > b.date) { return -1; }
-				if (a.date < b.date) { return 1; }
-				return 0;
-			});
-
-			callback();
-		},
-
-		save: function(callback) {
-			callback = callback || function(){};
-
-			Tags.data.set({'tagsList': Tags.list}, function() {
-				callback();
+					$timeout(function() {
+						callback(err);
+					}, 0);
+				});
 			});
 		},
 		
-		load: function(callback) {
-			callback = callback || function(){};
-			
-			Tags.data.get('tagsList', function(items) {
-				Tags.list = items.tagsList || [];
-
-				callback();
+		searchTag: function(trackName, artist, tag, callback) {
+			BackgroundService.searchTag(trackName, artist, tag, function(err) {
+				$timeout(function() {
+					callback(err);
+				}, 0);
 			});
-		},
-
-		data: new StorageHelper('Tags')
+		}
 	};
-
-	return Tags;
+	
+	return TagsService;
 });

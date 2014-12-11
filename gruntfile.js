@@ -5,12 +5,12 @@ module.exports = function(grunt) {
 		archive_name: 'shazam2spotify-<%= pkg.version %>',
 		jshint: {
 			globals: { angular: true },
-			all: ['gruntfile.js', 'src/popup/js/**/*.js'],
+			all: ['gruntfile.js', 'src/popup/js/**/*.js', 'src/background/**/*.js'],
 			gruntfile: ['gruntfile.js']
 		},
 		concat: {
 			options: {
-				separator: ';',
+				separator: '\n\n',
 			},
 			css: {
 				files: {
@@ -22,6 +22,19 @@ module.exports = function(grunt) {
 					'popup/popup.js': [
 						'src/popup/js/app.js',
 						'src/popup/js/**/*.js'
+					],
+					'background/background.js': [
+						'src/background/lib/*.js',
+						'src/background/background.js',
+						'src/background/Helper.js',
+						'src/background/ChromeHelper.js',
+						'src/background/CanvasIcon.js',
+						'src/background/LoggerService.js',
+						'src/background/StorageHelper.js',
+						'src/background/SpotifyService.js',
+						'src/background/ShazamService.js',
+						'src/background/TagsService.js',
+						'src/background/UpdateService.js',
 					]
 				}
 			}
@@ -42,7 +55,7 @@ module.exports = function(grunt) {
 				}
 			},
 			js: {
-				files: ['src/popup/js/**/*.js'],
+				files: ['src/popup/js/**/*.js', 'src/background/**/*.js'],
 				tasks: ['build:js'],
 				options: {
 					spawn: false,
@@ -72,6 +85,7 @@ module.exports = function(grunt) {
                 files: [
                     {expand: true, src: ['_locales/**'], dest: 'build/'},
                     {expand: true, src: ['icons/**'], dest: 'build/'},
+                    {expand: true, src: ['background/**'], dest: 'build/'},
                     {expand: true, src: ['popup/**'], dest: 'build/'},
                     {expand: true, src: ['LICENCE'], dest: 'build/'},
                     {expand: true, src: ['manifest.json'], dest: 'build/'},

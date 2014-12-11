@@ -1,36 +1,27 @@
-angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, ShazamService, SpotifyService) {
-	$scope.shazam = {
-		loginStatus: false,
-		openLogin: ShazamService.openLogin
-	};
+angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, ChromeHelper, BackgroundService, LoginService) {
+	$scope.login = LoginService;
 
-	ShazamService.loginStatus(function(status) {
-		$scope.shazam.loginStatus = status;
-	});
+	// Advanced settings
+	$scope.advanced = {
+		hidden: true,
 
-	$scope.spotify = {
-		loginStatus: false,
-		openLogin: function() {
-			SpotifyService.openLogin(function(status) {
-				$scope.spotify.loginStatus = status;
-				$scope.$apply();
-			});
+		toggle: function() {
+			$scope.advanced.hidden = !$scope.advanced.hidden;
 		},
-		disconnect: function() {
-			SpotifyService.disconnect(function() {
-				$scope.spotify.loginStatus = false;
-				$scope.$apply();
-			});
+
+		clearExtData: function() {
+			BackgroundService.Logger.info('[core] Cleaning extension\'s popup data.');
+
+			chrome.storage.local.clear();
+			chrome.storage.sync.clear();
+			
+			chrome.extension.sendMessage({greeting: 'clearStorage'});
+		},
+
+		exportLogs: function() {
+			var logsData = BackgroundService.Logger.exportLogs();
+			ChromeHelper.exportData('logs.txt', logsData);
 		}
-	};
-
-	SpotifyService.loginStatus(function(status) {
-		$scope.spotify.loginStatus = status;
-	});
-
-	$scope.resetAll = function() {
-		chrome.storage.local.clear();
-		chrome.storage.sync.clear();
 	};
 
 	$scope.return = function() {
