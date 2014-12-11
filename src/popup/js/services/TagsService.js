@@ -41,9 +41,9 @@ angular.module('Shazam2Spotify').factory('TagsService', function($timeout, $inte
 		},
 		
 		searchTag: function(trackName, artist, tag, callback) {
-			BackgroundService.searchTag(trackName, artist, tag, function(error) {
+			BackgroundService.searchTag(trackName, artist, tag, function(err) {
 				$timeout(function() {
-					callback(error);
+					callback(err);
 				}, 0);
 			});
 		}

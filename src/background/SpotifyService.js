@@ -154,7 +154,7 @@
 			},
 
 			addTracks: function(tracksIds, callback) {
-				if(tracksIds.length == 0) {
+				if(tracksIds.length === 0) {
 					Logger.info('[Spotify] No tracks to add to playlist.');
 					return callback();
 				}
@@ -162,7 +162,9 @@
 				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
 					if(err) { return callback(err); }
 
-					var alreadyInPlaylist = [];
+					Logger.info('[Spotify] '+ tracksIds.length +' tracks to check if they already exist in playlist.');
+
+					var alreadyInPlaylist = 0;
 
 					// Check for already existing tracks in playlist
 					Spotify.findInPagedResult({
@@ -174,12 +176,16 @@
 							var index = tracksIds.indexOf(track.track.id);
 							if(index != -1) {
 								tracksIds.splice(index, 1);
+								alreadyInPlaylist++;
 								Logger.info('[Spotify] Track '+ track.track.id +' already in playlist.');
 							}
 						});
 
 						cbFind(false);
 					}, function() {
+						Logger.info('[Spotify] '+ alreadyInPlaylist +' tracks already in playlist.');
+						Logger.info('[Spotify] '+ tracksIds.length +' tracks remaining to add.');
+
 						var tracksPaths = [];
 						tracksIds.forEach(function(id) {
 							tracksPaths.push('spotify:track:'+ id);

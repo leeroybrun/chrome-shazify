@@ -49,7 +49,7 @@
 			var tags = [];
 
 			$(data).find('tr').each(function() {
-				if($('td', this).length == 0) {
+				if($('td', this).length === 0) {
 					return;
 				}
 

@@ -493,6 +493,10 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		fill:#2ECC71;
 	}
 
+	.tag-status .success.pending .iconmelon {
+		opacity:0.6;
+	}
+
 	.tag-status .error .iconmelon {
 		fill:#F9690E;
 	}

@@ -51,7 +51,7 @@
 	</div>
 	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags()">
 		<div class="tag-status">
-			<div class="success" ng-if="tag.status == 3">
+			<div class="success" ng-if="tag.status >= 3" ng-class="{'pending': tag.status == 3}">
 				<div class="iconmelon">
 					<svg viewBox="0 0 32 32">
 						<g filter="">
@@ -79,7 +79,8 @@
 				</div>
 			</div>
 		</div>
-		<img ng-src="{{tag.image}}" class="tag-image">
+		<img ng-if="tag.image" ng-src="{{tag.image}}" class="tag-image">
+		<img ng-if="!tag.image" src="img/placeholder.png" class="tag-image">
 		<div class="tag-name">{{tag.name}}</div>
 		<div class="tag-artist">{{tag.artist}}</div>
 	</div>

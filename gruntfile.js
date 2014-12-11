@@ -31,9 +31,9 @@ module.exports = function(grunt) {
 						'src/background/CanvasIcon.js',
 						'src/background/LoggerService.js',
 						'src/background/StorageHelper.js',
-						'src/background/TagsService.js',
 						'src/background/SpotifyService.js',
 						'src/background/ShazamService.js',
+						'src/background/TagsService.js',
 					]
 				}
 			}
