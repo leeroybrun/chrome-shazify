@@ -1,10 +1,12 @@
 (function(ChromeHelper, Logger){
 	var Shazam = {
+		// Open the MyShazam login page
 		openLogin: function() {
 			Logger.info('[Shazam] Opening login page...');
 			ChromeHelper.focusOrCreateTab('https://www.shazam.com/myshazam');
 		},
 
+		// Check current login status on MyShazam
 		loginStatus: function(callback) {
 			$.get('https://www.shazam.com/fragment/myshazam')
 				.done(function() {
@@ -23,6 +25,7 @@
 				});
 		},
 
+		// Download tags history, parse it and return a tags array
 		getTags: function(lastUpdate, callback) {
 			Logger.info('[Shazam] Downloading tags history...');
 			$.get('https://www.shazam.com/myshazam/download-history')
@@ -45,6 +48,7 @@
 				});
 		},
 
+		// Parse tags from tags history
 		parseTags: function(lastUpdate, data, callback) {
 			var tags = [];
 

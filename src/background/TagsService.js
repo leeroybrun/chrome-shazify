@@ -3,6 +3,7 @@
 		list: [],
 		lastUpdate: new Date(0),
 
+		// Add/update a tag in the tags list
 		add: function(tag, callback) {
 			callback = callback || function(){};
 
@@ -31,6 +32,7 @@
 			}
 		},
 
+		// Private : called from Tags.add, add the specified tag to list or update it
 		_addToList: function(tag, callback) {
 			// TODO: use Array.prototype.find when available on Chrome
 			var found = false;
@@ -55,6 +57,7 @@
 			callback();
 		},
 
+		// Update tags list from MyShazam and then update Spotify playlist
 		update: function(callback) {
 			Logger.info('[Tags] Updating since '+ Tags.lastUpdate +'.');
 
@@ -73,6 +76,7 @@
 			});
 		},
 
+		// Update Spotify playlist with tags found but not already added (status=3)
 		updatePlaylist: function(callback) {
 			Logger.info('[Tags] Updating playlist on Spotify.');
 
@@ -102,6 +106,7 @@
 			});
 		},
 
+		// Save tags data (list & lastUpdate)
 		save: function(callback) {
 			callback = callback || function(){};
 
@@ -112,6 +117,7 @@
 			});
 		},
 		
+		// Load tags data (list & lastUpdate)
 		load: function(callback) {
 			callback = callback || function(){};
 			

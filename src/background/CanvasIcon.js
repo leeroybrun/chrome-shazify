@@ -1,5 +1,6 @@
 (function(){
 	var CanvasIcon = {
+		// Create new canvas, load icon and set browser action's icon
 		load: function() {
 			var icon = this;
 
@@ -32,6 +33,7 @@
 		    };
 		},
 
+		// Start rotation of icon
 		startRotation: function() {
 			if(!this.loaded) {
 				if(!this.img) {
@@ -62,6 +64,7 @@
 	        }, this.fps);
 		},
 
+		// Stop rotation of icon
 		stopRotation: function() {
 			clearInterval(this.interval);
 			this.interval = null;

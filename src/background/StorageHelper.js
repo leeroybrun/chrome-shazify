@@ -7,6 +7,7 @@
 		this.cache = {};
 	};
 
+	// Get values either from cache or from storage
 	StorageHelper.prototype.get = function(names, callback) {
 		var storage = this;
 
@@ -48,6 +49,7 @@
 		});
 	};
 
+	// Set values to cache & storage
 	StorageHelper.prototype.set = function(objects, callback) {
 		callback = callback || function(){};
 
@@ -73,6 +75,7 @@
 		});
 	};
 
+	// Clear cache
 	StorageHelper.prototype.clearCache = function() {
 		this.cache = {};
 	};

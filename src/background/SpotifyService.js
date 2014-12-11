@@ -5,12 +5,14 @@
 			clientSecret: 'b3bc17ef4d964fccb63b1f37af9101f8'
 		},
 
+		// From a track name and artist, generate a query for Spotify search
 		genQuery: function(track, artist) {
 			var reSpaces = new RegExp(' ', 'g');
 
 			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ artist.replace('Feat. ', '').replace(reSpaces, '+');
 		},
 
+		// Get current user and playlist ir cache or on Spotify
 		getUserAndPlaylist: function(callback) {
 			Spotify.data.get(['userId', 'playlistId'], function(items) {
 				var userId = items.userId;
@@ -63,8 +65,9 @@
 		},
 
 		playlist: {
-			name: chrome.i18n.getMessage('myTags'),
+			name: chrome.i18n.getMessage('myTags'), // The playlist's name
 
+			// Get id of existing playlist on Spotify or error if not found
 			getExistingId: function(callback) {
 				var playlistName = Spotify.playlist.name;
 
@@ -101,6 +104,7 @@
 				});
 			},
 
+			// Get playlist details
 			get: function(callback) {
 				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
 					if(err) { return callback(err); }
@@ -116,6 +120,7 @@
 				});
 			},
 
+			// Create playlist on Spotify
 			create: function(callback) {
 				Spotify.data.get(['userId', 'playlistId'], function(items) {
 					var userId = items.userId;
@@ -143,6 +148,7 @@
 				});
 			},
 
+			// Get playlist if it exists, or create a new one
 			getOrCreate: function(callback) {
 				Spotify.playlist.getExistingId(function(err, playlistId) {
 					if(err) {
@@ -153,6 +159,7 @@
 				});
 			},
 
+			// Add an array of trackIds to playlist
 			addTracks: function(tracksIds, callback) {
 				if(tracksIds.length === 0) {
 					Logger.info('[Spotify] No tracks to add to playlist.');
@@ -196,6 +203,8 @@
 				});
 			},
 
+			// Private : called from addTracks, add an array of trackPaths to playlist.
+			// Handle arrays bigger than 100 items (should be splitted in multiple requests for Spotify API)
 			_addTracksPaths: function(tracksPaths, callback) {
 				// We don't have any tracks to add anymore
 				if(tracksPaths.length === 0) {
@@ -252,6 +261,7 @@
 			}
 		},
 
+		// Find a track on Spotify
 		findTrack: function(query, callback) {
 			Logger.info('[Spotify] Searching for track "'+ query +'"...');
 
@@ -275,8 +285,10 @@
 			});
 		},
 
+		// Storage for Spotify data (auth token, etc)
 		data: new StorageHelper('Spotify', 'sync'), // New storage, synced with other Chrome installs
 
+		// Helpers to get URLs for API calls
 		getUrl: {
 			redirect: function() {
 				return 'https://'+ chrome.runtime.id +'.chromiumapp.org/spotify_cb';
@@ -298,6 +310,7 @@
 			}
 		},
 
+		// Call the Spotify API and search in paged result with checkFind, call callback when found or when last page is reached
 		findInPagedResult: function(callOptions, checkFind, callback) {
 			Spotify.call(callOptions, function(err, data) {
 				if(err) { Logger.error(err); }
@@ -320,6 +333,7 @@
 			});
 		},
 
+		// Call an API endpoint
 		call: function(options, callback) {
 			Spotify.loginStatus(function(status) {
 				if(!status) {
@@ -364,6 +378,7 @@
 			});
 		},
 
+		// Check login status on Spotify
 		loginStatus: function(callback) {
 			Spotify.data.get(['accessToken', 'tokenTime', 'expiresIn'], function(items) {
 				// Don't have an access token ? We are not logged in...
@@ -389,6 +404,7 @@
 			});
 		},
 
+		// Refresh access token
 		refreshToken: function(callback) {
 			Logger.info('[Spotify] Refreshing token...');
 
@@ -428,6 +444,7 @@
 			});
 		},
 
+		// Get an access token from an auth code
 		getAccessToken: function(authCode, callback) {
 			Logger.info('[Spotify] Getting access token...');
 
@@ -453,6 +470,7 @@
 				});
 		},
 
+		// Save access token
 		saveAccessToken: function(data, callback) {
 			if(data.access_token && data.expires_in) {
 				Spotify.data.set({
@@ -478,6 +496,7 @@
 			}
 		},
 
+		// Open Spotify login (with chrome identity)
 		openLogin: function(interactive, callback) {
 			if(typeof interactive === 'function') {
 				callback = interactive;
@@ -533,6 +552,7 @@
 			});
 		},
 
+		// Disconnect from Spotify API
 		disconnect: function(callback) {
 			callback = callback || function(){};
 
