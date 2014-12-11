@@ -49,7 +49,7 @@
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
-	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags()">
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags() track by tag.shazamId">
 		<div class="tag-status">
 			<div class="success" ng-if="tag.status >= 3" ng-class="{'pending': tag.status == 3}">
 				<div class="iconmelon">
