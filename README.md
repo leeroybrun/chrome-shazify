@@ -3,6 +3,8 @@ Shazam2Spotify
 
 Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
+<b>BREAKING NEWS:</b> Shazam pushed a new update the 10th December 2014 with support for syncing your tracks to Spotify. You can find more information [here](https://support.shazam.com/hc/en-us/articles/202911263-Latest-Update-Information-What-s-new-). If it's available for you, you should use it instead of this extension.
+
 [![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
 
 ## How it works
