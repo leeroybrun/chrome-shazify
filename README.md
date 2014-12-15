@@ -50,3 +50,5 @@ grunt bundle
 ## Roadmap for v0.2.5
 
 - Custom update scripts, handle versions like 0.2.10
+- Add tracks in order on Spotify
+    - Reorder existing tracks
