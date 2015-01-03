@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').controller('SettingsCtrl', function($scope, $location, ChromeHelper, BackgroundService, LoginService) {
+angular.module('Shazify').controller('SettingsCtrl', function($scope, $location, ChromeHelper, BackgroundService, LoginService) {
 	$scope.login = LoginService;
 
 	// Advanced settings

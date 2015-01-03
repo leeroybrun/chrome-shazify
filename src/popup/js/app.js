@@ -1,1 +1,1 @@
-angular.module('Shazam2Spotify', ['ngRoute', 'ngAnimate', 'angulartics', 'angulartics.google.analytics']);
+angular.module('Shazify', ['ngRoute', 'ngAnimate', 'angulartics', 'angulartics.google.analytics']);

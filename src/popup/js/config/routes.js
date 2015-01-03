@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify')
+angular.module('Shazify')
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider
 			.when('/', {

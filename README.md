@@ -1,17 +1,17 @@
-Shazam2Spotify
+Shazify
 =====================
 
 Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
-[![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
+[![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
 
 ## How it works
 
-<p align="center"><a href="https://www.youtube.com/watch?v=Zi1VRJqEI0Q"><img src="https://raw.githubusercontent.com/leeroybrun/chrome-shazam2spotify/master/video_screenshot.png" alt=""/></a></p>
+<p align="center"><a href="https://www.youtube.com/watch?v=Zi1VRJqEI0Q"><img src="https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/video_screenshot.png" alt=""/></a></p>
 
 ## Install
 
-To install the extention, just go to the Chrome Webstore : https://chrome.google.com/webstore/detail/shazam2spotify/clhbpnpnaneankhiagfnjcegpccjkbib
+To install the extention, just go to the Chrome Webstore : https://chrome.google.com/webstore/detail/shazify/clhbpnpnaneankhiagfnjcegpccjkbib
 
 ## How to use
 
@@ -31,7 +31,7 @@ How it works :
 
 If a Shazam tag cannot be found on Spotify, you will have the possibility to change the search query for this track.
 
-When you want to update your Spotify playlist with new tags, simply click on the Shazam2Spotify icon on Chrome toolbar. It will then search for new tags on Shazam and add them to Spotify.
+When you want to update your Spotify playlist with new tags, simply click on the Shazify icon on Chrome toolbar. It will then search for new tags on Shazam and add them to Spotify.
 
 ## Developers
 

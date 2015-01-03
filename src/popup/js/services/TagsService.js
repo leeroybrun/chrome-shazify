@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').factory('TagsService', function($timeout, $interval, BackgroundService, LoginService) {
+angular.module('Shazify').factory('TagsService', function($timeout, $interval, BackgroundService, LoginService) {
 	// Tags list : http://stackoverflow.com/a/18569690/1160800
 
 	var TagsService = {

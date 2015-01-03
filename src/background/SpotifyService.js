@@ -366,7 +366,7 @@
 										Spotify.call(options, callback);
 									} else {
 										// Error...
-										callback(new Error('Please authorize Shazam2Spotify to access your Spotify account.'));
+										callback(new Error('Please authorize Shazify to access your Spotify account.'));
 									}
 								});
 							} else {

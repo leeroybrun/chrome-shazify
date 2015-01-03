@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').directive('chromeTranslate', function() {
+angular.module('Shazify').directive('chromeTranslate', function() {
     return {
         restrict: 'A',
         link: function($scope, elem) {

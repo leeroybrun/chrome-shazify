@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').factory('LoginService', function(BackgroundService, $timeout) {
+angular.module('Shazify').factory('LoginService', function(BackgroundService, $timeout) {
 	var LoginService = {
 		checkLogin: function(callback) {
 			LoginService.shazam.loginStatus(function(status) {

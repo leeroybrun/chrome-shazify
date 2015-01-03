@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').controller('IntroCtrl', function($scope, $location, PopupStorage, BackgroundService, LoginService) {
+angular.module('Shazify').controller('IntroCtrl', function($scope, $location, PopupStorage, BackgroundService, LoginService) {
 	$scope.currentStep = 1;
 
 	$scope.goTo = function(step) {

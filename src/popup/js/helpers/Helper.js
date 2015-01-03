@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').factory('Helper', function() {
+angular.module('Shazify').factory('Helper', function() {
 	var Helper = {
 		// Thanks : http://stackoverflow.com/a/1714899/1160800
 		serializeUrlVars: function(obj) {

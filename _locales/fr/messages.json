@@ -21,7 +21,7 @@
     "description": ""
   },
   "introShazamLoggedOutText": {
-    "message": "<p>Commencons par nous connecter à Shazam.</p><p>Ouvrez la page de connexion et cliquez sur le bouton « Connexion ».</p><p>Une fois connecté, ouvrez à nouveau Shazam2Spotify.</p>",
+    "message": "<p>Commencons par nous connecter à Shazam.</p><p>Ouvrez la page de connexion et cliquez sur le bouton « Connexion ».</p><p>Une fois connecté, ouvrez à nouveau Shazify.</p>",
     "description": ""
   },
   "introShazamLoggedInText": {
@@ -104,7 +104,7 @@
   	"description": ""
   },
   "promptSpotifyLogin": {
-    "message": "Veuillez autoriser Shazam2Spotify à accéder à votre compte Spotify afin de pouvoir y créer et gérer une playlist.",
+    "message": "Veuillez autoriser Shazify à accéder à votre compte Spotify afin de pouvoir y créer et gérer une playlist.",
     "description": ""
   },
   "authSpotify": {

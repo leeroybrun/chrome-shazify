@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').factory('ChromeHelper', function() {
+angular.module('Shazify').factory('ChromeHelper', function() {
 	var ChromeHelper = {
 		findExistingTab: function(url, callback) {
 			chrome.windows.getAll({'populate': true}, function(windows) {

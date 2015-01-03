@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').factory('StorageHelper', function() {
+angular.module('Shazify').factory('StorageHelper', function() {
 	var Storage = function(prefix, type) {
 		type = type  || 'local';
 

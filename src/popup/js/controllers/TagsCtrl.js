@@ -1,4 +1,4 @@
-angular.module('Shazam2Spotify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService) {
+angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService) {
 	$scope.login = LoginService;
 
 	$scope.updating = function() { return TagsService.updating(); };
