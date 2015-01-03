@@ -50,3 +50,9 @@ grunt bundle
 ## Roadmap for v0.2.5
 
 - Custom update scripts, handle versions like 0.2.10
+
+## Disclaimer
+
+Shazify is not affiliated with Shazam Entertainment Limited.
+"Shazam" and its logo are trademarks and registered trademarks of Shazam Entertainment Limited.
+All other companies and product names are trademarks or registered trademarks of their respective companies.

@@ -76,6 +76,11 @@
 		        UpdateService.openUpdatePage('0.2.0');
 
 		        callback();
+			}},
+			{'version': 23, 'perform': function(callback) {
+		 		UpdateService.openUpdatePage('0.2.3');
+
+		        callback();
 			}}
 		]
 	};

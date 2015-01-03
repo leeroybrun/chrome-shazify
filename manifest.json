@@ -1,6 +1,6 @@
 {
-  "name": "Shazam2Spotify",
-  "version": "0.2.2",
+  "name": "Shazify",
+  "version": "0.2.4",
   "manifest_version": 2,
   "description": "__MSG_appDesc__",
   "homepage_url": "http://www.leeroy.me",
@@ -15,7 +15,7 @@
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "Shazam2Spotify",
+    "default_title": "S2S",
     "default_popup": "popup/popup.html"
   },
   "permissions": [

@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		archive_name: 'shazam2spotify-<%= pkg.version %>',
+		archive_name: 'shazify-<%= pkg.version %>',
 		jshint: {
 			globals: { angular: true },
 			all: ['gruntfile.js', 'src/popup/js/**/*.js', 'src/background/**/*.js'],
