@@ -5,6 +5,8 @@ Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
 [![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
 
+<b>BREAKING NEWS:</b> Shazam pushed a new update the 10th December 2014 with support for syncing your tracks to Spotify. You can find more information [here](https://support.shazam.com/hc/en-us/articles/202911263-Latest-Update-Information-What-s-new-). If it's available for you, you should use it instead of this extension.
+
 ## How it works
 
 <p align="center"><a href="https://www.youtube.com/watch?v=Zi1VRJqEI0Q"><img src="https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/video_screenshot.png" alt=""/></a></p>
@@ -50,9 +52,12 @@ grunt bundle
 ## Roadmap for v0.2.5
 
 - Custom update scripts, handle versions like 0.2.10
+- Add tracks in order on Spotify
+    - Reorder existing tracks
 
 ## Disclaimer
 
 Shazify is not affiliated with Shazam Entertainment Limited.
 "Shazam" and its logo are trademarks and registered trademarks of Shazam Entertainment Limited.
 All other companies and product names are trademarks or registered trademarks of their respective companies.
+
