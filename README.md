@@ -1,6 +1,8 @@
 Shazify
 =====================
 
+**Shazam2Spotify is now Shazify:** Shazam2Spotify has been taken down from Chrome Webstore by a DMCA notice from Shazam as I was using "Shazam" in the app's name and a part of their logo in the icon. I'm fighting to take it back to Chrome Webstore
+
 Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
 [![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
@@ -13,7 +15,16 @@ Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
 ## Install
 
-To install the extention, just go to the Chrome Webstore : https://chrome.google.com/webstore/detail/shazify/clhbpnpnaneankhiagfnjcegpccjkbib
+For now, the extension is not available to Chrome Webstore due to a DMCA notice from Shazam. I've submited an update to fix the issue. It's now pending a manual review from Google.
+
+In the meanwhile, the only way to install it is to load it as unpacked extension.
+
+1. Download the extension : https://github.com/leeroybrun/chrome-shazify/releases/download/v0.2.5/shazify-0.2.5.zip
+2. Extract the files to a new folder
+3. Load this new folder as "unpacked extension" following these instructions : https://developer.chrome.com/extensions/getstarted#unpacked
+
+Be warned that the extension will not auto update if you load it this way.
+Be sure to check this repository often to install it from Chrome Webstore as soon as it's available again.
 
 ## How to use
 
