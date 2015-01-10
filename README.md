@@ -17,14 +17,10 @@ Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
 For now, the extension is not available to Chrome Webstore due to a DMCA notice from Shazam. I've submited an update to fix the issue. It's now pending a manual review from Google.
 
-In the meanwhile, the only way to install it is to load it as unpacked extension.
+In the meanwhile, there is no way to install it.
+As the return URL is fixed on the Spotify API, you can't load it as "unpacked app".
 
-1. Download the extension : https://github.com/leeroybrun/chrome-shazify/releases/download/v0.2.5/shazify-0.2.5.zip
-2. Extract the files to a new folder
-3. Load this new folder as "unpacked extension" following these instructions : https://developer.chrome.com/extensions/getstarted#unpacked
-
-Be warned that the extension will not auto update if you load it this way.
-Be sure to check this repository often to install it from Chrome Webstore as soon as it's available again.
+If you want to be informed as soon as the app is available, [please register to the Shazify newsletter](http://eepurl.com/ba-V3j).
 
 ## How to use
 
