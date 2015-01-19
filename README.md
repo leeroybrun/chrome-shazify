@@ -1,13 +1,13 @@
 Shazify
 =====================
 
-**Shazam2Spotify is now Shazify:** Shazam2Spotify has been taken down from Chrome Webstore by a DMCA notice from Shazam as I was using "Shazam" in the app's name and a part of their logo in the icon. I'm fighting to take it back to Chrome Webstore
+**Shazam2Spotify is now Shazify:** Shazam2Spotify has been taken down from Chrome Webstore by a DMCA notice from Shazam as I was using "Shazam" in the app's name and a part of their logo in the icon. It's now back on CHrome Webstore with a new name and icon !
 
-Chrome extension used to sync your Shazam tags to a Spotify playlist.
+Easily sync your Shazam tags to a Spotify playlist.
 
 [![ScreenShot](https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/promo_1400x560.png)](http://youtu.be/Zi1VRJqEI0Q)
 
-<b>BREAKING NEWS:</b> Shazam pushed a new update the 10th December 2014 with support for syncing your tracks to Spotify. You can find more information [here](https://support.shazam.com/hc/en-us/articles/202911263-Latest-Update-Information-What-s-new-). If it's available for you, you should use it instead of this extension.
+<b>UPDATE:</b> Shazam pushed a new update the 10th December 2014 with support for syncing your tracks to Spotify. You can find more information [here](https://support.shazam.com/hc/en-us/articles/202911263-Latest-Update-Information-What-s-new-). If it's available for you, you should use it instead of this extension.
 
 ## How it works
 
@@ -15,12 +15,7 @@ Chrome extension used to sync your Shazam tags to a Spotify playlist.
 
 ## Install
 
-For now, the extension is not available to Chrome Webstore due to a DMCA notice from Shazam. I've submited an update to fix the issue. It's now pending a manual review from Google.
-
-In the meanwhile, there is no way to install it.
-As the return URL is fixed on the Spotify API, you can't load it as "unpacked app".
-
-If you want to be informed as soon as the app is available, [please register to the Shazify newsletter](http://eepurl.com/ba-V3j).
+You can install it from here : [Shazify on Chrome Webstore](https://chrome.google.com/webstore/detail/shazify/ncdhendbhjlcnboihkbjjldcndoebhan).
 
 ## How to use
 
