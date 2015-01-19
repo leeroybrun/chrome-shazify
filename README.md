@@ -1,7 +1,7 @@
 Shazify
 =====================
 
-**Shazam2Spotify is now Shazify:** Shazam2Spotify has been taken down from Chrome Webstore by a DMCA notice from Shazam as I was using "Shazam" in the app's name and a part of their logo in the icon. It's now back on CHrome Webstore with a new name and icon !
+**Shazam2Spotify is now Shazify:** Shazam2Spotify has been taken down from Chrome Webstore by a DMCA notice from Shazam as I was using "Shazam" in the app's name and a part of their logo in the icon. It's now back on Chrome Webstore with a new name and icon !
 
 Easily sync your Shazam tags to a Spotify playlist.
 
