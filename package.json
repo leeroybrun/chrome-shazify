@@ -1,6 +1,6 @@
 {
   "name": "chrome-shazify",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "author": "Leeroy Brun <leeroy.brun@batiplus.ch>",
   "private": true,
   "description": "Easily sync your Shazam tracks with a Spotify playlist",
