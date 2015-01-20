@@ -1,9 +1,9 @@
 {
   "name": "chrome-shazify",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "author": "Leeroy Brun <leeroy.brun@batiplus.ch>",
   "private": true,
-  "description": "Chrome extension used to export your Shazam tags to a Spotify playlist",
+  "description": "Easily sync your Shazam tracks with a Spotify playlist",
   "devDependencies": {
     "grunt": "*",
     "grunt-cli": "*",

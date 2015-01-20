@@ -1,6 +1,6 @@
 {
   "name": "Shazify",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "manifest_version": 2,
   "description": "__MSG_appDesc__",
   "homepage_url": "http://www.leeroy.me",
@@ -15,7 +15,7 @@
   },
   "browser_action": {
     "default_icon": "icons/icon19.png",
-    "default_title": "S2S",
+    "default_title": "Shazify",
     "default_popup": "popup/popup.html"
   },
   "permissions": [
