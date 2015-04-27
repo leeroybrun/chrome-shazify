@@ -61,6 +61,10 @@
   	"message": "Updating tags...",
   	"description": ""
   },
+  "doNotCloseBrowser": {
+    "message": "Please do not close your browser",
+    "description": ""
+  },
   "searchTrackButton": {
     "message": "Try a new search",
     "description": ""

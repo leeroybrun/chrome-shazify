@@ -1,6 +1,7 @@
 angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService) {
 	$scope.login = LoginService;
 
+	$scope.updateStatus = '';
 	$scope.updating = function() { return TagsService.updating(); };
 	$scope.tags = function() { return TagsService.list; };
 
@@ -38,7 +39,16 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 	};
 
 	var refreshTags = function() {
+		// This timer will update the status of tags addition
+		var refreshTimer = setInterval(function(){
+			TagsService.getUpdateStatus(function(status){
+				$scope.updateStatus = '('+ status.added +'/'+ status.all +')';
+			});
+		}, 3000);
+
 		TagsService.updateTags(function(err) {
+			clearInterval(refreshTimer);
+
 			if(err) {
 				return $location.path('/settings');
 			}

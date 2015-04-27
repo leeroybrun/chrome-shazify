@@ -57,13 +57,28 @@
 			callback();
 		},
 
+		_updateStatusNbTags: 0, // Nombre de tags au total en cours d'ajout
+		_updateStatusTagsAdded: 0, // Nombre de tags déjà ajoutés
+
+		getUpdateStatus: function()
+		{
+			return {
+				all: Tags._updateStatusNbTags,
+				added: Tags._updateStatusTagsAdded
+			};
+		},
+
 		// Update tags list from MyShazam and then update Spotify playlist
 		update: function(callback) {
 			Logger.info('[Tags] Updating since '+ Tags.lastUpdate +'.');
 
+			Tags._updateStatusTagsAdded = 0;
+
 			Shazam.getTags(Tags.lastUpdate, function(err, tags) {
 				if(!err && Array.isArray(tags)) {
 					Logger.info('[Tags] Got '+ tags.length +' tags from Shazam.');
+
+					Tags._updateStatusNbTags = tags.length;
 
 					if(tags.length === 0) {
 						return callback();
@@ -73,6 +88,7 @@
 
 					async.eachSeries(tags, function(tag, cbe) {
 						Tags.add(tag, function() {
+							Tags._updateStatusTagsAdded++;
 							cbe();
 						});
 					}, function() {

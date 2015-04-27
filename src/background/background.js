@@ -12,6 +12,8 @@ $(document).ready(function() {
 
 	s2s.updating = false;
 
+	s2s.getUpdateStatus = s2s.Tags.getUpdateStatus;
+
 	s2s.updateTags = function(callback) {
 		if(s2s.updating) {
 			s2s.Logger.info('[core] Tags update already in progress.');

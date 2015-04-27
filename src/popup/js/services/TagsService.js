@@ -5,6 +5,13 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 		list: BackgroundService.Tags.list,
 		updateListInterval: null,
 		updating: function() { return BackgroundService.updating; },
+		
+		getUpdateStatus: function(callback) {
+			$timeout(function() {
+				callback(BackgroundService.getUpdateStatus());
+			}, 0);
+		},
+
 		updateTags: function(callback) {
 			// We define an interval to update the list while tags' updating is in progress
 			if(TagsService.updateListInterval === null) {
