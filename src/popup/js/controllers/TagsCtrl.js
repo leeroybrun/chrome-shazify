@@ -38,12 +38,16 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		$scope.newSearch.show = true;
 	};
 
+	var updateStatus = function(){
+		TagsService.getUpdateStatus(function(status){
+			$scope.updateStatus = '('+ status.added +'/'+ status.all +')';
+		});
+	};
+
 	var refreshTags = function() {
 		// This timer will update the status of tags addition
 		var refreshTimer = setInterval(function(){
-			TagsService.getUpdateStatus(function(status){
-				$scope.updateStatus = '('+ status.added +'/'+ status.all +')';
-			});
+			updateStatus();
 		}, 3000);
 
 		TagsService.updateTags(function(err) {
@@ -56,6 +60,8 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 			// Tags updated !
 			console.log('Tags updated !');
 		});
+
+		updateStatus();
 	};
 
 	$scope.refreshTags = refreshTags;
