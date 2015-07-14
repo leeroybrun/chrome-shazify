@@ -16,7 +16,7 @@
 
 			// Search track on Spotify, if not already found
 			if(tag.status < 3) {
-				Spotify.findTrack(tag.query, function(err, track) {
+				Spotify.findTrack(tag.query, tag.name, tag.artist, function(err, track) {
 					if(err || !track) {
 						tag.status = 2;
 					} else {

@@ -93,6 +93,21 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		padding:6px 8px;
 	}
 
+	hr {
+		display: block;
+		height: 1px;
+	    border: 0;
+	    border-top: 1px solid #ccc;
+	    margin: 5px 0;
+	    padding: 0;
+	}
+
+	h3 {
+		font-weight: 500;
+		font-size: 16px;
+		margin-bottom: 0;
+	}
+
 /* Animations */
 
 	@-webkit-keyframes enterAnimation {
@@ -454,15 +469,16 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		min-height:240px;
 	}
 
-	.tags-list .tag {
+	.tag {
+		display:block;
 		overflow:hidden;
 		clear:both;
-		margin-bottom:7px;
+		padding-top:7px;
 		border-bottom:1px solid #e0e0e0;
 		padding-bottom:7px;
 	}
 
-	.tags-list .tag.ng-enter {
+	.tag.ng-enter {
 		opacity: 0;
 		transform: translate(0, -50px);
 
@@ -470,7 +486,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 				animation: enterAnimation 0.2s ease forwards;
 	}
 
-	.tags-list .tag.ng-enter-stagger {
+	.tag.ng-enter-stagger {
 		-webkit-animation-delay:50ms;
 		animation-delay:50ms;
 
@@ -535,6 +551,14 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.tag .tag-artist {
 		opacity:0.8;
 		font-weight:normal;
+	}
+
+	.tag.search-result {
+
+	}
+
+	.tag.search-result:hover {
+		background-color:#efefef;
 	}
 
 /* Settings */

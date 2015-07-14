@@ -1,4 +1,4 @@
-angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService) {
+angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService, SpotifyService) {
 	$scope.login = LoginService;
 
 	$scope.updateStatus = '';
@@ -9,21 +9,55 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		show: false,
 		tag: null,
 		error: null,
+		results: [],
 		query: {
 			artist: '',
 			track: ''
 		},
+		selectedTrack: null,
+
 		send: function() {
-			TagsService.searchTag($scope.newSearch.query.track, $scope.newSearch.query.artist, $scope.newSearch.tag, function(err) {
-				if(err) {
-					$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
-				} else {
-					$scope.newSearch.error = null;
-					$scope.newSearch.tag = null;
-					$scope.newSearch.show = false;
-				}
+			SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist, function(query) {
+				SpotifyService.searchTracks(query, function(err, tracks) {
+					if(err) {
+						$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
+					} else {
+						$scope.newSearch.results = tracks;
+						$scope.newSearch.error = null;
+
+						// We search on list the current selected track
+						if($scope.newSearch.tag.spotifyId) {
+							for(var i = 0; i < tracks.length; i++) {
+								if(tracks[i].id == $scope.newSearch.tag.spotifyId) {
+									$scope.newSearch.selectedTrack = tracks[i];
+								}
+							}
+						}
+					}
+				});
 			});
 		},
+
+		selectTrack: function(track) {
+			if($scope.newSearch.selectedTrack == track) {
+				$scope.newSearch.selectedTrack = null;
+			} else {
+				$scope.newSearch.selectedTrack = track;
+			}
+		},
+
+		saveSelectedTrack: function() {
+			$scope.newSearch.tag.spotifyId = $scope.newSearch.selectedTrack.id;
+			$scope.newSearch.tag.status = 3;
+			$scope.newSearch.tag.image = $scope.newSearch.selectedTrack.image;
+
+			// TODO: Remove old selected from playlist, add this one instead and save tags
+
+			$scope.newSearch.error = null;
+			$scope.newSearch.tag = null;
+			$scope.newSearch.show = false;
+		},
+
 		cancel: function() {
 			$scope.newSearch.error = null;
 			$scope.newSearch.tag = null;
@@ -35,6 +69,8 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		$scope.newSearch.query.artist = tag.artist;
 		$scope.newSearch.query.track = tag.name;
 		$scope.newSearch.tag = tag;
+		$scope.newSearch.results = [];
+		$scope.newSearch.selectedTrack = null;
 		$scope.newSearch.show = true;
 	};
 

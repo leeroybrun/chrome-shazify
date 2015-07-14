@@ -95,6 +95,22 @@
       }
     }
   },
+  "searchResults": {
+    "message": "Search results",
+    "description": ""
+  },
+  "searchResultsPleaseSelect": {
+    "message": "Please select the right track below",
+    "description": ""
+  },
+  "saveSelectedTrack": {
+    "message": "Save the selected track",
+    "description": ""
+  },
+  "searchResults": {
+    "message": "Search results",
+    "description": ""
+  },
   "settings": {
   	"message": "Settings",
   	"description": ""

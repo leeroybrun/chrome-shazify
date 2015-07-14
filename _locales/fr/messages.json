@@ -95,6 +95,18 @@
       }
     }
   },
+  "searchResults": {
+    "message": "Résultats de recherche",
+    "description": ""
+  },
+  "searchResultsPleaseSelect": {
+    "message": "Veuillez sélectionner le bon morceau ci-dessous.",
+    "description": ""
+  },
+  "saveSelectedTrack": {
+    "message": "Sauvegarder ce choix",
+    "description": ""
+  },
   "settings": {
   	"message": "Paramètres",
   	"description": ""

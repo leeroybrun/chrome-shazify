@@ -9,10 +9,10 @@
 		genQuery: function(track, artist) {
 			var reSpaces = new RegExp(' ', 'g');
 
-			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ artist.replace('Feat. ', '').replace(reSpaces, '+');
+			return 'track:'+ track.replace(reSpaces, '+') +' artist:'+ Helper.replaceAll(artist, 'Feat. ', '').replace(reSpaces, '+');
 		},
 
-		// Get current user and playlist ir cache or on Spotify
+		// Get current user and playlist in cache or on Spotify
 		getUserAndPlaylist: function(callback) {
 			Spotify.data.get(['userId', 'playlistId'], function(items) {
 				var userId = items.userId;
@@ -262,7 +262,7 @@
 		},
 
 		// Find a track on Spotify
-		findTrack: function(query, callback) {
+		findTrack: function(query, trackName, artist, callback) {
 			Logger.info('[Spotify] Searching for track "'+ query +'"...');
 
 			Spotify.call({
@@ -271,17 +271,84 @@
 				params: {
 					q: query,
 					type: 'track',
-					limit: 1
+					limit: 20
 				}
 			}, function(err, data) {
 				if(err) { Logger.info('[Spotify] Error searching track "'+ query +'".'); Logger.error(err); return callback(err); }
 				if(data.tracks.total === 0) { Logger.info('[Spotify] Track "'+ query +'" not found.'); return callback(new Error('Not found')); }
 
-				var track = data.tracks.items[0];
+				var found = null;
+				for(var i = 0; i < data.tracks.items.length && !found; i++) {
+					var track = data.tracks.items[i];
 
-				Logger.info('[Spotify] Track found "'+ track.id +'".');
+					// Only mark as found if the track name is exactly the same
+					// TODO: should check for artists too
+					if(track.name == trackName) {
+						found = track;
+					}
+				}
 
-				callback(null, track);
+				if(found) {
+					Logger.info('[Spotify] Track found "'+ found.id +'".');
+
+					return callback(null, found);
+				} else {
+					Logger.info('[Spotify] Track "'+ query +'" not found.');
+
+					return callback(new Error('Not found'));
+				}
+			});
+		},
+
+		// Find tracks on Spotify
+		findTracks: function(query, callback) {
+			Logger.info('[Spotify] Searching tracks for "'+ query +'"...');
+
+			Spotify.call({
+				endpoint: '/v1/search',
+				method: 'GET',
+				params: {
+					q: query,
+					type: 'track',
+					limit: 20
+				}
+			}, function(err, data) {
+				if(err) { Logger.info('[Spotify] Error searching tracks for "'+ query +'".'); Logger.error(err); return callback(err); }
+				if(data.tracks.total === 0) { Logger.info('[Spotify] No tracks found for query "'+ query +'".'); return callback(new Error('Not found')); }
+
+				var tracks = [];
+
+				// Loop over all tracks found
+				for(var i = 0; i < data.tracks.items.length; i++) {
+					var track = data.tracks.items[i];
+
+					// Make a string with the artists' names
+					var artist = '';
+					if(track.artists.length > 0) {
+						artist = track.artists[0].name;
+						for(var j = 1; j < track.artists.length; j++) {
+							artist += ', '+ track.artists[j].name;
+						}
+					}
+
+					// Create a more concise track object and add to list
+					tracks.push({
+						name: track.name, 
+						artist: artist,
+						image: track.album.images[track.album.images.length-1].url,
+						id: track.id
+					});
+				}
+
+				if(tracks.length > 0) {
+					Logger.info('[Spotify] '+ tracks.length +' tracks found.');
+
+					return callback(null, tracks);
+				} else {
+					Logger.info('[Spotify] No tracks found for query "'+ query +'".');
+
+					return callback(new Error('Not found'));
+				}
 			});
 		},
 
