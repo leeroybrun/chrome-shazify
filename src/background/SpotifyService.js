@@ -203,6 +203,45 @@
 				});
 			},
 
+			removeTracks: function(tracksIds, callback) {
+				if(tracksIds.length === 0) {
+					Logger.info('[Spotify] No tracks to remove from playlist.');
+					return callback();
+				}
+
+				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
+					if(err) { return callback(err); }
+
+					Logger.info('[Spotify] '+ tracksIds.length +' tracks to remove from playlist.');
+
+					var tracks = [];
+					tracksIds.forEach(function(id) {
+						tracks.push({ uri: 'spotify:track:'+ id });
+					});
+
+					Spotify.call({
+						method: 'DELETE',
+						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
+						data: JSON.stringify({ tracks: tracks })
+					}, function(err, data) {
+						if(err) { 
+							Logger.error('[Spotify] Error removing tracks from playlist.'); 
+							Logger.error(err);
+
+							return callback(err);
+						}
+
+						if(data.snapshot_id) {
+							return callback();
+						} else {
+							Logger.error('[Spotify] No snapshot_id returned for tracks removal.'); 
+
+							return callback(new Error('[Spotify] No snapshot_id returned for tracks removal.'));
+						}
+					});
+				});
+			},
+
 			// Private : called from addTracks, add an array of trackPaths to playlist.
 			// Handle arrays bigger than 100 items (should be splitted in multiple requests for Spotify API)
 			_addTracksPaths: function(tracksPaths, callback) {
