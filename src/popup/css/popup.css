@@ -238,7 +238,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 	.modal input {
-		width: 270px;
+		width: 100%;/*270px*/
 		background-color: white;
 		border: 1px solid #cccccc;
 		padding: 6px 8px;
@@ -559,6 +559,13 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.tag.search-result:hover {
 		background-color:#efefef;
+	}
+
+	.new-search-modal {
+		bottom:20px;
+		top:20px;
+		overflow-y:auto;
+		overflow-x:hidden;
 	}
 
 /* Settings */

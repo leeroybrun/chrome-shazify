@@ -78,11 +78,11 @@
     "description": ""
   },
   "trackNotFound": {
-  	"message": "Oops ! We cannot find this track on Spotify...",
+  	"message": "Oops ! We cannot find this track on Spotify... Please check/correct the search query below and then select the right track from the results that will be displayed.",
   	"description": ""
   },
-  "searchQueryPrompt": {
-    "message": "Please help us by entering/updating the search query below.",
+  "changeTrackSearch": {
+    "message": "Not the right track found? You can change the search query below and then select the right track from the results that will be displayed.",
     "description": ""
   },
   "noTrackFoundQuery": {

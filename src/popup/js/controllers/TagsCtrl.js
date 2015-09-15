@@ -39,17 +39,9 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		},
 
 		selectTrack: function(track) {
-			if($scope.newSearch.selectedTrack == track) {
-				$scope.newSearch.selectedTrack = null;
-			} else {
-				$scope.newSearch.selectedTrack = track;
-			}
-		},
-
-		saveSelectedTrack: function() {
-			$scope.newSearch.tag.spotifyId = $scope.newSearch.selectedTrack.id;
+			$scope.newSearch.tag.spotifyId = track.id;
 			$scope.newSearch.tag.status = 3;
-			$scope.newSearch.tag.image = $scope.newSearch.selectedTrack.image;
+			$scope.newSearch.tag.image = track.image;
 
 			// TODO: Remove old selected from playlist, add this one instead and save tags
 
@@ -72,6 +64,8 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		$scope.newSearch.results = [];
 		$scope.newSearch.selectedTrack = null;
 		$scope.newSearch.show = true;
+
+		$scope.newSearch.send();
 	};
 
 	var updateStatus = function(){

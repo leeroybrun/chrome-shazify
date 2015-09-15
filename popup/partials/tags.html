@@ -86,9 +86,9 @@
 		<div class="tag-artist">{{tag.artist}}</div>
 	</div>
 	<div class="modal-overlay" ng-if="newSearch.show" ng-click="newSearch.cancel()"></div>
-	<div class="modal" ng-if="newSearch.show">
-		<p chrome-translate>trackNotFound</p>
-		<p chrome-translate>searchQueryPrompt</p>
+	<div class="modal new-search-modal" ng-if="newSearch.show">
+		<p chrome-translate ng-if="newSearch.tag.status != 2">changeTrackSearch</p>
+		<p chrome-translate ng-if="newSearch.tag.status == 2">trackNotFound</p>
 		<form ng-submit="newSearch.send()">
 			<p><label chrome-translate>trackField</label><br />
 			<input type="text" ng-model="newSearch.query.track"></p>
@@ -118,7 +118,6 @@
 				<div class="tag-name">{{track.name}}</div>
 				<div class="tag-artist">{{track.artist}}</div>
 			</a>
-			<p><a ng-if="newSearch.selectedTrack" ng-click="newSearch.saveSelectedTrack()" class="pure-button pure-button-primary" chrome-translate analytics-on analytics-event="Save selected track" analytics-category="Retry search modal">saveSelectedTrack</a></p>
 		</div>
 	</div>
 </div>
