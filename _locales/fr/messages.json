@@ -78,12 +78,12 @@
     "description": ""
   },
   "trackNotFound": {
-    "message": "Oops ! Nous ne trouvons pas ce morceau sur Spotify...",
+    "message": "Oops ! Nous ne trouvons pas ce morceau sur Spotify... Veuillez modifier la requête de recherche ci-dessous et sélectionner le bon morceau dans les résultats qui s'afficheront.",
     "description": ""
   },
-  "searchQueryPrompt": {
-  	"message": "Aidez-nous en entrant une nouvelle requête de recherche :",
-  	"description": ""
+  "changeTrackSearch": {
+    "message": "Pas le bon morceau trouvé? Vous pouvez modifier la requête de recherche ci-dessous et sélectionner celui qui correspond le mieux.",
+    "description": ""
   },
   "noTrackFoundQuery": {
   	"message": "Aucun morceau trouvé... veuillez modifier les champs ci-dessus et réessayer.",
@@ -94,6 +94,18 @@
         "example": "track:... artist:..."
       }
     }
+  },
+  "searchResults": {
+    "message": "Résultats de recherche",
+    "description": ""
+  },
+  "searchResultsPleaseSelect": {
+    "message": "Veuillez sélectionner le bon morceau ci-dessous.",
+    "description": ""
+  },
+  "saveSelectedTrack": {
+    "message": "Sauvegarder ce choix",
+    "description": ""
   },
   "settings": {
   	"message": "Paramètres",
