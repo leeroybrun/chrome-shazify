@@ -1,27 +1,97 @@
-(function(ChromeHelper, Logger){
+(function(ChromeHelper, Logger, StorageHelper){
+	/*
+		Shazam service
+
+		Handle login to Shazam, getting auth token (with a content script) and calling API to fetch tags
+		
+	*/
 	var Shazam = {
+		// Storage for Shazam data (auth token, etc)
+		data: new StorageHelper('Shazam', 'sync'), // New storage, synced with other Chrome installs
+
+		receivePageLocalStorage: function (pageLocalStorage) {
+			console.log('pageLocalStorage', pageLocalStorage);
+		},
+
+		getInid: function(tabId) {
+			listenerAdded = (typeof listenerAdded !== 'undefined') ? listenerAdded : false;
+
+			Logger.info('[Shazam] Injecting content script to get "inid" from Local Storage...');
+
+			chrome.tabs.executeScript(tabId, { 
+				file: 'contentscripts/shazamLocalStorage.js',
+				runAt: 'document_end'
+			});
+
+			function receiveMessage(request, sender, sendResponse) {
+    		if(request.shazamLocalStorage && request.shazamLocalStorage.inid) {
+    			Shazam.setAndCheckInid(request.shazamLocalStorage.inid, function(isFine) {
+    				sendResponse({ isFine: isFine });
+
+    				if(!isFine) {
+    					Shazam.data.set({ 'inid': null });
+							Logger.info('[Shazam] "inid" returned is not fine...');
+						} else {
+							Logger.info('[Shazam] "inid" returned is fine!');
+							chrome.runtime.onMessage.removeListener(receiveMessage);
+						}
+					});
+    		}
+
+    		// Let us use "sendResponse" asynchronously
+    		return true;
+    	}
+
+			chrome.runtime.onMessage.addListener(receiveMessage);
+		},
+
+		setAndCheckInid: function(inid, callback) {
+			callback = callback || function(){};
+
+			Shazam.data.set({
+				'inid': inid
+			}, function() {
+				return Shazam.loginStatus(callback);
+			});
+		},
+
 		// Open the MyShazam login page
 		openLogin: function() {
 			Logger.info('[Shazam] Opening login page...');
-			ChromeHelper.focusOrCreateTab('https://www.shazam.com/myshazam');
+			ChromeHelper.focusOrCreateTab('https://www.shazam.com/myshazam', function(tab) {
+				// Will inject content script to Shazam page and wait for the inid to be available
+				// When available, will set and check it
+				Shazam.getInid(tab.id);
+			});
 		},
 
 		// Check current login status on MyShazam
 		loginStatus: function(callback) {
-			$.get('https://www.shazam.com/fragment/myshazam')
-				.done(function() {
-					Logger.info('[Shazam] login status : logged.');
-					callback(true);
-				})
-				.fail(function(jqXHR, textStatus) {
-					if(jqXHR.status === 401) {
-						Logger.info('[Shazam] login status : not logged (401).');
-						Logger.error(textStatus);
-						callback(false);
-					} else {
+			Shazam.data.get('inid', function(items) {
+				if(!items.inid) {
+					return callback(false);
+				}
+
+				$.get('https://www.shazam.com/discovery/v4/fr/CH/web/-/tag/'+ items.inid +'?limit=20')
+					.done(function() {
 						Logger.info('[Shazam] login status : logged.');
-						callback(true);
-					}
+						return callback(true);
+					})
+					.fail(function(jqXHR, textStatus) {
+						if(jqXHR.status === 401) {
+							Logger.info('[Shazam] login status : not logged (401).');
+							Logger.error(textStatus);
+							return callback(false);
+						} else if(jqXHR.status === 456) {
+							Logger.info('[Shazam] login status : error (456).');
+							Logger.error(textStatus);
+							return callback(false);
+						}
+
+						Logger.info('[Shazam] login status : error.');
+						Logger.error(textStatus);
+						return callback(false);
+					});
 				});
 		},
 
@@ -90,4 +160,4 @@
 	};
 
 	window.s2s.Shazam = Shazam;
-})(window.s2s.ChromeHelper, window.s2s.Logger);
+})(window.s2s.ChromeHelper, window.s2s.Logger, window.s2s.StorageHelper);
