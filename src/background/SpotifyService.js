@@ -322,7 +322,7 @@
 
 					// Only mark as found if the track name is exactly the same
 					// TODO: should check for artists too
-					if(track.name == trackName) {
+					if(track.name.toLowerCase() == trackName.toLowerCase()) {
 						found = track;
 					}
 				}

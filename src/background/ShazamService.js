@@ -93,28 +93,64 @@
 						Logger.error(textStatus);
 						return callback(false);
 					});
-				});
+			});
 		},
 
 		// Download tags history, parse it and return a tags array
-		getTags: function(lastUpdate, callback) {
-			Logger.info('[Shazam] Downloading tags history...');
-			$.get('https://www.shazam.com/myshazam/download-history')
-				.done(function(data) {
-					if(data) {
-						Shazam.parseTags(lastUpdate, data, callback);
-					} else {
-						Logger.error('[Shazam] Cannot download Shazam history.');
-						Logger.error('[Shazam] Data returned : "'+ data +'"');
+		getTags: function(lastUpdate, callback, token) {
+			token = token || null;
 
-						return callback(new Error('Cannot download Shazam history.'));
-					}
-				})
-				.fail(function(jqXHR, textStatus) {
-					Logger.info('[Shazam] Tags fetch error : '+textStatus+'.');
+			Logger.info('[Shazam] Getting list of tags...');
+			Shazam.data.get('inid', function(items) {
+				if(!items.inid) {
+					Logger.error('[Shazam] cannot get tags, seems not to be logged in.');
+					return callback(new Error('Cannot get tags, seems not to be logged in.'));
+				}
 
-					return callback(new Error('Tags fetch error : '+textStatus));
-				});
+				$.getJSON('https://www.shazam.com/discovery/v4/fr/CH/web/-/tag/'+ items.inid +'?limit=200'+ ((token) ? '&token='+ token : ''))
+					.done(function(data) {
+						if(data && data.tags) {
+							Shazam.parseTags(lastUpdate, data, function(error, tags) {
+								if(error) {
+									Logger.error('[Shazam] error parsing tags: '+ error +'.');
+									return callback(error);
+								}
+
+								if(!tags || !tags.length) {
+									return callback(null, []);
+								}
+
+								var lastTagDate = tags[tags.length-1].date;
+
+								// If Shazam API returned a token, it's that we still have tags we can fetch
+								if(data.token && lastTagDate >= lastUpdate) {
+									Logger.info('[Shazam] more tags to fetch, calling getTags again.');
+									// Recursive call to get all tags since the last update
+									Shazam.getTags(lastUpdate, function(error, newTags) {
+										if(error) {
+											Logger.error('[Shazam] error getting tags: '+ error +'.');
+											return callback(error);
+										}
+
+										return callback(null, tags.concat(newTags));
+									}, data.token);
+								} else {
+									return callback(null, tags);
+								}
+							});
+						} else {
+							Logger.error('[Shazam] Cannot get tags from Shazam.');
+							Logger.error('[Shazam] Data returned : "'+ data +'"');
+
+							return callback(new Error('Cannot get tags from Shazam.'));
+						}
+					})
+					.fail(function(jqXHR, textStatus) {
+						Logger.info('[Shazam] Tags fetch error : '+textStatus+'.');
+
+						return callback(new Error('Tags fetch error : '+textStatus));
+					});
+			});
 		},
 
 		// Parse tags from tags history
@@ -123,31 +159,26 @@
 
 			var tags = [];
 			var stopParsing = false;
-			var tagsEl = $(data).find('tr');
 
-			Logger.info('[Shazam] Start parsing of '+ tagsEl.length +' elements...');
+			Logger.info('[Shazam] Start parsing of '+ data.tags.length +' elements...');
 
-			for(var i = 0; i < tagsEl.length && stopParsing === false; i++) {
-				if($('td', tagsEl[i]).length === 0) {
-					continue;
-				}
+			var length = data.tags.length;
+			for(var i = 0; i < length && stopParsing === false; i++) {
+				var tagDate = new Date(data.tags[i].timestamp);
+				var tagName = data.tags[i].track.heading.title;
+				var tagArtist = data.tags[i].track.heading.subtitle;
 
-				var date = new Date($('td.time', tagsEl[i]).text());
+				if(tagDate > lastUpdate) {
+					if(tagName && tagArtist) {
+						var tag = {
+							shazamId: data.tags[i].tagid,
+							name: data.tags[i].track.heading.title,
+							artist: data.tags[i].track.heading.subtitle,
+							date: tagDate
+						};
 
-				if(date > lastUpdate) {
-					var idMatch = (new RegExp('t([0-9]+)', 'g')).exec($('td:nth-child(1) a', tagsEl[i]).attr('href'));
-					if(!idMatch) {
-						continue;
+						tags.push(tag);
 					}
-
-					var tag = {
-						shazamId: idMatch[1],
-						name: $('td:nth-child(1) a', tagsEl[i]).text().trim(),
-						artist: $('td:nth-child(2)', tagsEl[i]).text().trim(),
-						date: date
-					};
-
-					tags.push(tag);
 				} else {
 					// Tag's date is lower than last update date = the following tags were already fetched in previous updates
 					Logger.info('[Shazam] Stop parsing, we reached the last tag not already fetched.');
@@ -155,9 +186,8 @@
 				}
 			}
 
-			callback(null, tags);
+			return callback(null, tags);
 		}
-		
 	};
 
 	window.s2s.Shazam = Shazam;

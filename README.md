@@ -56,11 +56,18 @@ grunt build
 grunt bundle
 ```
 
-## Roadmap for v0.2.5
+## Roadmap for v0.4.0
 
 - Custom update scripts, handle versions like 0.2.10
 - Add tracks in order on Spotify
     - Reorder existing tracks
+- Add filter functionnality from tag status (found, not found)
+- Rounded tag image
+- Store tags and Spotify tracks found in IndexedDB (use Dexie.js)
+- Remove tags from localStorage
+- When select a different Spotify track for a tag, remove the old one from playlist (if not associated with another tag) and add the new one
+- Create an update page to let the users know of the new functionnalities
+- Add an edit button for tracks found, to le the user know he can change the track found
 
 ## Disclaimer
 
