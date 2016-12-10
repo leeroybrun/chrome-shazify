@@ -24,23 +24,23 @@
 			});
 
 			function receiveMessage(request, sender, sendResponse) {
-    		if(request.shazamLocalStorage && request.shazamLocalStorage.inid) {
-    			Shazam.setAndCheckInid(request.shazamLocalStorage.inid, function(isFine) {
-    				sendResponse({ isFine: isFine });
+	    		if(request.shazamLocalStorage && request.shazamLocalStorage.inid) {
+	    			Shazam.setAndCheckInid(request.shazamLocalStorage.inid, function(isFine) {
+	    				sendResponse({ isFine: isFine });
 
-    				if(!isFine) {
-    					Shazam.data.set({ 'inid': null });
+	    				if(!isFine) {
+	    					Shazam.data.set({ 'inid': null });
 							Logger.info('[Shazam] "inid" returned is not fine...');
 						} else {
 							Logger.info('[Shazam] "inid" returned is fine!');
 							chrome.runtime.onMessage.removeListener(receiveMessage);
 						}
 					});
-    		}
+	    		}
 
-    		// Let us use "sendResponse" asynchronously
-    		return true;
-    	}
+	    		// Let us use "sendResponse" asynchronously
+	    		return true;
+    		}
 
 			chrome.runtime.onMessage.addListener(receiveMessage);
 		},
@@ -69,6 +69,7 @@
 		loginStatus: function(callback) {
 			Shazam.data.get('inid', function(items) {
 				if(!items.inid) {
+					Logger.info('[Shazam] login status : np inid stored.');
 					return callback(false);
 				}
 

@@ -397,7 +397,7 @@
 		// Helpers to get URLs for API calls
 		getUrl: {
 			redirect: function() {
-				return 'https://'+ chrome.runtime.id +'.chromiumapp.org/spotify_cb';
+				return chrome.identity.getRedirectURL() +'spotify_cb';
 			},
 
 			authorize: function() {
