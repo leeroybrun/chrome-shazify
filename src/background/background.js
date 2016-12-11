@@ -5,7 +5,7 @@ $(document).ready(function() {
 	s2s.Logger.info('[init] Loading tags from storage...');
 
 	s2s.Tags.load(function() {
-		s2s.Logger.info('[init] '+ s2s.Tags.list.length +' tags loaded.');
+		
 	});
 
 	s2s.CanvasIcon.load();
@@ -86,8 +86,13 @@ $(document).ready(function() {
 	        s2s.Spotify.data.clearCache();
 	        s2s.CanvasIcon.stopRotation();
 
-	        // Reload tags, will reset list & lastUpdate
-	        s2s.Tags.load();
+	        s2s.Tags.db.clear().then(function() {
+	        	// Reload tags, will reset list & lastUpdate
+	        	s2s.Tags.load();
+	        }).catch(function(reason) {
+	        	s2s.Logger.error('[core] Cannot clear tags database.');
+	        	s2s.Logger.error(reason);
+	        });
 	    }
 	});
 

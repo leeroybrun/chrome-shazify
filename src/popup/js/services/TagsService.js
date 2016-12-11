@@ -2,9 +2,9 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 	// Tags list : http://stackoverflow.com/a/18569690/1160800
 
 	var TagsService = {
-		list: BackgroundService.Tags.list,
+		list: [],
 		updateListInterval: null,
-		updating: function() { return BackgroundService.updating; },
+		updating: function() { return true; }, // true until first list fetch is complete
 		
 		getUpdateStatus: function(callback) {
 			$timeout(function() {
@@ -16,8 +16,9 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 			// We define an interval to update the list while tags' updating is in progress
 			if(TagsService.updateListInterval === null) {
 				TagsService.updateListInterval = $interval(function() {
-					// The intervall will automatically trigger a scope update, so we don't need to redefine the list
-					//TagsService.list = BackgroundService.Tags.list;
+					BackgroundService.Tags.getList(function(error, tagsList) {
+						TagsService.list = tagsList;
+					});
 
 					if(TagsService.updating() === false) {
 						$interval.cancel(TagsService.updateListInterval);
@@ -55,6 +56,12 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 			});
 		}
 	};
+
+	BackgroundService.Tags.getList(function(error, tagsList) {
+		TagsService.list = tagsList;
+
+		TagsService.updating = function() { return BackgroundService.updating; };
+	});
 	
 	return TagsService;
 });

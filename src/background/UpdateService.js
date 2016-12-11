@@ -57,30 +57,51 @@
 
 		_updates: [
 			{'version': 20, 'perform': function(callback) {
-		        s2s.Logger.info('[Update] Cleaning extension\'s background data.');
+		    s2s.Logger.info('[Update] Cleaning extension\'s background data.');
 
 				var popups = chrome.extension.getViews({type: 'popup'});
-		        if(popups && popups.length) {
-		        	popups[0].window.close();
-		        }
+        if(popups && popups.length) {
+        	popups[0].window.close();
+        }
 
-		        ChromeHelper.clearStorage();
+        ChromeHelper.clearStorage();
 
-		        // Clear cached data from background script
-		        Tags.data.clearCache();
-		        Spotify.data.clearCache();
+        // Clear cached data from background script
+        Tags.data.clearCache();
+        Spotify.data.clearCache();
 
-		        // Reload tags, will reset list & lastUpdate
-		        s2s.Tags.load();
+        // Reload tags, will reset list & lastUpdate
+        s2s.Tags.load();
 
-		        UpdateService.openUpdatePage('0.2.0');
+        UpdateService.openUpdatePage('0.2.0');
 
-		        callback();
+        callback();
 			}},
 			{'version': 23, 'perform': function(callback) {
 		 		UpdateService.openUpdatePage('0.2.3');
 
-		        callback();
+        callback();
+			}},
+			{'version': 40, 'perform': function(callback) {
+				s2s.Logger.info('[Update] Cleaning extension\'s background data.');
+
+				var popups = chrome.extension.getViews({type: 'popup'});
+        if(popups && popups.length) {
+        	popups[0].window.close();
+        }
+
+        ChromeHelper.clearStorage();
+
+        // Clear cached data from background script
+        Tags.data.clearCache();
+        Spotify.data.clearCache();
+
+        // Reload tags, will reset list & lastUpdate
+        s2s.Tags.load();
+
+		 		UpdateService.openUpdatePage('0.4.0');
+
+		    callback();
 			}}
 		]
 	};

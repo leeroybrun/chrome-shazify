@@ -1,6 +1,5 @@
-(function(StorageHelper, Logger, Spotify, Shazam){
+(function(Database, StorageHelper, Logger, Spotify, Shazam){
 	var Tags = {
-		list: [],
 		lastUpdate: new Date(0),
 
 		// Add/update a tag in the tags list
@@ -34,27 +33,16 @@
 
 		// Private : called from Tags.add, add the specified tag to list or update it
 		_addToList: function(tag, callback) {
-			// TODO: use Array.prototype.find when available on Chrome
-			var found = false;
-			for(var i in Tags.list) {
-				if(Tags.list[i].shazamId == tag.shazamId) {
-					found = true;
-					$.extend(Tags.list[i], tag); // Update existing tag
-					break;
-				}
-			}
+			Tags.db.put(tag).then(function() {
+				return Tags.db.get(tag.shazamId).then(function(tag) {
+					return callback(null, tag);
+				});
+			}).catch(function(reason) {
+				Logger.error('[Tags] Error adding/updating tag to DB : '+ reason +'.');
+				Logger.error(reason);
 
-			if(!found) {
-				Tags.list.push(tag);
-			}
-
-			Tags.list.sort(function (a, b) {
-				if (a.date > b.date) { return -1; }
-				if (a.date < b.date) { return 1; }
-				return 0;
+				return callback(reason);
 			});
-
-			callback();
 		},
 
 		_updateStatusNbTags: 0, // Nombre de tags au total en cours d'ajout
@@ -104,40 +92,62 @@
 		updatePlaylist: function(callback) {
 			Logger.info('[Tags] Updating playlist on Spotify.');
 
-			var tracksToAdd = [];    // Used to revert "status" if an error occurs
-			var tracksIdsToAdd = []; // Used to add tracks to playlist
+			// Used to revert "status" if an error occurs
+			Tags.db.where('status').equals(3).toArray().then(function(tracksToAdd) {
+				var tracksIdsToAdd = []; // Used to add tracks to playlist
 
-			for(var i in Tags.list) {
-				var tag = Tags.list[i];
-
-				if(tag.status == 3) { 
-					tracksToAdd.push(tag);
-					tracksIdsToAdd.push(tag.spotifyId);
-					tag.status = 4;
+				for(var i in tracksToAdd) {
+					tracksIdsToAdd.push(tracksToAdd[i].spotifyId);
+					tracksToAdd[i].status = 4; // Set status as added, will not be saved to DB if an error occurs
 				}
-			}
 
-			Spotify.playlist.addTracks(tracksIdsToAdd, function(err) {
-				if(err) {
-					Logger.info('[Tags] Cannot add tags to playlist, reverting tags status.');
-					// If an error occurs, revert tag status to 3. This will let the system retry addition later.
-					for(var i in tracksToAdd) {
-						tracksToAdd[i].status = 3;
+				Spotify.playlist.addTracks(tracksIdsToAdd, function(err) {
+					if(err) {
+						Logger.info('[Tags] Cannot add tags to playlist.');
+					} else {
+						// Only update DB if addition succeeded
+						Tags.db.bulkPut(tracksToAdd).then(function() {
+							Logger.info('[Tags] Updated in DB.');
+						}).catch(function(reason) {
+							Logger.error('[Tags] Error updating tags in DB.');
+							Logger.error(reason);
+						});
 					}
-				}
 
-				Tags.save(callback);
+					Tags.save(callback);
+				});
+			}).catch(function(reason) {
+				Logger.error('[Tags] Error getting tags list to add.');
+				Logger.error(reason);
 			});
 		},
 
-		// Save tags data (list & lastUpdate)
+		// Save tags data (lastUpdate)
 		save: function(callback) {
 			callback = callback || function(){};
 
 			Logger.info('[Tags] Saving tags data.');
 
-			Tags.data.set({'tagsList': Tags.list, 'lastUpdate': Tags.lastUpdate.getTime()}, function() {
+			Tags.data.set({'lastUpdate': Tags.lastUpdate.getTime()}, function() {
 				callback();
+			});
+		},
+
+		getList: function(callback) {
+			callback = callback || function(){};
+
+			Tags.db.orderBy('date').toArray().then(function(tagsList) {
+				return callback(null, tagsList);
+			}).catch(function(reason) {
+				return callback(reason);
+			});
+		},
+
+		count: function(callback) {
+			Tags.db.count().then(function(tagsCount) {
+				return callback(null, tagsCount);
+			}).catch(function(reason) {
+				return callback(reason);
 			});
 		},
 		
@@ -145,20 +155,27 @@
 		load: function(callback) {
 			callback = callback || function(){};
 			
-			Tags.data.get(['tagsList', 'lastUpdate'], function(items) {
-				Tags.list = items.tagsList || [];
+			Tags.data.get('lastUpdate', function(items) {				
 				Tags.lastUpdate = new Date(items.lastUpdate) || new Date(0);
 				Tags.lastUpdate = (!isNaN(Tags.lastUpdate.valueOf())) ? Tags.lastUpdate : new Date(0);
 
-				Logger.info('[Tags] Got from storage -> tagsList: '+ Tags.list.length +' items.');
+				Tags.count(function(error, tagsCount) {
+					if(error) {
+						return Logger.error('[Tags] Error counting tags in DB : '+ error +'.');
+					}
+
+					Logger.info('[Tags] '+ tagsCount +' items in DB.');
+				});
+				
 				Logger.info('[Tags] Got from storage -> lastUpdate: '+ Tags.lastUpdate +'.');
 
 				callback();
 			});
 		},
 
-		data: new StorageHelper('Tags')
+		data: new StorageHelper('Tags', 'sync'),
+		db: Database.tags
 	};
 
 	window.s2s.Tags = Tags;
-})(window.s2s.StorageHelper, window.s2s.Logger, window.s2s.Spotify, window.s2s.Shazam);
+})(window.s2s.Db, window.s2s.StorageHelper, window.s2s.Logger, window.s2s.Spotify, window.s2s.Shazam);

@@ -67,6 +67,7 @@ grunt bundle
 - Create an update page to let the users know of the new functionnalities
 - Add an edit button for tracks found, to le the user know he can change the track found
 - Replace SVG icons with SimpleLineIcons
+- Use bulk* methods from Dexie.js to speedup tags addition/update to DB
 
 ## Disclaimer
 

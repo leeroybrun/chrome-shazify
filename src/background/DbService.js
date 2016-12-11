@@ -2,14 +2,14 @@
 	var Db = (function() {
 		var db = new Dexie('Shazify');
 
-		/*db.version(1).stores({
-		    users: "++id, name, &username, *email, address.city",
-		    relations: "++, userId1, userId2, [userId1+userId2], relation"
+		db.version(1).stores({
+			// shazamId is primary key & unique
+		  tags: 'shazamId, date, spotifyId, status', // name, artist, query, image
 		});
 
 		db.open().catch(function (e) {
-		    console.error("Open failed: " + e.stack);
-		});*/
+		  console.error("Open failed: " + e.stack);
+		});
 
 		return db;
 	}());
