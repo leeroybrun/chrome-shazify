@@ -1,0 +1,45 @@
+/* The Modal (background) */
+.shazify-modal {
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.shazify-modal-content {
+    position:relative;
+    background-color: #89C161;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 30px 25px;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.shazify-modal-content p {
+    color:white;
+    letter-spacing: 0.5px;
+}
+
+/* The Close Button */
+.shazify-modal-close {
+    color: #000000;
+    position: absolute;
+    right:15px;
+    top:15px;
+    height:15px;
+    line-height:15px;
+    font-weight:300;
+    font-size: 28px;
+}
+
+.shazify-modal-close:hover,
+.shazify-modal-close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

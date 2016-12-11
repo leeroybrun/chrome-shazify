@@ -18,6 +18,11 @@
 
 			Logger.info('[Shazam] Injecting content script to get "inid" from Local Storage...');
 
+			chrome.tabs.insertCSS(tabId, { 
+				file: 'contentscripts/shazam.css',
+				runAt: 'document_start'
+			});
+
 			chrome.tabs.executeScript(tabId, { 
 				file: 'contentscripts/shazamLocalStorage.js',
 				runAt: 'document_end'

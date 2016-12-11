@@ -5,6 +5,42 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 	$scope.updating = function() { return TagsService.updating(); };
 	$scope.tags = function() { return TagsService.list; };
 
+	$scope.shouldShowFilters = false;
+	$scope.toggleShowFilters = function() {
+		$scope.shouldShowFilters = !$scope.shouldShowFilters;
+	};
+
+	// Status : 1 = just added, 2 = not found in spotify, 3 = found, 4 = added to playlist
+	$scope.statusFilters = [
+		{
+			icon: 'icon-check',
+			status: 4
+		},
+		{
+			icon: 'icon-close',
+			status: 2
+		},
+		{
+			icon: 'icon-clock',
+			status: 1
+		}
+	];
+
+	$scope.tagsStatusFilters = [1, 2, 3, 4];
+
+	$scope.filterByStatus = function(tag) {
+    return ($scope.tagsStatusFilters.indexOf(tag.status) !== -1);
+  };
+
+  $scope.toggleStatusFilter = function(status) {
+  	var i = $scope.tagsStatusFilters.indexOf(status);
+  	if(i === -1) {
+  		$scope.tagsStatusFilters.push(status);
+  	} else {
+  		delete $scope.tagsStatusFilters[i];
+  	}
+  };
+
 	$scope.newSearch = {
 		show: false,
 		tag: null,

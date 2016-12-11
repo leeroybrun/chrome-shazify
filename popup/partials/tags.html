@@ -1,5 +1,11 @@
 <div class="topbar">
 	<div class="right">
+		<a class="simplelineicon clickable" ng-click="toggleShowFilters()" analytics-on analytics-event="Open filters" analytics-category="Tags" ng-if="updating() === false">
+			<i class="icon-tag"></i>
+		</a>
+		<div class="dropdown" ng-show="shouldShowFilters">
+			<a class="filter" ng-repeat="filter in statusFilters" ng-click="toggleStatusFilter(filter.status)" ng-class="{ selected: tagsStatusFilters.indexOf(filter.status) !== -1 }"><i class="{{filter.icon}}"></i></a>
+		</div>
 		<a class="iconmelon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
 			<svg viewBox="0 0 32 32">
 				<g filter="">
@@ -50,7 +56,7 @@
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
-	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags() track by tag.shazamId">
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags() | filter:filterByStatus track by tag.shazamId">
 		<div class="tag-status">
 			<div class="success clickable" ng-if="tag.status >= 3" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search on already found" analytics-category="Tags" ng-class="{'pending': tag.status == 3}">
 				<div class="iconmelon">

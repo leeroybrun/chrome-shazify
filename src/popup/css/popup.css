@@ -317,6 +317,70 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		overflow:hidden;
 	}
 
+	.topbar .simplelineicon {
+		width:16px;
+		height:16px;
+		font-size:16px;
+		line-height: 16px;
+		float:left;
+		margin-left:7px;
+		margin-top:6px;
+	}
+
+	.topbar .dropdown {
+		position:absolute;
+		top:44px;
+		background-color: white;
+		border:1px solid #cccccc;
+		padding:10px;
+		z-index: 2000;
+    right: 30px;
+    box-sizing: content-box;
+    height: 16px;
+	}
+
+	.topbar .dropdown:after, .topbar .dropdown:before {
+		bottom: 100%;
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.topbar .dropdown:after {
+		border-color: rgba(255, 255, 255, 0);
+		border-bottom-color: #ffffff;
+		border-width: 6px;
+		margin-left: -6px;
+	}
+	.topbar .dropdown:before {
+		border-color: rgba(204, 204, 204, 0);
+		border-bottom-color: #cccccc;
+		border-width: 7px;
+		margin-left: -7px;
+	}
+
+	.topbar .dropdown .filter {
+		font-size:16px;
+		line-height: 16px;
+		height: 16px;
+		opacity: 0.3;
+		margin-right:5px;
+		cursor:pointer;
+		display:inline-block;
+	}
+
+	.topbar .dropdown .filter:last-child {
+		margin-right: 0;
+	}
+
+	.topbar .dropdown .filter.selected {
+		opacity:1;
+	}
+
 	.topbar .iconmelon {
 		width:16px;
 		height:16px;
@@ -535,6 +599,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.tag .tag-image {
 		width:36px;
+		border-radius: 50%;
 		float:left;
 		margin-right:10px;
 	}

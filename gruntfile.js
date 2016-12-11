@@ -17,7 +17,8 @@ module.exports = function(grunt) {
 			},
 			css: {
 				files: {
-					'popup/popup.css': ['src/popup/css/*.css']
+					'popup/popup.css': ['src/popup/css/*.css'],
+					'contentscripts/shazam.css': ['src/contentscripts/shazam.css']
 				}
 			},
 			js: {
@@ -55,7 +56,7 @@ module.exports = function(grunt) {
 				}
 			},
 			css: {
-				files: ['src/popup/css/*.css'],
+				files: ['src/popup/css/*.css', 'src/contentscripts/*.css'],
 				tasks: ['build:css'],
 				options: {
 					spawn: false,

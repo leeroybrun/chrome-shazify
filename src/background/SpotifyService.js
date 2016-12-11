@@ -475,9 +475,14 @@
 										callback(new Error('Please authorize Shazify to access your Spotify account.'));
 									}
 								});
+							// Too many requests, wait and try again
+							} else if(jqXHR.status === 429) {
+								setTimeout(function() {
+									Spotify.call(options, callback);
+								}, 1000);
 							} else {
-								callback(new Error('Error calling API'));
-								Logger.error('[Spotify] Error calling API : '+textStatus+'.');
+								callback(new Error('Error calling API ('+ jqXHR.status +').'));
+								Logger.error('[Spotify] Error calling API ('+ jqXHR.status +') : '+textStatus+'.');
 							}
 						});
 				});

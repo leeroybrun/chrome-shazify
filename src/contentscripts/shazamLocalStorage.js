@@ -23,6 +23,43 @@ function retrieveWindowVariables(variables) {
     return ret;
 }
 
+function openModal(text) {
+    var modalContainer = document.createElement('div');
+    modalContainer.className = 'shazify-modal';
+
+    var modalContent = document.createElement('div');
+    modalContent.className = 'shazify-modal-content';
+    modalContainer.appendChild(modalContent);
+
+    var modalClose = document.createElement('span');
+    modalClose.className = 'shazify-modal-close';
+    modalClose.innerHTML = '&times;';
+
+    var modalText = document.createElement('p');
+    modalText.innerHTML = text;
+
+    modalContent.appendChild(modalClose);
+    modalContent.appendChild(modalText);
+
+    var closeModal = function() {
+        modalContainer.remove();
+    };
+
+    modalClose.onclick = closeModal;
+    modalContainer.onclick = closeModal;
+    
+    document.body.appendChild(modalContainer);
+}
+
+var modalOpened = false;
+function openModalOnlyOnce(text) {
+    if(modalOpened) {
+        return;
+    }
+
+    return openModal(text);
+}
+
 function getAndSendLocalStorage() {
     var pageVars = retrieveWindowVariables(['localStorage']);
 
@@ -37,6 +74,8 @@ function getAndSendLocalStorage() {
             observeForLoginAndGetLocalStorage();
           } else {
             console.log('inid seems fine! Congrats! You are now logged in on Shazam.');
+
+            openModalOnlyOnce('<b>Shazify:</b> Login is successful! Please open Shazify again.');
           }
         });
 
