@@ -6,27 +6,14 @@
 		<div class="dropdown" ng-show="shouldShowFilters">
 			<a class="filter" ng-repeat="filter in statusFilters" ng-click="toggleStatusFilter(filter.status)" ng-class="{ selected: tagsStatusFilters.indexOf(filter.status) !== -1 }"><i class="{{filter.icon}}"></i></a>
 		</div>
-		<a class="iconmelon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#rotate"></use>
-				</g>
-			</svg>
+		<a class="simplelineicon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
+			<i class="icon-refresh"></i>
 		</a>
-		<a class="iconmelon" ng-if="updating() === true">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#rotate"></use>
-					<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="4s" repeatCount="indefinite"/>
-				</g>
-			</svg>
+		<a class="simplelineicon" ng-if="updating() === true">
+			<i class="icon-refresh icon-spin"></i>
 		</a>
-		<a class="iconmelon" href="#/settings">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#settings-toolkit"></use>
-				</g>
-			</svg>
+		<a class="simplelineicon" href="#/settings">
+			<i class="icon-settings"></i>
 		</a>
 	</div>
 	<h2 chrome-translate>myTags</h2>
@@ -34,55 +21,42 @@
 <div class="tags-list">
 	<div class="updating" ng-if="updating() === true">
 		<div class="content">
-			<div class="iconmelon">
-				<svg viewBox="0 0 32 32">
-					<g filter="">
-						<use xlink:href="#rotate"></use>
-						<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="4s" repeatCount="indefinite"/>
-					</g>
-				</svg>
+			<div class="simplelineicon">
+				<i class="icon-refresh icon-spin"></i>
 			</div>
-			<p><span chrome-translate>updatingTags</span><br />{{updateStatus}}</p>
+			<p><span class="updating-tags" chrome-translate>updatingTags</span><br />{{updateStatus}}</p>
 			<p chrome-translate>doNotCloseBrowser</p>
 		</div>
 	</div>
+	<div class="loading" ng-if="loading === true && updating() === false">
+		<div class="content">
+			<div class="simplelineicon">
+				<i class="icon-refresh icon-spin"></i>
+			</div>
+			<p chrome-translate>loadingTags</p>
+		</div>
+	</div>
 	<div class="no-tags" ng-if="!tags">
-		<p class="iconmelon">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#error"></use>
-				</g>
-			</svg>
+		<p class="simplelineicon">
+			<i class="icon-exclamation"></i>
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
 	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags() | filter:filterByStatus track by tag.shazamId">
 		<div class="tag-status">
 			<div class="success clickable" ng-if="tag.status >= 3" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search on already found" analytics-category="Tags" ng-class="{'pending': tag.status == 3}">
-				<div class="iconmelon">
-					<svg viewBox="0 0 32 32">
-						<g filter="">
-							<use xlink:href="#success"></use>
-						</g>
-					</svg>
+				<div class="simplelineicon">
+					<i class="icon-check"></i>
 				</div>
 			</div>
 			<div class="error" ng-if="tag.status == 2">
-				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
-					<svg viewBox="0 0 32 32">
-						<g filter="">
-							<use xlink:href="#error"></use>
-						</g>
-					</svg>
+				<div class="simplelineicon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
+					<i class="icon-close"></i>
 				</div>
 			</div>
 			<div class="search" ng-if="tag.status == 1">
-				<div class="iconmelon">
-					<svg viewBox="0 0 32 32">
-						<g filter="">
-							<use xlink:href="#search"></use>
-						</g>
-					</svg>
+				<div class="simplelineicon">
+					<i class="icon-clock"></i>
 				</div>
 			</div>
 		</div>
@@ -90,6 +64,17 @@
 		<img ng-if="!tag.image" src="img/placeholder.png" class="tag-image">
 		<div class="tag-name">{{tag.name}}</div>
 		<div class="tag-artist">{{tag.artist}}</div>
+	</div>
+	<div class="pagination">
+		<button class="pure-button pure-button-primary" analytics-on analytics-event="Prev page" analytics-category="Tags" ng-disabled="!pagination.hasPrevPage()" ng-click="pagination.prevPage()">
+        <-
+    </button>
+    <button class="btn btn-default" disabled>
+        {{pagination.page+1}}/{{pagination.nbPages()}}
+    </button>
+    <button class="pure-button pure-button-primary" analytics-on analytics-event="Next page" analytics-category="Tags" ng-disabled="!pagination.hasNextPage()" ng-click="pagination.nextPage()">
+        ->
+    </button>
 	</div>
 	<div class="modal-overlay" ng-if="newSearch.show" ng-click="newSearch.cancel()"></div>
 	<div class="modal new-search-modal" ng-if="newSearch.show">
@@ -110,12 +95,8 @@
 			<a ng-click="newSearch.selectTrack(track)" ng-class="{selected: track.id == newSearch.selectedTrack.id}" class="tag search-result clickable" ng-repeat="track in newSearch.results track by track.id">
 				<div class="tag-status" ng-if="newSearch.selectedTrack && track.id == newSearch.selectedTrack.id">
 					<div class="success">
-						<div class="iconmelon">
-							<svg viewBox="0 0 32 32">
-								<g filter="">
-									<use xlink:href="#success"></use>
-								</g>
-							</svg>
+						<div class="simplelineicon">
+							<i class="icon-check"></i>
 						</div>
 					</div>
 				</div>

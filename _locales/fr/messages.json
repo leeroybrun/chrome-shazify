@@ -61,6 +61,10 @@
   	"message": "Mise à jour des tags en cours...",
   	"description": ""
   },
+  "loadingTags": {
+    "message": "Chargement...",
+    "description": ""
+  },
   "doNotCloseBrowser": {
     "message": "Veuillez ne pas fermer votre navigateur",
     "description": ""

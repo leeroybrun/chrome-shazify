@@ -3,7 +3,6 @@
 		update: function(initVersionTxt, finalVersionTxt) {
 			var rePoint = new RegExp('\\.', 'g');
 
-			// TODO: handle versions 0.2.10 -> 210 -> bigger than 0.3.1 -> 31 !
 			var initVersion = parseInt(initVersionTxt.replace(rePoint, ''));
 			var finalVersion = parseInt(finalVersionTxt.replace(rePoint, ''));
 
@@ -55,6 +54,13 @@
         	chrome.tabs.create({'url': chrome.extension.getURL('static/update-'+ version +'-'+ locale +'.html'), 'selected': true});
 		},
 
+    /*
+      Use full version number, example :
+        v0.4.0  -> 00.04.00 -> 400
+        v0.4.2  -> 00.04.02 -> 402
+        v0.4.15 -> 00.04.15 -> 415
+        v1.3.4  -> 01.03.04 -> 10304
+    */
 		_updates: [
 			{'version': 20, 'perform': function(callback) {
 		    s2s.Logger.info('[Update] Cleaning extension\'s background data.');
@@ -82,7 +88,8 @@
 
         callback();
 			}},
-			{'version': 40, 'perform': function(callback) {
+      // v0.04.00
+			{'version': 400, 'perform': function(callback) {
 				s2s.Logger.info('[Update] Cleaning extension\'s background data.');
 
 				var popups = chrome.extension.getViews({type: 'popup'});

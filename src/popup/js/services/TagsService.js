@@ -2,9 +2,29 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 	// Tags list : http://stackoverflow.com/a/18569690/1160800
 
 	var TagsService = {
-		list: [],
 		updateListInterval: null,
-		updating: function() { return true; }, // true until first list fetch is complete
+		updating: function() { return BackgroundService.updating; },
+
+		getList: function(status, offset, limit, callback) {
+			if(typeof status === 'function') {
+				callback = status;
+				status = null;
+				offset = null;
+				limit = null;
+			}
+
+			BackgroundService.Tags.getList({
+				where: {
+					status: status || [ 1, 2, 3, 4 ]
+				},
+				offset: offset || 0,
+				limit: limit || 50
+			}, callback);
+
+			BackgroundService.Tags.count(function(error, count) {
+				TagsService.count = count;
+			});
+		},
 		
 		getUpdateStatus: function(callback) {
 			$timeout(function() {
@@ -12,13 +32,11 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 			}, 0);
 		},
 
-		updateTags: function(callback) {
+		updateTags: function(updateCallback, callback) {
 			// We define an interval to update the list while tags' updating is in progress
 			if(TagsService.updateListInterval === null) {
 				TagsService.updateListInterval = $interval(function() {
-					BackgroundService.Tags.getList(function(error, tagsList) {
-						TagsService.list = tagsList;
-					});
+					updateCallback();
 
 					if(TagsService.updating() === false) {
 						$interval.cancel(TagsService.updateListInterval);
@@ -56,12 +74,6 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 			});
 		}
 	};
-
-	BackgroundService.Tags.getList(function(error, tagsList) {
-		TagsService.list = tagsList;
-
-		TagsService.updating = function() { return BackgroundService.updating; };
-	});
 	
 	return TagsService;
 });

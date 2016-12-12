@@ -133,10 +133,45 @@
 			});
 		},
 
-		getList: function(callback) {
+		getList: function(options, callback) {
+			options = options || {};
 			callback = callback || function(){};
 
-			Tags.db.orderBy('date').toArray().then(function(tagsList) {
+			var tags = Tags.db.orderBy('date');
+
+			/* 
+				{
+					status: [1, 2, 3, 4], // Will be translated to .where('status').anyOf([1, 2, 3, 4])
+					name: 'Hello' 				// Will be translated to .and('name').equals('Hello')
+				}
+			*/
+			if(options.where) {
+				var firstWhere = true;
+				Object.keys(options.where).forEach(function(key) {
+					if(firstWhere) {
+						tags = tags.where(key);
+						firstWhere = false;
+					} else {
+						tags = tags.and(key);
+					}
+
+					if(Array.isArray(options.where[key])) {
+						tags = tags.anyOf(options.where[key]);
+					} else {
+						tags = tags.equals(options.where[key]);
+					}
+				});
+			}
+
+			if(options.offset) {
+				tags = tags.offset(options.offset);
+			}
+
+			if(options.limit) {
+				tags = tags.limit(options.limit);
+			}
+
+			tags.toArray().then(function(tagsList) {
 				return callback(null, tagsList);
 			}).catch(function(reason) {
 				return callback(reason);

@@ -62,12 +62,12 @@ grunt bundle
 - Add tracks in order on Spotify
     - Reorder existing tracks
 - Store tags and Spotify tracks found in IndexedDB (use Dexie.js)
-- Remove tags from localStorage
+- [x] Remove tags from localStorage
 - When select a different Spotify track for a tag, remove the old one from playlist (if not associated with another tag) and add the new one
 - Create an update page to let the users know of the new functionnalities
 - Add an edit button for tracks found, to le the user know he can change the track found
-- Replace SVG icons with SimpleLineIcons
-- Use bulk* methods from Dexie.js to speedup tags addition/update to DB
+- [x] Replace SVG icons with SimpleLineIcons
+- Use bulk* methods from Dexie.js to speedup tags addition/update to DB or transactions
 
 ## Disclaimer
 

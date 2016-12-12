@@ -46,6 +46,27 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		width:300px;
 	}
 
+	.simplelineicon {
+	  width: 32px;
+	  height: 32px;
+	  display: block;
+	  color: #525151;
+	}
+
+	.simplelineicon.red {
+		color:#A94442;
+	}
+
+	.simplelineicon.green {
+		color:#3c763d;
+	}
+
+	.icon-spin {
+		display:inline-block;
+		-webkit-animation: spin 2s infinite linear;
+		animation: spin 2s infinite linear;
+	}
+
 	.iconmelon {
 	  position: relative;
 	  width: 32px;
@@ -109,6 +130,28 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 /* Animations */
+
+	@-webkit-keyframes spin {
+		0% {
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+		100% {
+			-webkit-transform: rotate(-359deg);
+			transform: rotate(-359deg);
+		}
+	}
+
+	@keyframes spin {
+		0% {
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+		100% {
+			-webkit-transform: rotate(-359deg);
+			transform: rotate(-359deg);
+		}
+	}
 
 	@-webkit-keyframes enterAnimation {
 		to { 
@@ -250,7 +293,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 /* Updating */
-	.updating {
+	.updating, .loading {
 		position:absolute;
 		top:0;
 		left:0;
@@ -261,20 +304,20 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		z-index:3000;
 	}
 
-	.updating.ng-enter, .modal-overlay.ng-leave {
+	.updating.ng-enter, .updating.ng-leave, .loading.ng-enter, .loading.ng-leave {
 		-webkit-transition: 0.3s ease all;
 				transition: 0.3s ease all;
 	}
 
-	.updating.ng-enter, .updating.ng-leave.ng-leave-active {
+	.updating.ng-enter, .updating.ng-leave.ng-leave-active, .loading.ng-enter, .loading.ng-leave.ng-leave-active {
 		opacity:0;
 	}
 
-	.updating.ng-enter.ng-enter-active, .updating.ng-leave {
+	.updating.ng-enter.ng-enter-active, .updating.ng-leave, .loading.ng-enter.ng-enter-active, .loading.ng-leave {
 		opacity:1;
 	}
 
-	.updating .content {
+	.updating .content, .loading .content {
 		width:150px;
 		height:150px;
 		position:absolute;
@@ -284,16 +327,29 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		text-align:center;
 	}
 
-	.updating .iconmelon {
+	.updating .iconmelon, .loading .iconmelon {
 		width:64px;
 		height:64px;
 		margin:40px auto;
 		display:block;
 	}
 
-	.updating .iconmelon svg {
+	.updating .iconmelon svg, .loading .iconmelon svg {
 		padding:8px;
 		margin-left:-10px;
+	}
+
+	.updating .simplelineicon, .loading .simplelineicon {
+		width:64px;
+		height:64px;
+		font-size:64px;
+		line-height:64px;
+		margin:40px auto;
+		display:block;
+	}
+
+	.updating .updating-tags {
+		font-size:120%;
 	}
 
 /* Top bar */
@@ -527,6 +583,14 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		margin:0 auto;
 	}
 
+	.no-tags .simplelineicon {
+		width:64px;
+		height:64px;
+		font-size:64px;
+		line-height:64px;
+		margin:0 auto;
+	}
+
 	.tags-list {
 		overflow:hidden;
 		position:relative;
@@ -583,6 +647,29 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.tag-status .search .iconmelon {
 		fill:#59ABE3;
+	}
+
+	.tag-status .simplelineicon {
+		width:32px;
+		height:32px;
+		font-size:32px;
+		line-height:32px;
+	}
+
+	.tag-status .success .simplelineicon {
+		color:#2ECC71;
+	}
+
+	.tag-status .success.pending .simplelineicon {
+		opacity:0.6;
+	}
+
+	.tag-status .error .simplelineicon {
+		color:#F9690E;
+	}
+
+	.tag-status .search .simplelineicon {
+		color:#59ABE3;
 	}
 
 	.tag.tag-success {

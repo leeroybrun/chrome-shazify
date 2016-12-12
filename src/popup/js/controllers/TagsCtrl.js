@@ -3,7 +3,17 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 
 	$scope.updateStatus = '';
 	$scope.updating = function() { return TagsService.updating(); };
-	$scope.tags = function() { return TagsService.list; };
+	$scope.tags = [];
+
+	$scope.loading = true;
+
+	function updateList() {
+		$scope.loading = true;
+		TagsService.getList($scope.tagsStatusFilters, $scope.pagination.offset(), $scope.pagination.limit, function(list) {
+			$scope.tags = list;
+			$scope.loading = false;
+		});
+	}
 
 	$scope.shouldShowFilters = false;
 	$scope.toggleShowFilters = function() {
@@ -38,6 +48,43 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
   		$scope.tagsStatusFilters.push(status);
   	} else {
   		delete $scope.tagsStatusFilters[i];
+  	}
+  };
+
+  $scope.pagination = {
+  	page: 0,
+  	offset: function() { return this.page * this.offset; },
+  	limit: 50,
+  	totalItems: function() { return TagsService.count; },
+  	nbPages: function() {
+      return Math.ceil(this.totalItems() / this.limit);
+    },
+    loading: false,
+
+  	hasNextPage: function() {
+  		return this.page < this.nbPages();
+  	},
+  	nextPage: function() {
+  		if(!this.hasNextPage()) {
+    		return;
+    	}
+
+  		this.page++;
+
+  		updateList();
+  	},
+
+  	hasPrevPage: function() {
+  		return this.page > 0;
+  	},
+  	prevPage: function() {
+  		if(!this.hasPrevPage()) {
+    		return;
+    	}
+
+  		this.page--;
+
+  		updateList();
   	}
   };
 
@@ -111,14 +158,12 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 	};
 
 	var refreshTags = function() {
-		// This timer will update the status of tags addition
-		var refreshTimer = setInterval(function(){
+		TagsService.updateTags(function() {
+			// Called multiple times to update list/count during update
 			updateStatus();
-		}, 3000);
-
-		TagsService.updateTags(function(err) {
-			clearInterval(refreshTimer);
-
+			return updateList();
+		}, function(err) {
+			// Final callback called only once
 			if(err) {
 				return $location.path('/settings');
 			}
