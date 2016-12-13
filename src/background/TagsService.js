@@ -122,6 +122,77 @@
 			});
 		},
 
+		selectSpotifyTrack: function(shazamId, newSpotifyId, callback) {
+			Tags.db.get(shazamId).then(function(tag) {
+				var oldSpotifyId = tag.spotifyId;
+
+				Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' (old: '+ oldSpotifyId +' | new: '+ newSpotifyId +').');
+
+				// Selected spotifyId is the same as already registered for the track
+				if(oldSpotifyId && oldSpotifyId === newSpotifyId) {
+					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : same, nothing to do.');
+					return callback();
+				}
+
+				var Promise = Dexie.Promise;
+				var promise = Promise.resolve();
+
+				// -- Remove old track from playlist --
+				// Tag was already linked to a Spotify track, but we link it to a new one
+				// If other tags are linked to the old track -> don't change anything in playlist
+				// If no other is linked to it, remove it to playlist
+				if(oldSpotifyId) {
+					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : an other track was already defined.');
+					promise.then(function() {
+						return Tags.db.where('spotifyId').equals(oldSpotifyId).count().then(function(count) {
+							Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : '+ count +' other tags have the old one too.');
+							// No other tags linked to the old Spotify track
+							if(count === 0) {
+								return new Promise(function(resolve, reject) {
+									Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : no other tag is linked to the old track, removing from playlist.');
+									Spotify.playlist.removeTracks([oldSpotifyId], function(err) {
+										if(err) {
+											return reject(err);
+										}
+
+										return resolve();
+									});
+								});
+							}
+						});
+					});
+				}
+
+				// -- Add new track to playlist --
+				return promise.then(function() {
+					return new Promise(function(resolve, reject) {
+						Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : adding new track to playlist.');
+						Spotify.playlist.addTracks([newSpotifyId], function(err) {
+							if(err) {
+								return reject(err);
+							}
+
+							return resolve();
+						});
+					});
+				// -- Update tag in DB with new spotifyId --
+				}).then(function() {
+					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : updating tag in DB.');
+					tag.spotifyId = newSpotifyId;
+					tag.status = 4;
+					// TODO: update artist, name, etc. as in the .add() method
+					return Tags.db.put(tag);
+				});
+			}).then(function() {
+				Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : all done!');
+				return callback();
+			}).catch(function(reason) {
+				Logger.error('[Tags] Error trying to replace Spotify track for '+ shazamId +'.');
+				Logger.error(reason);
+				return callback(reason);
+			});
+		},
+
 		// Save tags data (lastUpdate)
 		save: function(callback) {
 			callback = callback || function(){};
@@ -137,42 +208,52 @@
 			options = options || {};
 			callback = callback || function(){};
 
-			var tags = Tags.db.orderBy('date');
+			var tags = Tags.db;
 
-			/* 
-				{
-					status: [1, 2, 3, 4], // Will be translated to .where('status').anyOf([1, 2, 3, 4])
-					name: 'Hello' 				// Will be translated to .and('name').equals('Hello')
+			tags = tags.orderBy('date');
+
+			// Count all tags before filtering them
+			tags.count().then(function(totalCount) {
+
+				/* 
+					{
+						status: [1, 2, 3, 4], // Will be translated to .where('status').anyOf([1, 2, 3, 4])
+						name: 'Hello' 				// Will be translated to .and('name').equals('Hello')
+					}
+				*/
+				if(options.where) {
+					tags.filter(function(tag) {
+						var found = true;
+						Object.keys(options.where).forEach(function(key) {
+							if(Array.isArray(options.where[key])) {
+								found = found && options.where[key].indexOf(tag[key]) !== -1;
+							} else {
+								found = found && tag[key] === options.where[key];
+							}
+						});
+
+						return found;
+					});
 				}
-			*/
-			if(options.where) {
-				var firstWhere = true;
-				Object.keys(options.where).forEach(function(key) {
-					if(firstWhere) {
-						tags = tags.where(key);
-						firstWhere = false;
-					} else {
-						tags = tags.and(key);
+
+				// Count filtered tags
+				return tags.count().then(function(count) {
+					if(options.limit) {
+						if('offset' in options) {
+							tags = tags.offset(options.offset);
+						}
+
+						tags = tags.limit(options.limit);
 					}
 
-					if(Array.isArray(options.where[key])) {
-						tags = tags.anyOf(options.where[key]);
-					} else {
-						tags = tags.equals(options.where[key]);
-					}
+					return tags.toArray().then(function(list) {
+						return callback(null, {
+							totalCount: totalCount,
+							count: count,
+							list: list
+						});
+					});
 				});
-			}
-
-			if(options.offset) {
-				tags = tags.offset(options.offset);
-			}
-
-			if(options.limit) {
-				tags = tags.limit(options.limit);
-			}
-
-			tags.toArray().then(function(tagsList) {
-				return callback(null, tagsList);
 			}).catch(function(reason) {
 				return callback(reason);
 			});

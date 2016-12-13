@@ -13,16 +13,30 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 				limit = null;
 			}
 
+			status = (status === null || typeof status === 'undefined') ? [ 1, 2, 3, 4 ] : status;
+			offset = (offset === null || typeof offset === 'undefined') ? 0 : offset;
+			limit  = (limit === null || typeof limit === 'undefined') ? 10 : limit;
+
 			BackgroundService.Tags.getList({
 				where: {
-					status: status || [ 1, 2, 3, 4 ]
+					status: status
 				},
-				offset: offset || 0,
-				limit: limit || 50
-			}, callback);
+				offset: offset,
+				limit: limit
+			}, function(error, result) {
+				if(error) {
+					return callback(error);
+				}
 
-			BackgroundService.Tags.count(function(error, count) {
-				TagsService.count = count;
+				/*BackgroundService.Tags.count(function(error, count) {
+					if(error) {
+						return callback(error);
+					}*/
+
+					$timeout(function() {
+						return callback(null, result);
+					}, 0);
+				//});
 			});
 		},
 		
@@ -36,7 +50,9 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 			// We define an interval to update the list while tags' updating is in progress
 			if(TagsService.updateListInterval === null) {
 				TagsService.updateListInterval = $interval(function() {
-					updateCallback();
+					$timeout(function() {
+						updateCallback();
+					}, 0);
 
 					if(TagsService.updating() === false) {
 						$interval.cancel(TagsService.updateListInterval);
@@ -68,6 +84,14 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 		
 		searchTag: function(trackName, artist, tag, callback) {
 			BackgroundService.searchTag(trackName, artist, tag, function(err) {
+				$timeout(function() {
+					callback(err);
+				}, 0);
+			});
+		},
+		
+		selectSpotifyTrack: function(shazamId, newSpotifyId, callback) {
+			BackgroundService.Tags.selectSpotifyTrack(shazamId, newSpotifyId, function(err) {
 				$timeout(function() {
 					callback(err);
 				}, 0);

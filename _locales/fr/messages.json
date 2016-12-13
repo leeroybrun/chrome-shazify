@@ -69,8 +69,12 @@
     "message": "Veuillez ne pas fermer votre navigateur",
     "description": ""
   },
+  "all": {
+    "message": "tous",
+    "description": ""
+  },
   "searchTrackButton": {
-    "message": "Lancer une nouvelle recherche",
+    "message": "Rechercher",
     "description": ""
   },
   "trackField": {

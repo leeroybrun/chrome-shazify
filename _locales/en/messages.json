@@ -69,8 +69,12 @@
     "message": "Please do not close your browser",
     "description": ""
   },
+  "all": {
+    "message": "all",
+    "description": ""
+  },
   "searchTrackButton": {
-    "message": "Try a new search",
+    "message": "Search",
     "description": ""
   },
   "trackField": {

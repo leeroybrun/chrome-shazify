@@ -1,17 +1,26 @@
-angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $interval, BackgroundService, PopupStorage, LoginService, TagsService, SpotifyService) {
+angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $interval, $timeout, $anchorScroll, BackgroundService, PopupStorage, LoginService, TagsService, SpotifyService) {
 	$scope.login = LoginService;
 
 	$scope.updateStatus = '';
 	$scope.updating = function() { return TagsService.updating(); };
-	$scope.tags = [];
+	$scope.items = [];
+  $scope.totalCount = 0;
+  $scope.filteredCount = 0;
 
 	$scope.loading = true;
 
 	function updateList() {
 		$scope.loading = true;
-		TagsService.getList($scope.tagsStatusFilters, $scope.pagination.offset(), $scope.pagination.limit, function(list) {
-			$scope.tags = list;
-			$scope.loading = false;
+		TagsService.getList($scope.tagsStatusFilters, $scope.pagination.offset(), $scope.pagination.limit(), function(error, result) {
+      if(error) {
+        console.error(error);
+        return console.error('Error getting tags list : '+ error);
+      }
+
+      $scope.items = result.list;
+      $scope.filteredCount = result.count;
+      $scope.totalCount = result.totalCount;
+      $scope.loading = false;
 		});
 	}
 
@@ -38,10 +47,6 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 
 	$scope.tagsStatusFilters = [1, 2, 3, 4];
 
-	$scope.filterByStatus = function(tag) {
-    return ($scope.tagsStatusFilters.indexOf(tag.status) !== -1);
-  };
-
   $scope.toggleStatusFilter = function(status) {
   	var i = $scope.tagsStatusFilters.indexOf(status);
   	if(i === -1) {
@@ -49,17 +54,27 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
   	} else {
   		delete $scope.tagsStatusFilters[i];
   	}
+
+    updateList();
   };
 
   $scope.pagination = {
   	page: 0,
-  	offset: function() { return this.page * this.offset; },
-  	limit: 50,
-  	totalItems: function() { return TagsService.count; },
-  	nbPages: function() {
-      return Math.ceil(this.totalItems() / this.limit);
+  	offset: function() { return this.page * this.limit(); },
+    limitString: '10',
+  	limit: function() { return parseInt(this.limitString); },
+
+    limitChanged: function() {
+      this.page = 0;
+
+      $timeout(function() {
+        updateList();
+      }, 0);
     },
-    loading: false,
+
+  	nbPages: function() {
+      return (this.limit() === 0) ? 1 : Math.ceil($scope.filteredCount / this.limit());
+    },
 
   	hasNextPage: function() {
   		return this.page < this.nbPages();
@@ -71,7 +86,11 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 
   		this.page++;
 
-  		updateList();
+      $anchorScroll();
+
+      $timeout(function() {
+        updateList();
+      }, 0);
   	},
 
   	hasPrevPage: function() {
@@ -84,72 +103,13 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 
   		this.page--;
 
-  		updateList();
+      $anchorScroll();
+
+  		$timeout(function() {
+        updateList();
+      }, 0);
   	}
   };
-
-	$scope.newSearch = {
-		show: false,
-		tag: null,
-		error: null,
-		results: [],
-		query: {
-			artist: '',
-			track: ''
-		},
-		selectedTrack: null,
-
-		send: function() {
-			SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist, function(query) {
-				SpotifyService.searchTracks(query, function(err, tracks) {
-					if(err) {
-						$scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
-					} else {
-						$scope.newSearch.results = tracks;
-						$scope.newSearch.error = null;
-
-						// We search on list the current selected track
-						if($scope.newSearch.tag.spotifyId) {
-							for(var i = 0; i < tracks.length; i++) {
-								if(tracks[i].id == $scope.newSearch.tag.spotifyId) {
-									$scope.newSearch.selectedTrack = tracks[i];
-								}
-							}
-						}
-					}
-				});
-			});
-		},
-
-		selectTrack: function(track) {
-			$scope.newSearch.tag.spotifyId = track.id;
-			$scope.newSearch.tag.status = 3;
-			$scope.newSearch.tag.image = track.image;
-
-			// TODO: Remove old selected from playlist, add this one instead and save tags
-
-			$scope.newSearch.error = null;
-			$scope.newSearch.tag = null;
-			$scope.newSearch.show = false;
-		},
-
-		cancel: function() {
-			$scope.newSearch.error = null;
-			$scope.newSearch.tag = null;
-			$scope.newSearch.show = false;
-		}
-	};
-
-	$scope.retryTagSearch = function(tag) {
-		$scope.newSearch.query.artist = tag.artist;
-		$scope.newSearch.query.track = tag.name;
-		$scope.newSearch.tag = tag;
-		$scope.newSearch.results = [];
-		$scope.newSearch.selectedTrack = null;
-		$scope.newSearch.show = true;
-
-		$scope.newSearch.send();
-	};
 
 	var updateStatus = function(){
 		TagsService.getUpdateStatus(function(status){
@@ -161,7 +121,7 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		TagsService.updateTags(function() {
 			// Called multiple times to update list/count during update
 			updateStatus();
-			return updateList();
+			updateList();
 		}, function(err) {
 			// Final callback called only once
 			if(err) {
@@ -176,6 +136,76 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 	};
 
 	$scope.refreshTags = refreshTags;
+
+  $scope.newSearch = {
+    show: false,
+    tag: null,
+    error: null,
+    results: [],
+    query: {
+      artist: '',
+      track: ''
+    },
+    selectedTrack: null,
+
+    send: function() {
+      SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist, function(query) {
+        SpotifyService.searchTracks(query, function(err, tracks) {
+          if(err) {
+            $scope.newSearch.error = chrome.i18n.getMessage('noTrackFoundQuery');
+          } else {
+            $scope.newSearch.results = tracks;
+            $scope.newSearch.error = null;
+
+            // We search on list the current selected track
+            if($scope.newSearch.tag.spotifyId) {
+              for(var i = 0; i < tracks.length; i++) {
+                if(tracks[i].id == $scope.newSearch.tag.spotifyId) {
+                  $scope.newSearch.selectedTrack = tracks[i];
+                }
+              }
+            }
+          }
+        });
+      });
+    },
+
+    selectTrack: function(track) {
+      $scope.newSearch.tag.spotifyId = track.id;
+      $scope.newSearch.tag.status = 3;
+      $scope.newSearch.tag.image = track.image;
+
+      // TODO: Remove old selected from playlist, add this one instead and save tags
+      TagsService.selectSpotifyTrack($scope.newSearch.tag.shazamId, track.id, function(err) {
+        if(err) {
+          console.error(err);
+        }
+
+        updateList();
+      });
+
+      $scope.newSearch.error = null;
+      $scope.newSearch.tag = null;
+      $scope.newSearch.show = false;
+    },
+
+    cancel: function() {
+      $scope.newSearch.error = null;
+      $scope.newSearch.tag = null;
+      $scope.newSearch.show = false;
+    }
+  };
+
+  $scope.retryTagSearch = function(tag) {
+    $scope.newSearch.query.artist = tag.artist;
+    $scope.newSearch.query.track = tag.name;
+    $scope.newSearch.tag = tag;
+    $scope.newSearch.results = [];
+    $scope.newSearch.selectedTrack = null;
+    $scope.newSearch.show = true;
+
+    $scope.newSearch.send();
+  };
 
 	// Do we need to show intro ?
 	PopupStorage.get('introStep', function(items) {

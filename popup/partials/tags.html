@@ -16,7 +16,7 @@
 			<i class="icon-settings"></i>
 		</a>
 	</div>
-	<h2 chrome-translate>myTags</h2>
+	<h2><span chrome-translate>myTags</span> <span class="tags-count">({{filteredCount}}/{{totalCount}})</span></h2>
 </div>
 <div class="tags-list">
 	<div class="updating" ng-if="updating() === true">
@@ -36,13 +36,13 @@
 			<p chrome-translate>loadingTags</p>
 		</div>
 	</div>
-	<div class="no-tags" ng-if="!tags">
+	<div class="no-tags" ng-if="!items">
 		<p class="simplelineicon">
 			<i class="icon-exclamation"></i>
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
-	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags() | filter:filterByStatus track by tag.shazamId">
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in items track by tag.shazamId">
 		<div class="tag-status">
 			<div class="success clickable" ng-if="tag.status >= 3" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search on already found" analytics-category="Tags" ng-class="{'pending': tag.status == 3}">
 				<div class="simplelineicon">
@@ -65,17 +65,33 @@
 		<div class="tag-name">{{tag.name}}</div>
 		<div class="tag-artist">{{tag.artist}}</div>
 	</div>
-	<div class="pagination">
-		<button class="pure-button pure-button-primary" analytics-on analytics-event="Prev page" analytics-category="Tags" ng-disabled="!pagination.hasPrevPage()" ng-click="pagination.prevPage()">
-        <-
-    </button>
-    <button class="btn btn-default" disabled>
-        {{pagination.page+1}}/{{pagination.nbPages()}}
-    </button>
-    <button class="pure-button pure-button-primary" analytics-on analytics-event="Next page" analytics-category="Tags" ng-disabled="!pagination.hasNextPage()" ng-click="pagination.nextPage()">
-        ->
-    </button>
+
+	<div class="pagination" ng-if="loading === false && updating() === false">
+		<div class="pagination-left">
+			<a class="pagination-prev" ng-class="{ disabled: !pagination.hasPrevPage() }" ng-click="pagination.prevPage()" analytics-on analytics-event="Prev page" analytics-category="Tags">
+	      <i class="icon-arrow-left-circle"></i>
+	    </a>
+	  </div>
+	  <div class="pagination-center">
+	    <div class="pagination-count" disabled>
+	      {{pagination.page+1}}/{{pagination.nbPages()}}
+	    </div>
+	    <select ng-model="pagination.limitString" ng-change="pagination.limitChanged()" class="pagination-limit">
+	    	<option value="10">10 / page</option>
+	    	<option value="25">25 / page</option>
+	    	<option value="50">50 / page</option>
+	    	<option value="100">100 / page</option>
+	    	<option value="200">200 / page</option>
+	    	<option value="0"><span chrome-translate>all</span> ({{filteredCount}})</option>
+	    </select>
+	  </div>
+	  <div class="pagination-right">
+	    <a class="pagination-next" ng-class="{ disabled: !pagination.hasNextPage() }" ng-click="pagination.nextPage()" analytics-on analytics-event="Next page" analytics-category="Tags">
+	      <i class="icon-arrow-right-circle"></i>
+	    </a>
+	  </div>
 	</div>
+
 	<div class="modal-overlay" ng-if="newSearch.show" ng-click="newSearch.cancel()"></div>
 	<div class="modal new-search-modal" ng-if="newSearch.show">
 		<p chrome-translate ng-if="newSearch.tag.status != 2">changeTrackSearch</p>

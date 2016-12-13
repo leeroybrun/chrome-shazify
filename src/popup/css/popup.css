@@ -129,6 +129,22 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		margin-bottom: 0;
 	}
 
+	.button-xsmall {
+    font-size: 70%;
+  }
+
+  .button-small {
+    font-size: 85%;
+  }
+
+  .button-large {
+    font-size: 110%;
+  }
+
+  .button-xlarge {
+    font-size: 125%;
+  }
+
 /* Animations */
 
 	@-webkit-keyframes spin {
@@ -327,6 +343,10 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		text-align:center;
 	}
 
+	.loading .content {
+		margin-top:40px;
+	}
+
 	.updating .iconmelon, .loading .iconmelon {
 		width:64px;
 		height:64px;
@@ -366,6 +386,12 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		margin-bottom:0;
 		font-weight:400;
 		font-size:18px;
+	}
+
+	.topbar h2 .tags-count {
+		font-size:60%;
+		opacity:0.8;
+		vertical-align: middle;
 	}
 
 	.topbar .right {
@@ -594,7 +620,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.tags-list {
 		overflow:hidden;
 		position:relative;
-		min-height:240px;
+		min-height:310px;
 	}
 
 	.tag {
@@ -615,8 +641,8 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 	.tag.ng-enter-stagger {
-		-webkit-animation-delay:50ms;
-		animation-delay:50ms;
+		-webkit-animation-delay:10ms;
+		animation-delay:10ms;
 
 		-webkit-animation-duration:0;
 		animation-duration:0;
@@ -703,6 +729,53 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.tag .tag-artist {
 		opacity:0.8;
 		font-weight:normal;
+	}
+
+/* Pagination */
+	.pagination {
+		margin-top:5px;
+		overflow: hidden;
+		display: flex;
+		height:19px;
+	}
+
+	.pagination-left {
+		width: 20px;
+    flex: 0 0 20px;
+	}
+
+	.pagination-center {
+		flex: 1;
+		text-align: center;
+	}
+
+	.pagination-right {
+		width: 20px;
+    flex: 0 0 20px;
+	}
+
+	.pagination-prev, .pagination-next {
+		font-size:16px;
+		line-height: 16px;
+		height: 16px;
+		cursor: pointer;
+	}
+
+	.pagination-prev.disabled, .pagination-next.disabled {
+		cursor: default;
+		opacity: 0.4;
+	}
+
+	.pagination-count {
+		display:inline-block;
+	}
+
+	.pagination-limit {
+		font-size:90%;
+	}
+
+	.pagination-next {
+		text-align: right;
 	}
 
 	.tag.search-result {
