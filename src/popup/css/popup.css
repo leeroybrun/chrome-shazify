@@ -145,6 +145,94 @@ https://github.com/yui/pure/blob/master/LICENSE.md
     font-size: 125%;
   }
 
+/* Audio player */
+  .audio-player {
+  	position: relative;
+		text-align: center;
+  }
+
+  .audio-player button {
+  	cursor: pointer;
+  	position:relative;
+  	display: block;
+		margin: 0 auto;
+		padding: 0;
+		width: 24px;
+		height: 24px;
+		background: transparent;
+		color: #2ECC71; /*1ECD97*/
+		border: 2px solid #2ECC71;
+		border-radius: 50%;
+  }
+
+  .audio-player svg.progress-circle {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+
+	.audio-player svg.progress-circle path {
+		opacity: 0;
+		fill: none;
+	}
+
+	.audio-player svg.progress-circle path {
+		stroke: #2ECC71;
+		stroke-width: 5;
+	}
+
+	.audio-player.playing button {
+		border-color: #ddd;
+	}
+
+	.audio-player button span {
+		position:absolute;
+		top: 2px;
+    left: 3px;
+	}
+
+	.audio-player button svg {
+		color:#2ECC71;
+		fill:#2ECC71;
+		stroke: #2ECC71;
+	}
+
+	.audio-player span.play {
+		opacity:1;
+	}
+
+	.audio-player span.pause {
+		opacity:0;
+		top: 3px;
+    left: 3px;
+	}
+
+	.audio-player.playing span.play {
+		-webkit-transition: opacity 0.15s;
+		transition: opacity 0.15s;
+		opacity:0;
+	}
+
+	.audio-player.playing span.pause {
+		-webkit-transition: opacity 0.15s;
+		transition: opacity 0.15s;
+		opacity:1;
+	}
+
+	.audio-player button span {
+		-webkit-transition: opacity 0.3s 0.1s;
+		transition: opacity 0.3s 0.1s;
+	}
+
+	.audio-player.playing svg.progress-circle path {
+		opacity: 1;
+		-webkit-transition: stroke-dashoffset 0.3s;
+		transition: stroke-dashoffset 0.3s;
+	}
+
 /* Animations */
 
 	@-webkit-keyframes spin {
@@ -648,10 +736,33 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		animation-duration:0;
 	}
 
+	.tag:hover .tag-actions {
+		display:block;
+	}
+
+	.tag-actions {
+		display:none;
+		float:right;
+		margin-left:10px;
+		margin-top:2px;
+	}
+
+	.tag-actions .player {
+	  margin-top: 3px;
+	}
+
+	.tag-status.hidden+.tag-actions {
+		margin-right:8px;
+	}
+
 	.tag-status {
 		float:right;
 		margin-left:10px;
 		margin-top:2px;
+	}
+
+	.tag-status.hidden {
+		display:none;
 	}
 
 	.tag-status .iconmelon {

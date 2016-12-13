@@ -2,7 +2,7 @@
 	var Tags = {
 		lastUpdate: new Date(0),
 
-		// Add/update a tag in the tags list
+		// Add/update a tag in the tags DB and search for Spotify track
 		add: function(tag, callback) {
 			callback = callback || function(){};
 
@@ -20,8 +20,7 @@
 						tag.status = 2;
 					} else {
 						tag.status = 3;
-						tag.image = track.album.images[track.album.images.length-1].url;
-						tag.spotifyId = track.id;
+						tag = Tags.setSpotifyInfosToTag(tag, track);
 					}
 
 					Tags._addToList(tag, callback);
@@ -43,6 +42,14 @@
 
 				return callback(reason);
 			});
+		},
+
+		setSpotifyInfosToTag: function(tag, track) {
+			tag.image = track.album.images[track.album.images.length-1].url;
+			tag.previewUrl = track.preview_url;
+			tag.spotifyId = track.id;
+
+			return tag;
 		},
 
 		_updateStatusNbTags: 0, // Nombre de tags au total en cours d'ajout
@@ -146,8 +153,8 @@
 					promise.then(function() {
 						return Tags.db.where('spotifyId').equals(oldSpotifyId).count().then(function(count) {
 							Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : '+ count +' other tags have the old one too.');
-							// No other tags linked to the old Spotify track
-							if(count === 0) {
+							// No other tags linked to the old Spotify track except this one
+							if(count <= 1) {
 								return new Promise(function(resolve, reject) {
 									Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : no other tag is linked to the old track, removing from playlist.');
 									Spotify.playlist.removeTracks([oldSpotifyId], function(err) {
@@ -175,12 +182,26 @@
 							return resolve();
 						});
 					});
-				// -- Update tag in DB with new spotifyId --
+				// -- Getting track details from Spotify --
 				}).then(function() {
+					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : getting track details from Spotify.');
+					return new Promise(function(resolve, reject) {
+						Spotify.getTrack(newSpotifyId, function(err, track) {
+							if(err) {
+								return reject(err);
+							}
+
+							return resolve(track);
+						});
+					});
+				// -- Update tag in DB with new spotifyId --
+				}).then(function(track) {
 					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : updating tag in DB.');
-					tag.spotifyId = newSpotifyId;
+					tag = Tags.setSpotifyInfosToTag(tag, track);
 					tag.status = 4;
-					// TODO: update artist, name, etc. as in the .add() method
+					
+					console.log(tag);
+
 					return Tags.db.put(tag);
 				});
 			}).then(function() {

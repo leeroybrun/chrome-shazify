@@ -60,6 +60,11 @@
 				</div>
 			</div>
 		</div>
+		<div class="tag-actions">
+			<div class="player" ng-if="tag.previewUrl">
+				<audio-player audio-src="tag.previewUrl" />
+			</div>
+		</div>
 		<img ng-if="tag.image" ng-src="{{tag.image}}" class="tag-image">
 		<img ng-if="!tag.image" src="img/placeholder.png" class="tag-image">
 		<div class="tag-name">{{tag.name}}</div>
@@ -109,11 +114,16 @@
 			<hr />
 			<p chrome-translate>searchResultsPleaseSelect</p>
 			<a ng-click="newSearch.selectTrack(track)" ng-class="{selected: track.id == newSearch.selectedTrack.id}" class="tag search-result clickable" ng-repeat="track in newSearch.results track by track.id">
-				<div class="tag-status" ng-if="newSearch.selectedTrack && track.id == newSearch.selectedTrack.id">
+				<div class="tag-status" ng-class="{ hidden: !newSearch.isSelectedTrack(track) }">
 					<div class="success">
 						<div class="simplelineicon">
 							<i class="icon-check"></i>
 						</div>
+					</div>
+				</div>
+				<div class="tag-actions">
+					<div class="player" ng-if="track.previewUrl">
+						<audio-player audio-src="track.previewUrl" />
 					</div>
 				</div>
 				<img ng-if="track.image" ng-src="{{track.image}}" class="tag-image">

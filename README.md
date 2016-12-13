@@ -61,9 +61,12 @@ grunt bundle
 - [x] Custom update scripts, handle versions like 0.2.10
 - [x] Store tags and Spotify tracks found in IndexedDB (use Dexie.js)
 - [x] Remove tags from localStorage
+- Do not remove from localStorage and load it all again, get tags from localStorage and add them in DB to keep spotifyId
 - When select a different Spotify track for a tag, remove the old one from playlist (if not associated with another tag) and add the new one
 - Create an update page to let the users know of the new functionnalities
 - [x] Replace SVG icons with SimpleLineIcons
+- Set a track to "not found"
+- Add audio preview ("preview_url" from Spotify API)
 - Use bulk* methods from Dexie.js to speedup tags addition/update to DB or transactions
 
 ## Disclaimer

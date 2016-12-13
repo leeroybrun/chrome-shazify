@@ -1,0 +1,17 @@
+<div class="audio-player" ng-class="{ playing: playing }"><!-- svg circle for progress indication -->
+	<button ng-click="togglePlay(); $event.stopPropagation();">
+		<span class="play">
+			<svg width="16" height="16" viewBox="0 0 20 20">
+				<path d="M15 10.001c0 0.299-0.305 0.514-0.305 0.514l-8.561 5.303c-0.624 0.409-1.134 0.106-1.134-0.669v-10.297c0-0.777 0.51-1.078 1.135-0.67l8.561 5.305c-0.001 0 0.304 0.215 0.304 0.514z"></path>
+			</svg>
+		</span>
+		<span class="pause">
+			<svg width="14" height="14" viewBox="0 0 20 20">
+				<path d="M15 3h-2c-0.553 0-1 0.048-1 0.6v12.8c0 0.552 0.447 0.6 1 0.6h2c0.553 0 1-0.048 1-0.6v-12.8c0-0.552-0.447-0.6-1-0.6zM7 3h-2c-0.553 0-1 0.048-1 0.6v12.8c0 0.552 0.447 0.6 1 0.6h2c0.553 0 1-0.048 1-0.6v-12.8c0-0.552-0.447-0.6-1-0.6z"></path>
+			</svg>
+		</span>
+	</button>
+	<svg class="progress-circle" width="24" height="24" viewBox="0 0 70 70">
+		<path ng-style="{ 'stroke-dasharray': svgCircleLength, 'stroke-dashoffset': strokeDashoffset }" d="m35,2.5c17.955803,0 32.5,14.544199 32.5,32.5c0,17.955803 -14.544197,32.5 -32.5,32.5c-17.955803,0 -32.5,-14.544197 -32.5,-32.5c0,-17.955801 14.544197,-32.5 32.5,-32.5z" />
+	</svg>
+</div>

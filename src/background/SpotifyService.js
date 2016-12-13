@@ -300,6 +300,24 @@
 			}
 		},
 
+		// Get details for a track from it's ID
+		getTrack: function(trackId, callback) {
+			Logger.info('[Spotify] Getting details for track "'+ trackId +'"...');
+
+			Spotify.call({
+				endpoint: '/v1/tracks/'+ trackId,
+				method: 'GET'
+			}, function(err, data) {
+				if(err) { 
+					Logger.info('[Spotify] Error getting track "'+ trackId +'".'); 
+					Logger.error(err); 
+					return callback(err);
+				}
+
+				return callback(null, data);
+			});
+		},
+
 		// Find a track on Spotify
 		findTrack: function(query, trackName, artist, callback) {
 			Logger.info('[Spotify] Searching for track "'+ query +'"...');
@@ -375,7 +393,8 @@
 						name: track.name, 
 						artist: artist,
 						image: track.album.images[track.album.images.length-1].url,
-						id: track.id
+						id: track.id,
+						previewUrl: track.preview_url
 					});
 				}
 

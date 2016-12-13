@@ -147,6 +147,9 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
       track: ''
     },
     selectedTrack: null,
+    isSelectedTrack: function(track) {
+      return this.selectedTrack && track.id == this.selectedTrack.id;
+    },
 
     send: function() {
       SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist, function(query) {
