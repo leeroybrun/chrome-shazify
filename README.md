@@ -77,6 +77,11 @@ grunt bundle
 - [x] Replace SVG icons with SimpleLineIcons
 - [x] Add audio preview ("preview_url" from Spotify API)
 
+## Roadmap for v1.0
+
+- Refactor. Code is messy at some places...
+- Use React/Inferno/Vue.js/Angular 2.x instead of Angular 1.x
+
 ## Disclaimer
 
 Shazify is not affiliated with Shazam Entertainment Limited.
