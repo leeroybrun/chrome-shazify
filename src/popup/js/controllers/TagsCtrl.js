@@ -3,6 +3,7 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 
 	$scope.updateStatus = '';
 	$scope.updating = function() { return TagsService.updating(); };
+  $scope.updatingApp = function() { return TagsService.updatingApp(); };
 	$scope.items = [];
   $scope.totalCount = 0;
   $scope.filteredCount = 0;
@@ -29,31 +30,47 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		$scope.shouldShowFilters = !$scope.shouldShowFilters;
 	};
 
-	// Status : 1 = just added, 2 = not found in spotify, 3 = found, 4 = added to playlist
+	// Status : 1 = just added, 2 = not found in spotify, 3 = found, 4 = added to playlist, 5 = not found, manual search
 	$scope.statusFilters = [
 		{
 			icon: 'icon-check',
-			status: 4
+			status: [1, 3, 4]
 		},
 		{
 			icon: 'icon-close',
-			status: 2
-		},
-		{
-			icon: 'icon-clock',
-			status: 1
+			status: [2, 5]
 		}
 	];
 
-	$scope.tagsStatusFilters = [1, 2, 3, 4];
+  $scope.isFilterSelected = function(statusArr) {
+    if(!Array.isArray(statusArr)) {
+      statusArr = [statusArr];
+    }
 
-  $scope.toggleStatusFilter = function(status) {
-  	var i = $scope.tagsStatusFilters.indexOf(status);
-  	if(i === -1) {
-  		$scope.tagsStatusFilters.push(status);
-  	} else {
-  		delete $scope.tagsStatusFilters[i];
-  	}
+    var selected = true;
+
+    statusArr.forEach(function(status) {
+      selected = selected && $scope.tagsStatusFilters.indexOf(status) !== -1;
+    });
+
+    return selected;
+  };
+
+	$scope.tagsStatusFilters = [1, 2, 3, 4, 5];
+
+  $scope.toggleStatusFilter = function(statusArr) {
+    if(!Array.isArray(statusArr)) {
+      statusArr = [statusArr];
+    }
+
+    statusArr.forEach(function(status) {
+      var i = $scope.tagsStatusFilters.indexOf(status);
+      if(i === -1) {
+        $scope.tagsStatusFilters.push(status);
+      } else {
+        delete $scope.tagsStatusFilters[i];
+      }
+    });
 
     updateList();
   };
@@ -173,12 +190,30 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
       });
     },
 
+    setNotFound: function() {
+      $scope.newSearch.tag.spotifyId = null;
+      $scope.newSearch.tag.status = 5;
+      $scope.newSearch.tag.image = null;
+      $scope.newSearch.tag.previewUrl = null;
+
+      TagsService.setAsNotFound($scope.newSearch.tag.shazamId, function(err) {
+        if(err) {
+          console.error(err);
+        }
+
+        updateList();
+      });
+
+      $scope.newSearch.error = null;
+      $scope.newSearch.tag = null;
+      $scope.newSearch.show = false;
+    },
+
     selectTrack: function(track) {
       $scope.newSearch.tag.spotifyId = track.id;
       $scope.newSearch.tag.status = 3;
       $scope.newSearch.tag.image = track.image;
 
-      // TODO: Remove old selected from playlist, add this one instead and save tags
       TagsService.selectSpotifyTrack($scope.newSearch.tag.shazamId, track.id, function(err) {
         if(err) {
           console.error(err);

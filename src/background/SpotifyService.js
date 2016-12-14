@@ -496,6 +496,7 @@
 								});
 							// Too many requests, wait and try again
 							} else if(jqXHR.status === 429) {
+								Logger.error('[Spotify] Too many requests, waiting 1s... ('+ jqXHR.status +') : '+textStatus+'.');
 								setTimeout(function() {
 									Spotify.call(options, callback);
 								}, 1000);
@@ -564,8 +565,16 @@
 							});
 						})
 						.fail(function(jqXHR, textStatus) {
-							Logger.error('[Spotify] Error getting token : '+textStatus+'.');
-							callback(false);
+							if(jqXHR.status === 429) {
+								Logger.error('[Spotify] Too many requests, waiting 1s... ('+ jqXHR.status +') : '+textStatus+'.');
+
+								setTimeout(function() {
+									Spotify.refreshToken(callback);
+								}, 1000);
+							} else {
+								Logger.error('[Spotify] Error getting token : '+textStatus+'.');
+								callback(false);
+							}
 						});
 				} else {
 					Logger.info('[Spotify] No refresh token stored... open login.');
@@ -595,8 +604,16 @@
 					Spotify.saveAccessToken(data, callback);
 				})
 				.fail(function(jqXHR, textStatus) {
-					Logger.error('[Spotify] Error getting access token : '+ textStatus +'.');
-					callback(false);
+					if(jqXHR.status === 429) {
+						Logger.error('[Spotify] Too many requests, waiting 1s... ('+ jqXHR.status +') : '+textStatus+'.');
+						
+						setTimeout(function() {
+							Spotify.getAccessToken(authCode, callback);
+						}, 1000);
+					} else {
+						Logger.error('[Spotify] Error getting access token : '+ textStatus +'.');
+						callback(false);
+					}
 				});
 		},
 

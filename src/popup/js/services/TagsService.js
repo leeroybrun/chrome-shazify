@@ -4,8 +4,13 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 	var TagsService = {
 		updateListInterval: null,
 		updating: function() { return BackgroundService.updating; },
+		updatingApp: function() { return BackgroundService.updatingApp; },
 
 		getList: function(status, offset, limit, callback) {
+			if(TagsService.updatingApp()) {
+				return callback(null, []);
+			}
+
 			if(typeof status === 'function') {
 				callback = status;
 				status = null;
@@ -47,6 +52,10 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 		},
 
 		updateTags: function(updateCallback, callback) {
+			if(TagsService.updatingApp()) {
+				return callback();
+			}
+
 			// We define an interval to update the list while tags' updating is in progress
 			if(TagsService.updateListInterval === null) {
 				TagsService.updateListInterval = $interval(function() {
@@ -71,7 +80,7 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 				}
 
 				BackgroundService.updateTags(function(err) {
-					if(err && err == 'already_in_progress') {
+					if(err && (err == 'already_in_progress' || err == 'app_update_in_progress')) {
 						err = null;
 					}
 
@@ -83,6 +92,10 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 		},
 		
 		searchTag: function(trackName, artist, tag, callback) {
+			if(TagsService.updatingApp()) {
+				return callback();
+			}
+
 			BackgroundService.searchTag(trackName, artist, tag, function(err) {
 				$timeout(function() {
 					callback(err);
@@ -91,7 +104,23 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 		},
 		
 		selectSpotifyTrack: function(shazamId, newSpotifyId, callback) {
+			if(TagsService.updatingApp()) {
+				return callback();
+			}
+
 			BackgroundService.Tags.selectSpotifyTrack(shazamId, newSpotifyId, function(err) {
+				$timeout(function() {
+					callback(err);
+				}, 0);
+			});
+		},
+		
+		setAsNotFound: function(shazamId, callback) {
+			if(TagsService.updatingApp()) {
+				return callback();
+			}
+
+			BackgroundService.Tags.setAsNotFound(shazamId, function(err) {
 				$timeout(function() {
 					callback(err);
 				}, 0);

@@ -4,7 +4,7 @@
 			<i class="icon-tag"></i>
 		</a>
 		<div class="dropdown" ng-show="shouldShowFilters">
-			<a class="filter" ng-repeat="filter in statusFilters" ng-click="toggleStatusFilter(filter.status)" ng-class="{ selected: tagsStatusFilters.indexOf(filter.status) !== -1 }"><i class="{{filter.icon}}"></i></a>
+			<a class="filter" ng-repeat="filter in statusFilters" ng-click="toggleStatusFilter(filter.status)" ng-class="{ selected: isFilterSelected(filter.status) }"><i class="{{filter.icon}}"></i></a>
 		</div>
 		<a class="simplelineicon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
 			<i class="icon-refresh"></i>
@@ -19,7 +19,7 @@
 	<h2><span chrome-translate>myTags</span> <span class="tags-count">({{filteredCount}}/{{totalCount}})</span></h2>
 </div>
 <div class="tags-list">
-	<div class="updating" ng-if="updating() === true">
+	<div class="waiting-overlay updating" ng-if="updating() === true && updatingApp() === false">
 		<div class="content">
 			<div class="simplelineicon">
 				<i class="icon-refresh icon-spin"></i>
@@ -28,12 +28,21 @@
 			<p chrome-translate>doNotCloseBrowser</p>
 		</div>
 	</div>
-	<div class="loading" ng-if="loading === true && updating() === false">
+	<div class="waiting-overlay loading" ng-if="loading === true && updating() === false && updatingApp() === false">
 		<div class="content">
 			<div class="simplelineicon">
 				<i class="icon-refresh icon-spin"></i>
 			</div>
 			<p chrome-translate>loadingTags</p>
+		</div>
+	</div>
+	<div class="waiting-overlay updating-app" ng-if="updatingApp() === true">
+		<div class="content">
+			<div class="simplelineicon">
+				<i class="icon-settings icon-spin-slow"></i>
+			</div>
+			<p chrome-translate class="updating-app">updatingApp</p>
+			<p chrome-translate>doNotCloseBrowser</p>
 		</div>
 	</div>
 	<div class="no-tags" ng-if="!items">
@@ -44,12 +53,12 @@
 	</div>
 	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in items track by tag.shazamId">
 		<div class="tag-status">
-			<div class="success clickable" ng-if="tag.status >= 3" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search on already found" analytics-category="Tags" ng-class="{'pending': tag.status == 3}">
+			<div class="success clickable" ng-if="tag.status == 3 || tag.status == 4" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search on already found" analytics-category="Tags" ng-class="{'pending': tag.status == 3}">
 				<div class="simplelineicon">
 					<i class="icon-check"></i>
 				</div>
 			</div>
-			<div class="error" ng-if="tag.status == 2">
+			<div class="error" ng-if="tag.status == 2 || tag.status == 5">
 				<div class="simplelineicon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
 					<i class="icon-close"></i>
 				</div>
@@ -113,6 +122,18 @@
 			<h3 chrome-translate>searchResults</h3>
 			<hr />
 			<p chrome-translate>searchResultsPleaseSelect</p>
+			<a ng-click="newSearch.setNotFound()" ng-class="{selected: newSearch.tag.status == 5}" class="tag search-result not-found clickable">
+				<div class="tag-status" ng-class="{ hidden: !(newSearch.tag.status == 5) }">
+					<div class="success">
+						<div class="simplelineicon">
+							<i class="icon-check"></i>
+						</div>
+					</div>
+				</div>
+				<img src="img/placeholder.png" class="tag-image">
+				<div class="tag-name" chrome-translate>notFound</div>
+				<div class="tag-artist" chrome-translate>notFoundText</div>
+			</a>
 			<a ng-click="newSearch.selectTrack(track)" ng-class="{selected: track.id == newSearch.selectedTrack.id}" class="tag search-result clickable" ng-repeat="track in newSearch.results track by track.id">
 				<div class="tag-status" ng-class="{ hidden: !newSearch.isSelectedTrack(track) }">
 					<div class="success">

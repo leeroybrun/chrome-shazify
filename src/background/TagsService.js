@@ -7,7 +7,7 @@
 			callback = callback || function(){};
 
 			tag.spotifyId = tag.spotifyId || null;
-			tag.status = tag.status || 1; // Status : 1 = just added, 2 = not found in spotify, 3 = found, 4 = added to playlist
+			tag.status = tag.status || 1; // Status : 1 = just added, 2 = not found in spotify, 3 = found, 4 = added to playlist, 5 = not found, manual search
 
 			tag.query = tag.query || Spotify.genQuery(tag.name, tag.artist);
 
@@ -71,7 +71,7 @@
 
 			Shazam.getTags(Tags.lastUpdate, function(err, tags) {
 				if(!err && Array.isArray(tags)) {
-					Logger.info('[Tags] Got '+ tags.length +' tags from Shazam.');
+					Logger.info('[Tags] Got '+ tags.length +' new tags from Shazam.');
 
 					Tags._updateStatusNbTags = tags.length;
 
@@ -129,7 +129,10 @@
 			});
 		},
 
+		// Manually select a Spotify track for a tag
 		selectSpotifyTrack: function(shazamId, newSpotifyId, callback) {
+			var Promise = Dexie.Promise;
+
 			Tags.db.get(shazamId).then(function(tag) {
 				var oldSpotifyId = tag.spotifyId;
 
@@ -141,8 +144,7 @@
 					return callback();
 				}
 
-				var Promise = Dexie.Promise;
-				var promise = Promise.resolve();
+				var promise = Promise.resolve(tag);
 
 				// -- Remove old track from playlist --
 				// Tag was already linked to a Spotify track, but we link it to a new one
@@ -151,64 +153,145 @@
 				if(oldSpotifyId) {
 					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : an other track was already defined.');
 					promise.then(function() {
-						return Tags.db.where('spotifyId').equals(oldSpotifyId).count().then(function(count) {
-							Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : '+ count +' other tags have the old one too.');
-							// No other tags linked to the old Spotify track except this one
-							if(count <= 1) {
-								return new Promise(function(resolve, reject) {
-									Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : no other tag is linked to the old track, removing from playlist.');
-									Spotify.playlist.removeTracks([oldSpotifyId], function(err) {
-										if(err) {
-											return reject(err);
-										}
+						return new Promise(function(resolve, reject) {
+							Tags.removeTrackFromPlaylist(shazamId, oldSpotifyId, function(err) {
+								if(err) {
+									return reject(err);
+								}
 
-										return resolve();
-									});
-								});
-							}
+								return resolve(tag);
+							});
 						});
 					});
 				}
 
-				// -- Add new track to playlist --
-				return promise.then(function() {
-					return new Promise(function(resolve, reject) {
-						Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : adding new track to playlist.');
-						Spotify.playlist.addTracks([newSpotifyId], function(err) {
-							if(err) {
-								return reject(err);
-							}
+				return promise;
 
-							return resolve();
-						});
+			// -- Add new track to playlist --
+			}).then(function(tag) {
+				return new Promise(function(resolve, reject) {
+					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : adding new track to playlist.');
+					Spotify.playlist.addTracks([newSpotifyId], function(err) {
+						if(err) {
+							return reject(err);
+						}
+
+						return resolve(tag);
 					});
-				// -- Getting track details from Spotify --
-				}).then(function() {
-					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : getting track details from Spotify.');
-					return new Promise(function(resolve, reject) {
-						Spotify.getTrack(newSpotifyId, function(err, track) {
-							if(err) {
-								return reject(err);
-							}
-
-							return resolve(track);
-						});
-					});
-				// -- Update tag in DB with new spotifyId --
-				}).then(function(track) {
-					Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : updating tag in DB.');
-					tag = Tags.setSpotifyInfosToTag(tag, track);
-					tag.status = 4;
-					
-					console.log(tag);
-
-					return Tags.db.put(tag);
 				});
+
+			// -- Getting track details from Spotify --
+			}).then(function(tag) {
+				Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : getting track details from Spotify.');
+				return new Promise(function(resolve, reject) {
+					Spotify.getTrack(newSpotifyId, function(err, track) {
+						if(err) {
+							return reject(err);
+						}
+
+						return resolve({
+							tag: tag,
+							track: track
+						});
+					});
+				});
+
+			// -- Update tag in DB with new spotifyId --
+			}).then(function(result) {
+				Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : updating tag in DB.');
+				result.tag = Tags.setSpotifyInfosToTag(result.tag, result.track);
+				result.tag.status = 4;
+
+				return Tags.db.put(result.tag);
+
+			// -- Finished --
 			}).then(function() {
 				Logger.info('[Tags] Replacing Spotify track for '+ shazamId +' : all done!');
 				return callback();
+
+			// -- Catch all errors --
 			}).catch(function(reason) {
 				Logger.error('[Tags] Error trying to replace Spotify track for '+ shazamId +'.');
+				Logger.error(reason);
+				return callback(reason);
+			});
+		},
+
+		// Remove track from playlist if not used by another tag
+		removeTrackFromPlaylist: function(shazamId, spotifyId, callback) {
+			Tags.db.where('spotifyId').equals(spotifyId).filter(function(tag) {
+				// Filter to get only tags != to the one for which we want to remove the track
+				return tag.shazamId !== shazamId;
+			}).count().then(function(count) {
+				Logger.info('[Tags] Removing Spotify track '+ spotifyId +' : '+ count +' other tags have the old one too.');
+				// No other tags linked to the old Spotify track except this one
+				if(count === 0) {
+					Logger.info('[Tags] Removing Spotify track '+ spotifyId +' : no other tag is linked to the old track, removing from playlist.');
+
+					Spotify.playlist.removeTracks([spotifyId], function(err) {
+						if(err) {
+							return callback(err);
+						}
+
+						return callback();
+					});
+				} else {
+					return callback();
+				}
+			});
+		},
+
+		// Set a tag as not found
+		// Will stop searching automatically for it
+		setAsNotFound: function(shazamId, callback) {
+			var Promise = Dexie.Promise;
+
+			Tags.db.get(shazamId).then(function(tag) {
+				var oldSpotifyId = tag.spotifyId;
+
+				Logger.info('[Tags] Setting '+ shazamId +' as not found.');
+
+				var promise = Promise.resolve(tag);
+
+				// -- Remove old track from playlist --
+				// Tag was already linked to a Spotify track, but we link it to a new one
+				// If other tags are linked to the old track -> don't change anything in playlist
+				// If no other is linked to it, remove it to playlist
+				if(tag.spotifyId) {
+					Logger.info('[Tags] Checking if we need to remove Spotify track for '+ shazamId +' from playlist.');
+					promise.then(function(tag) {
+						return new Promise(function(resolve, reject) {
+							Tags.removeTrackFromPlaylist(shazamId, tag.spotifyId, function(err) {
+								if(err) {
+									return reject(err);
+								}
+
+								return resolve(tag);
+							});
+						});
+					});
+				}
+
+				return promise;
+
+			// -- Update tag in DB --
+			}).then(function(tag) {
+				Logger.info('[Tags] Setting '+ shazamId +' as not found: updating tag in DB.');
+				tag.image = null;
+				tag.previewUrl = null;
+				tag.spotifyId = null;
+				tag.status = 5; // Manual search
+
+				return Tags.db.put(tag);
+
+			// -- Finished -- 
+			}).then(function() {
+				Logger.info('[Tags] Setting '+ shazamId +' as not found: all done!');
+				return callback();
+
+			// -- Catch all errors --
+			}).catch(function(reason) {
+				Logger.error('[Tags] Error trying to setting '+ shazamId +' as not found.');
 				Logger.error(reason);
 				return callback(reason);
 			});
@@ -231,7 +314,7 @@
 
 			var tags = Tags.db;
 
-			tags = tags.orderBy('date');
+			tags = tags.orderBy('date').reverse();
 
 			// Count all tags before filtering them
 			tags.count().then(function(totalCount) {

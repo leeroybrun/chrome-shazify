@@ -56,31 +56,14 @@ grunt build
 grunt bundle
 ```
 
-## Roadmap for v0.4.0
-
-- Do not remove from localStorage and load it all again, get tags from localStorage and add them in DB to keep spotifyId
-- Create an update page to let the users know of the new functionnalities
-- Set a track to "not found" (status = 5? manual search, will not search automatically again for these tags)
-- (Use bulk* methods from Dexie.js to speedup tags addition/update to DB or transactions)
-- [x] Handle new Shazam login & API
-- [x] Match track name in lower case
-- [x] Filter functionnality to show only tags found/not found
-- [x] New icons
-- [x] Pagination
-- [x] Handle "Too Many Requests" error on Spotify
-- [x] Update AngularJS to 1.5.9
-- [x] Manually select the track wanted from Spotify search results
-- [x] Custom update scripts, handle versions like 0.2.10
-- [x] Store tags and Spotify tracks found in IndexedDB (use Dexie.js)
-- [x] Remove tags from localStorage
-- [x] When select a different Spotify track for a tag, remove the old one from playlist (if not associated with another tag) and add the new one
-- [x] Replace SVG icons with SimpleLineIcons
-- [x] Add audio preview ("preview_url" from Spotify API)
-
 ## Roadmap for v1.0
 
-- Refactor. Code is messy at some places...
-- Use React/Inferno/Vue.js/Angular 2.x instead of Angular 1.x
+- [ ] Refactor. Code is messy at some places...
+- [ ] Use React/Inferno/Vue.js/Angular 2.x instead of Angular 1.x
+- [ ] Use Promises instead of callbacks
+- [ ] Use bulk* methods from Dexie.js to speedup tags addition/update to DB or transactions
+- [ ] Put "new search" (in TagsCtrl) in a separate directive/controller
+- [ ] Add volume control for audio preview
 
 ## Disclaimer
 

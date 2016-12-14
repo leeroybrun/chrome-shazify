@@ -67,6 +67,12 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		animation: spin 2s infinite linear;
 	}
 
+	.icon-spin-slow {
+		display:inline-block;
+		-webkit-animation: spin 4s infinite linear;
+		animation: spin 4s infinite linear;
+	}
+
 	.iconmelon {
 	  position: relative;
 	  width: 32px;
@@ -397,7 +403,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 /* Updating */
-	.updating, .loading {
+	.waiting-overlay {
 		position:absolute;
 		top:0;
 		left:0;
@@ -408,20 +414,20 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		z-index:3000;
 	}
 
-	.updating.ng-enter, .updating.ng-leave, .loading.ng-enter, .loading.ng-leave {
+	.waiting-overlay.ng-enter, .waiting-overlay.ng-leave {
 		-webkit-transition: 0.3s ease all;
 				transition: 0.3s ease all;
 	}
 
-	.updating.ng-enter, .updating.ng-leave.ng-leave-active, .loading.ng-enter, .loading.ng-leave.ng-leave-active {
+	.waiting-overlay.ng-enter, .waiting-overlay.ng-leave.ng-leave-active {
 		opacity:0;
 	}
 
-	.updating.ng-enter.ng-enter-active, .updating.ng-leave, .loading.ng-enter.ng-enter-active, .loading.ng-leave {
+	.waiting-overlay.ng-enter.ng-enter-active, .waiting-overlay.ng-leave {
 		opacity:1;
 	}
 
-	.updating .content, .loading .content {
+	.waiting-overlay .content {
 		width:150px;
 		height:150px;
 		position:absolute;
@@ -433,30 +439,35 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.loading .content {
 		margin-top:40px;
+		font-size:120%;
 	}
 
-	.updating .iconmelon, .loading .iconmelon {
+	.waiting-overlay .iconmelon {
 		width:64px;
 		height:64px;
 		margin:40px auto;
 		display:block;
 	}
 
-	.updating .iconmelon svg, .loading .iconmelon svg {
+	.waiting-overlay .iconmelon svg {
 		padding:8px;
 		margin-left:-10px;
 	}
 
-	.updating .simplelineicon, .loading .simplelineicon {
+	.waiting-overlay .simplelineicon {
 		width:64px;
 		height:64px;
 		font-size:64px;
 		line-height:64px;
-		margin:40px auto;
+		margin:40px auto 20px auto;
 		display:block;
 	}
 
 	.updating .updating-tags {
+		font-size:120%;
+	}
+
+	.waiting-overlay .updating-app {
 		font-size:120%;
 	}
 
@@ -504,7 +515,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		border:1px solid #cccccc;
 		padding:10px;
 		z-index: 2000;
-    right: 30px;
+    right: 41px;
     box-sizing: content-box;
     height: 16px;
 	}

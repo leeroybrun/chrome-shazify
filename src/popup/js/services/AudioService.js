@@ -1,5 +1,14 @@
 angular.module('Shazify').factory('AudioService', function($timeout) {
 	var AudioService = {
+		setup: function() {
+			AudioService._audio.volume = 0.5;
+
+			AudioService._audio.addEventListener('ended', function() {
+				AudioService.callOnEnd();
+				AudioService.clearOnProgress();
+			});
+		},
+
 		_audio: new Audio(),
 
 		setSrc: function(src) {
@@ -35,8 +44,6 @@ angular.module('Shazify').factory('AudioService', function($timeout) {
 		onProgress: null,
 		progressTimer: null,
 
-		_onEndedSet: false,
-
 		play: function(src) {
 			src = src || null;
 
@@ -47,15 +54,6 @@ angular.module('Shazify').factory('AudioService', function($timeout) {
 			}
 
 			AudioService._audio.play();
-
-			if(!AudioService._onEndedSet) {
-				AudioService._audio.addEventListener('ended', function() {
-					AudioService.callOnEnd();
-					AudioService.clearOnProgress();
-				});
-
-				AudioService._onEndedSet = true;
-			}
 
 			AudioService.progressTimer = setInterval(function() {
 				if(AudioService._audio.currentTime && AudioService._audio.duration) {
@@ -75,6 +73,8 @@ angular.module('Shazify').factory('AudioService', function($timeout) {
 			AudioService.progressTimer = null;
 		}
 	};
+
+	AudioService.setup();
 	
 	return AudioService;
 });

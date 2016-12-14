@@ -65,6 +65,10 @@
     "message": "Chargement...",
     "description": ""
   },
+  "updatingApp": {
+    "message": "Shazify se met à jour à la dernière version...",
+    "description": ""
+  },
   "doNotCloseBrowser": {
     "message": "Veuillez ne pas fermer votre navigateur",
     "description": ""
@@ -109,6 +113,14 @@
   },
   "searchResultsPleaseSelect": {
     "message": "Veuillez sélectionner le bon morceau ci-dessous.",
+    "description": ""
+  },
+  "notFound": {
+    "message": "Non trouvé",
+    "description": ""
+  },
+  "notFoundText": {
+    "message": "Aucun morceau ne correspond.",
     "description": ""
   },
   "saveSelectedTrack": {
