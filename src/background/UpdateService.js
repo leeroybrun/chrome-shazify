@@ -200,6 +200,8 @@
 
               return callback();
             });
+          } else {
+            return callback();
           }
         });
       }}

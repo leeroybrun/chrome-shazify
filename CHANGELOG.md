@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.3
+
+- [x] Bugfix in v0.4.2 update script
+
 ## v0.4.2
 
 - [x] If tags list was empty, force reload on update to v0.4.x
