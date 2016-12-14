@@ -30,6 +30,8 @@
 			var initVersion = parseInt(initVersionTxt);
 			var finalVersion = parseInt(finalVersionTxt);
 
+      Logger.info('[Updater] Init version : '+ initVersion +' | Final version : '+ finalVersion);
+
 			var startIndex = null;
 			var endIndex = null;
 
@@ -149,7 +151,7 @@
 
         var oldTagsStorage = new StorageHelper('Tags', 'local');
         oldTagsStorage.get(['tagsList', 'lastUpdate'], function(items) {
-          if(items.tagsList) {
+          if(items.tagsList && items.tagsList.length) {
             async.eachLimit(items.tagsList, 5, function(oldTag, cbe) {
               Logger.info('[Update] Moving tag '+ oldTag.shazamId +' to DB...');
 
@@ -179,10 +181,28 @@
               return onceDone(items.lastUpdate);
             });
           } else {
-            return onceDone(items.lastUpdate);
+            // If tags list was emtpy, we set last update to 0 to force reloading
+            return onceDone(0);
           }
         });
-			}}
+			}},
+      // v0.04.02
+      {'version': 402, 'perform': function(callback) {
+        Logger.info('[Update] Checking if we have any tag in DB, or force update...');
+
+        Tags.count(function(err, count) {
+          if(count === 0) {
+            Logger.info('[Update] No tags found, force update...');
+
+            Tags.data.clearCache();
+            Tags.data.set({ 'lastUpdate': 0 }, function() {
+              Tags.load();
+
+              return callback();
+            });
+          }
+        });
+      }}
 		]
 	};
 

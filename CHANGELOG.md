@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.2
+
+- [x] If tags list was empty, force reload on update to v0.4.x
+- [x] Show loading indicator when searching tracks
+- [x] Translate "Successful login on Shazam" message
+
+## v0.4.1
+
+- [x] Add Content Scripts to bundle
+
 ## v0.4.0
 
 - [x] Store tags in IndexedDB instead of Local Storage

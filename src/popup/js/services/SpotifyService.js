@@ -3,7 +3,6 @@ angular.module('Shazify').factory('SpotifyService', function($timeout, $interval
 		searchTracks: function(query, callback) {
 			BackgroundService.Spotify.findTracks(query, function(err, tracks) {
 				$timeout(function() {
-					console.log(err, tracks);
 					callback(err, tracks);
 				}, 0);
 			});

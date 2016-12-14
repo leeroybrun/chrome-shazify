@@ -169,6 +169,8 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
     },
 
     send: function() {
+      $scope.loading = true;
+
       SpotifyService.genQuery($scope.newSearch.query.track, $scope.newSearch.query.artist, function(query) {
         SpotifyService.searchTracks(query, function(err, tracks) {
           if(err) {
@@ -186,6 +188,8 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
               }
             }
           }
+
+          $scope.loading = false;
         });
       });
     },

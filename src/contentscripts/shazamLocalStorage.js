@@ -75,7 +75,7 @@ function getAndSendLocalStorage() {
           } else {
             console.log('inid seems fine! Congrats! You are now logged in on Shazam.');
 
-            openModalOnlyOnce('<b>Shazify:</b> Login is successful! Please open Shazify again.');
+            openModalOnlyOnce('<b>Shazify:</b> '+ chrome.i18n.getMessage('shazamLoginSuccessOpenAgain'));
           }
         });
 

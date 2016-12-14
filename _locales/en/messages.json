@@ -4,6 +4,11 @@
     "description":"The description of the application, displayed in the web store."
   },
 
+  "shazamLoginSuccessOpenAgain": {
+    "message": "Shazam login is successful. Please open Shazify again.",
+    "description": ""
+  },
+
   "introWelcome": {
     "message": "Welcome",
     "description": ""
