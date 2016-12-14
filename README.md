@@ -56,11 +56,14 @@ grunt build
 grunt bundle
 ```
 
-## Roadmap for v0.2.5
+## Roadmap for v1.0
 
-- Custom update scripts, handle versions like 0.2.10
-- Add tracks in order on Spotify
-    - Reorder existing tracks
+- [ ] Refactor. Code is messy at some places...
+- [ ] Use React/Inferno/Vue.js/Angular 2.x instead of Angular 1.x
+- [ ] Use Promises instead of callbacks
+- [ ] Use bulk* methods from Dexie.js to speedup tags addition/update to DB or transactions
+- [ ] Put "new search" (in TagsCtrl) in a separate directive/controller
+- [ ] Add volume control for audio preview
 
 ## Disclaimer
 

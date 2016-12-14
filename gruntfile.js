@@ -4,7 +4,10 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		archive_name: 'shazify-<%= pkg.version %>',
 		jshint: {
-			globals: { angular: true },
+			options: {
+        globals: { angular: true },
+        ignores: 'src/background/lib/*'
+      },
 			all: ['gruntfile.js', 'src/popup/js/**/*.js', 'src/background/**/*.js'],
 			gruntfile: ['gruntfile.js']
 		},
@@ -14,11 +17,15 @@ module.exports = function(grunt) {
 			},
 			css: {
 				files: {
-					'popup/popup.css': ['src/popup/css/*.css']
+					'popup/popup.css': ['src/popup/css/*.css'],
+					'contentscripts/shazam.css': ['src/contentscripts/shazam.css']
 				}
 			},
 			js: {
 				files: {
+          'contentscripts/shazamLocalStorage.js': [
+            'src/contentscripts/shazamLocalStorage.js'
+          ],
 					'popup/popup.js': [
 						'src/popup/js/app.js',
 						'src/popup/js/**/*.js'
@@ -29,6 +36,7 @@ module.exports = function(grunt) {
 						'src/background/Helper.js',
 						'src/background/ChromeHelper.js',
 						'src/background/CanvasIcon.js',
+            'src/background/DbService.js',
 						'src/background/LoggerService.js',
 						'src/background/StorageHelper.js',
 						'src/background/SpotifyService.js',
@@ -48,14 +56,14 @@ module.exports = function(grunt) {
 				}
 			},
 			css: {
-				files: ['src/popup/css/*.css'],
+				files: ['src/popup/css/*.css', 'src/contentscripts/*.css'],
 				tasks: ['build:css'],
 				options: {
 					spawn: false,
 				}
 			},
 			js: {
-				files: ['src/popup/js/**/*.js', 'src/background/**/*.js'],
+				files: ['src/contentscripts/*.js', 'src/popup/js/**/*.js', 'src/background/**/*.js'],
 				tasks: ['build:js'],
 				options: {
 					spawn: false,

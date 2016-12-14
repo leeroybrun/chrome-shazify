@@ -61,12 +61,24 @@
   	"message": "Updating tags...",
   	"description": ""
   },
+  "loadingTags": {
+    "message": "Loading...",
+    "description": ""
+  },
+  "updatingApp": {
+    "message": "Shazify is updating to latest version...",
+    "description": ""
+  },
   "doNotCloseBrowser": {
     "message": "Please do not close your browser",
     "description": ""
   },
+  "all": {
+    "message": "all",
+    "description": ""
+  },
   "searchTrackButton": {
-    "message": "Try a new search",
+    "message": "Search",
     "description": ""
   },
   "trackField": {
@@ -78,11 +90,11 @@
     "description": ""
   },
   "trackNotFound": {
-  	"message": "Oops ! We cannot find this track on Spotify...",
+  	"message": "Oops ! We cannot find this track on Spotify... Please check/correct the search query below and then select the right track from the results that will be displayed.",
   	"description": ""
   },
-  "searchQueryPrompt": {
-    "message": "Please help us by entering/updating the search query below.",
+  "changeTrackSearch": {
+    "message": "Not the right track found? You can change the search query below and then select the right track from the results that will be displayed.",
     "description": ""
   },
   "noTrackFoundQuery": {
@@ -94,6 +106,30 @@
         "example": "track:... artist:..."
       }
     }
+  },
+  "searchResults": {
+    "message": "Search results",
+    "description": ""
+  },
+  "searchResultsPleaseSelect": {
+    "message": "Please select the right track below",
+    "description": ""
+  },
+  "notFound": {
+    "message": "Not found",
+    "description": ""
+  },
+  "notFoundText": {
+    "message": "No track is matching.",
+    "description": ""
+  },
+  "saveSelectedTrack": {
+    "message": "Save the selected track",
+    "description": ""
+  },
+  "searchResults": {
+    "message": "Search results",
+    "description": ""
   },
   "settings": {
   	"message": "Settings",

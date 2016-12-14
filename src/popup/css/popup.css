@@ -46,6 +46,33 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		width:300px;
 	}
 
+	.simplelineicon {
+	  width: 32px;
+	  height: 32px;
+	  display: block;
+	  color: #525151;
+	}
+
+	.simplelineicon.red {
+		color:#A94442;
+	}
+
+	.simplelineicon.green {
+		color:#3c763d;
+	}
+
+	.icon-spin {
+		display:inline-block;
+		-webkit-animation: spin 2s infinite linear;
+		animation: spin 2s infinite linear;
+	}
+
+	.icon-spin-slow {
+		display:inline-block;
+		-webkit-animation: spin 4s infinite linear;
+		animation: spin 4s infinite linear;
+	}
+
 	.iconmelon {
 	  position: relative;
 	  width: 32px;
@@ -93,7 +120,148 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		padding:6px 8px;
 	}
 
+	hr {
+		display: block;
+		height: 1px;
+	    border: 0;
+	    border-top: 1px solid #ccc;
+	    margin: 5px 0;
+	    padding: 0;
+	}
+
+	h3 {
+		font-weight: 500;
+		font-size: 16px;
+		margin-bottom: 0;
+	}
+
+	.button-xsmall {
+    font-size: 70%;
+  }
+
+  .button-small {
+    font-size: 85%;
+  }
+
+  .button-large {
+    font-size: 110%;
+  }
+
+  .button-xlarge {
+    font-size: 125%;
+  }
+
+/* Audio player */
+  .audio-player {
+  	position: relative;
+		text-align: center;
+  }
+
+  .audio-player button {
+  	cursor: pointer;
+  	position:relative;
+  	display: block;
+		margin: 0 auto;
+		padding: 0;
+		width: 24px;
+		height: 24px;
+		background: transparent;
+		color: #2ECC71; /*1ECD97*/
+		border: 2px solid #2ECC71;
+		border-radius: 50%;
+  }
+
+  .audio-player svg.progress-circle {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+
+	.audio-player svg.progress-circle path {
+		opacity: 0;
+		fill: none;
+	}
+
+	.audio-player svg.progress-circle path {
+		stroke: #2ECC71;
+		stroke-width: 5;
+	}
+
+	.audio-player.playing button {
+		border-color: #ddd;
+	}
+
+	.audio-player button span {
+		position:absolute;
+		top: 2px;
+    left: 3px;
+	}
+
+	.audio-player button svg {
+		color:#2ECC71;
+		fill:#2ECC71;
+		stroke: #2ECC71;
+	}
+
+	.audio-player span.play {
+		opacity:1;
+	}
+
+	.audio-player span.pause {
+		opacity:0;
+		top: 3px;
+    left: 3px;
+	}
+
+	.audio-player.playing span.play {
+		-webkit-transition: opacity 0.15s;
+		transition: opacity 0.15s;
+		opacity:0;
+	}
+
+	.audio-player.playing span.pause {
+		-webkit-transition: opacity 0.15s;
+		transition: opacity 0.15s;
+		opacity:1;
+	}
+
+	.audio-player button span {
+		-webkit-transition: opacity 0.3s 0.1s;
+		transition: opacity 0.3s 0.1s;
+	}
+
+	.audio-player.playing svg.progress-circle path {
+		opacity: 1;
+		-webkit-transition: stroke-dashoffset 0.3s;
+		transition: stroke-dashoffset 0.3s;
+	}
+
 /* Animations */
+
+	@-webkit-keyframes spin {
+		0% {
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+		100% {
+			-webkit-transform: rotate(-359deg);
+			transform: rotate(-359deg);
+		}
+	}
+
+	@keyframes spin {
+		0% {
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+		100% {
+			-webkit-transform: rotate(-359deg);
+			transform: rotate(-359deg);
+		}
+	}
 
 	@-webkit-keyframes enterAnimation {
 		to { 
@@ -223,7 +391,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 	.modal input {
-		width: 270px;
+		width: 100%;/*270px*/
 		background-color: white;
 		border: 1px solid #cccccc;
 		padding: 6px 8px;
@@ -235,7 +403,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	}
 
 /* Updating */
-	.updating {
+	.waiting-overlay {
 		position:absolute;
 		top:0;
 		left:0;
@@ -246,20 +414,20 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		z-index:3000;
 	}
 
-	.updating.ng-enter, .modal-overlay.ng-leave {
+	.waiting-overlay.ng-enter, .waiting-overlay.ng-leave {
 		-webkit-transition: 0.3s ease all;
 				transition: 0.3s ease all;
 	}
 
-	.updating.ng-enter, .updating.ng-leave.ng-leave-active {
+	.waiting-overlay.ng-enter, .waiting-overlay.ng-leave.ng-leave-active {
 		opacity:0;
 	}
 
-	.updating.ng-enter.ng-enter-active, .updating.ng-leave {
+	.waiting-overlay.ng-enter.ng-enter-active, .waiting-overlay.ng-leave {
 		opacity:1;
 	}
 
-	.updating .content {
+	.waiting-overlay .content {
 		width:150px;
 		height:150px;
 		position:absolute;
@@ -269,16 +437,38 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		text-align:center;
 	}
 
-	.updating .iconmelon {
+	.loading .content {
+		margin-top:40px;
+		font-size:120%;
+	}
+
+	.waiting-overlay .iconmelon {
 		width:64px;
 		height:64px;
 		margin:40px auto;
 		display:block;
 	}
 
-	.updating .iconmelon svg {
+	.waiting-overlay .iconmelon svg {
 		padding:8px;
 		margin-left:-10px;
+	}
+
+	.waiting-overlay .simplelineicon {
+		width:64px;
+		height:64px;
+		font-size:64px;
+		line-height:64px;
+		margin:40px auto 20px auto;
+		display:block;
+	}
+
+	.updating .updating-tags {
+		font-size:120%;
+	}
+
+	.waiting-overlay .updating-app {
+		font-size:120%;
 	}
 
 /* Top bar */
@@ -297,9 +487,79 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		font-size:18px;
 	}
 
+	.topbar h2 .tags-count {
+		font-size:60%;
+		opacity:0.8;
+		vertical-align: middle;
+	}
+
 	.topbar .right {
 		float:right;
 		overflow:hidden;
+	}
+
+	.topbar .simplelineicon {
+		width:16px;
+		height:16px;
+		font-size:16px;
+		line-height: 16px;
+		float:left;
+		margin-left:7px;
+		margin-top:6px;
+	}
+
+	.topbar .dropdown {
+		position:absolute;
+		top:44px;
+		background-color: white;
+		border:1px solid #cccccc;
+		padding:10px;
+		z-index: 2000;
+    right: 41px;
+    box-sizing: content-box;
+    height: 16px;
+	}
+
+	.topbar .dropdown:after, .topbar .dropdown:before {
+		bottom: 100%;
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.topbar .dropdown:after {
+		border-color: rgba(255, 255, 255, 0);
+		border-bottom-color: #ffffff;
+		border-width: 6px;
+		margin-left: -6px;
+	}
+	.topbar .dropdown:before {
+		border-color: rgba(204, 204, 204, 0);
+		border-bottom-color: #cccccc;
+		border-width: 7px;
+		margin-left: -7px;
+	}
+
+	.topbar .dropdown .filter {
+		font-size:16px;
+		line-height: 16px;
+		height: 16px;
+		opacity: 0.3;
+		margin-right:5px;
+		cursor:pointer;
+		display:inline-block;
+	}
+
+	.topbar .dropdown .filter:last-child {
+		margin-right: 0;
+	}
+
+	.topbar .dropdown .filter.selected {
+		opacity:1;
 	}
 
 	.topbar .iconmelon {
@@ -448,21 +708,30 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		margin:0 auto;
 	}
 
+	.no-tags .simplelineicon {
+		width:64px;
+		height:64px;
+		font-size:64px;
+		line-height:64px;
+		margin:0 auto;
+	}
+
 	.tags-list {
 		overflow:hidden;
 		position:relative;
-		min-height:240px;
+		min-height:310px;
 	}
 
-	.tags-list .tag {
+	.tag {
+		display:block;
 		overflow:hidden;
 		clear:both;
-		margin-bottom:7px;
+		padding-top:7px;
 		border-bottom:1px solid #e0e0e0;
 		padding-bottom:7px;
 	}
 
-	.tags-list .tag.ng-enter {
+	.tag.ng-enter {
 		opacity: 0;
 		transform: translate(0, -50px);
 
@@ -470,18 +739,41 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 				animation: enterAnimation 0.2s ease forwards;
 	}
 
-	.tags-list .tag.ng-enter-stagger {
-		-webkit-animation-delay:50ms;
-		animation-delay:50ms;
+	.tag.ng-enter-stagger {
+		-webkit-animation-delay:10ms;
+		animation-delay:10ms;
 
 		-webkit-animation-duration:0;
 		animation-duration:0;
+	}
+
+	.tag:hover .tag-actions {
+		display:block;
+	}
+
+	.tag-actions {
+		display:none;
+		float:right;
+		margin-left:10px;
+		margin-top:2px;
+	}
+
+	.tag-actions .player {
+	  margin-top: 3px;
+	}
+
+	.tag-status.hidden+.tag-actions {
+		margin-right:8px;
 	}
 
 	.tag-status {
 		float:right;
 		margin-left:10px;
 		margin-top:2px;
+	}
+
+	.tag-status.hidden {
+		display:none;
 	}
 
 	.tag-status .iconmelon {
@@ -505,6 +797,29 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		fill:#59ABE3;
 	}
 
+	.tag-status .simplelineicon {
+		width:32px;
+		height:32px;
+		font-size:32px;
+		line-height:32px;
+	}
+
+	.tag-status .success .simplelineicon {
+		color:#2ECC71;
+	}
+
+	.tag-status .success.pending .simplelineicon {
+		opacity:0.6;
+	}
+
+	.tag-status .error .simplelineicon {
+		color:#F9690E;
+	}
+
+	.tag-status .search .simplelineicon {
+		color:#59ABE3;
+	}
+
 	.tag.tag-success {
 
 	}
@@ -519,6 +834,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.tag .tag-image {
 		width:36px;
+		border-radius: 50%;
 		float:left;
 		margin-right:10px;
 	}
@@ -535,6 +851,68 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.tag .tag-artist {
 		opacity:0.8;
 		font-weight:normal;
+	}
+
+/* Pagination */
+	.pagination {
+		margin-top:5px;
+		overflow: hidden;
+		display: flex;
+		height:19px;
+	}
+
+	.pagination-left {
+		width: 20px;
+    flex: 0 0 20px;
+	}
+
+	.pagination-center {
+		flex: 1;
+		text-align: center;
+	}
+
+	.pagination-right {
+		width: 20px;
+    flex: 0 0 20px;
+	}
+
+	.pagination-prev, .pagination-next {
+		font-size:16px;
+		line-height: 16px;
+		height: 16px;
+		cursor: pointer;
+	}
+
+	.pagination-prev.disabled, .pagination-next.disabled {
+		cursor: default;
+		opacity: 0.4;
+	}
+
+	.pagination-count {
+		display:inline-block;
+	}
+
+	.pagination-limit {
+		font-size:90%;
+	}
+
+	.pagination-next {
+		text-align: right;
+	}
+
+	.tag.search-result {
+
+	}
+
+	.tag.search-result:hover {
+		background-color:#efefef;
+	}
+
+	.new-search-modal {
+		bottom:20px;
+		top:20px;
+		overflow-y:auto;
+		overflow-x:hidden;
 	}
 
 /* Settings */

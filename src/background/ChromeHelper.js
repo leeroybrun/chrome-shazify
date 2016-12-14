@@ -30,13 +30,17 @@
 		},
 
 		// Focus existing tab or create it
-		focusOrCreateTab: function(url) {
+		focusOrCreateTab: function(url, callback) {
+			callback = callback || function(){};
+
 			ChromeHelper.findExistingTab(url, function(existing_tab) {
 				if (existing_tab) {
 					chrome.tabs.reload(existing_tab.id, {'bypassCache': true});
 					chrome.tabs.update(existing_tab.id, {'selected': true});
+
+					return callback(existing_tab);
 				} else {
-					chrome.tabs.create({'url': url, 'selected': true});
+					chrome.tabs.create({'url': url, 'selected': true}, callback);
 				}
 			});
 		},

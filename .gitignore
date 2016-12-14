@@ -3,5 +3,6 @@ node_modules/
 popup/popup.css
 popup/popup.js
 background/background.js
+/contentscripts/
 dist/
 build/

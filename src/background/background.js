@@ -5,12 +5,13 @@ $(document).ready(function() {
 	s2s.Logger.info('[init] Loading tags from storage...');
 
 	s2s.Tags.load(function() {
-		s2s.Logger.info('[init] '+ s2s.Tags.list.length +' tags loaded.');
+		
 	});
 
 	s2s.CanvasIcon.load();
 
 	s2s.updating = false;
+	s2s.updatingApp = false;
 
 	s2s.getUpdateStatus = s2s.Tags.getUpdateStatus;
 
@@ -18,6 +19,11 @@ $(document).ready(function() {
 		if(s2s.updating) {
 			s2s.Logger.info('[core] Tags update already in progress.');
 			return callback('already_in_progress');
+		}
+
+		if(s2s.updatingApp) {
+			s2s.Logger.info('[core] App update in progress, please wait.');
+			return callback('app_update_in_progress');
 		}
 
 		s2s.Logger.info('[core] Starting tags update...');
@@ -86,20 +92,28 @@ $(document).ready(function() {
 	        s2s.Spotify.data.clearCache();
 	        s2s.CanvasIcon.stopRotation();
 
-	        // Reload tags, will reset list & lastUpdate
-	        s2s.Tags.load();
+	        s2s.Tags.db.clear().then(function() {
+	        	// Reload tags, will reset list & lastUpdate
+	        	s2s.Tags.load();
+	        }).catch(function(reason) {
+	        	s2s.Logger.error('[core] Cannot clear tags database.');
+	        	s2s.Logger.error(reason);
+	        });
 	    }
 	});
 
 	// Check for install/update
 	chrome.runtime.onInstalled.addListener(function(details) {
 	    if(details.reason == 'install') {
-	        s2s.Logger.info('[core] Extension installed.');
+        s2s.Logger.info('[core] Extension installed.');
 	    } else if(details.reason == 'update') {
-	        var thisVersion = chrome.runtime.getManifest().version;
-	        s2s.Logger.info('[core] Extension updated from '+ details.previousVersion +' to '+ thisVersion +'.');
-	        
-	        s2s.UpdateService.update(details.previousVersion, thisVersion);
+        var thisVersion = chrome.runtime.getManifest().version;
+        
+        if(details.previousVersion !== thisVersion) {
+        	s2s.Logger.info('[core] Extension updated from '+ details.previousVersion +' to '+ thisVersion +'.');
+        
+        	s2s.UpdateService.update(details.previousVersion, thisVersion);
+      	}
 	    }
 	});
 });

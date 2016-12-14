@@ -1,83 +1,77 @@
 <div class="topbar">
 	<div class="right">
-		<a class="iconmelon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#rotate"></use>
-				</g>
-			</svg>
+		<a class="simplelineicon clickable" ng-click="toggleShowFilters()" analytics-on analytics-event="Open filters" analytics-category="Tags" ng-if="updating() === false">
+			<i class="icon-tag"></i>
 		</a>
-		<a class="iconmelon" ng-if="updating() === true">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#rotate"></use>
-					<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="4s" repeatCount="indefinite"/>
-				</g>
-			</svg>
+		<div class="dropdown" ng-show="shouldShowFilters">
+			<a class="filter" ng-repeat="filter in statusFilters" ng-click="toggleStatusFilter(filter.status)" ng-class="{ selected: isFilterSelected(filter.status) }"><i class="{{filter.icon}}"></i></a>
+		</div>
+		<a class="simplelineicon clickable" ng-click="refreshTags()" analytics-on analytics-event="Manual refresh" analytics-category="Tags" ng-if="updating() === false">
+			<i class="icon-refresh"></i>
 		</a>
-		<a class="iconmelon" href="#/settings">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#settings-toolkit"></use>
-				</g>
-			</svg>
+		<a class="simplelineicon" ng-if="updating() === true">
+			<i class="icon-refresh icon-spin"></i>
+		</a>
+		<a class="simplelineicon" href="#/settings">
+			<i class="icon-settings"></i>
 		</a>
 	</div>
-	<h2 chrome-translate>myTags</h2>
+	<h2><span chrome-translate>myTags</span> <span class="tags-count">({{filteredCount}}/{{totalCount}})</span></h2>
 </div>
 <div class="tags-list">
-	<div class="updating" ng-if="updating() === true">
+	<div class="waiting-overlay updating" ng-if="updating() === true && updatingApp() === false">
 		<div class="content">
-			<div class="iconmelon">
-				<svg viewBox="0 0 32 32">
-					<g filter="">
-						<use xlink:href="#rotate"></use>
-						<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="4s" repeatCount="indefinite"/>
-					</g>
-				</svg>
+			<div class="simplelineicon">
+				<i class="icon-refresh icon-spin"></i>
 			</div>
-			<p><span chrome-translate>updatingTags</span><br />{{updateStatus}}</p>
+			<p><span class="updating-tags" chrome-translate>updatingTags</span><br />{{updateStatus}}</p>
 			<p chrome-translate>doNotCloseBrowser</p>
 		</div>
 	</div>
-	<div class="no-tags" ng-if="!tags">
-		<p class="iconmelon">
-			<svg viewBox="0 0 32 32">
-				<g filter="">
-					<use xlink:href="#error"></use>
-				</g>
-			</svg>
+	<div class="waiting-overlay loading" ng-if="loading === true && updating() === false && updatingApp() === false">
+		<div class="content">
+			<div class="simplelineicon">
+				<i class="icon-refresh icon-spin"></i>
+			</div>
+			<p chrome-translate>loadingTags</p>
+		</div>
+	</div>
+	<div class="waiting-overlay updating-app" ng-if="updatingApp() === true">
+		<div class="content">
+			<div class="simplelineicon">
+				<i class="icon-settings icon-spin-slow"></i>
+			</div>
+			<p chrome-translate class="updating-app">updatingApp</p>
+			<p chrome-translate>doNotCloseBrowser</p>
+		</div>
+	</div>
+	<div class="no-tags" ng-if="!items">
+		<p class="simplelineicon">
+			<i class="icon-exclamation"></i>
 		</p>
 		<p chrome-translate>noTagsFound</p>
 	</div>
-	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in tags() track by tag.shazamId">
+	<div class="tag" nb-class="{'tag-success': tag.status == 3, 'tag-search': tag.status == 1, 'tag-error': tag.status == 2}" ng-repeat="tag in items track by tag.shazamId">
 		<div class="tag-status">
-			<div class="success" ng-if="tag.status >= 3" ng-class="{'pending': tag.status == 3}">
-				<div class="iconmelon">
-					<svg viewBox="0 0 32 32">
-						<g filter="">
-							<use xlink:href="#success"></use>
-						</g>
-					</svg>
+			<div class="success clickable" ng-if="tag.status == 3 || tag.status == 4" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search on already found" analytics-category="Tags" ng-class="{'pending': tag.status == 3}">
+				<div class="simplelineicon">
+					<i class="icon-check"></i>
 				</div>
 			</div>
-			<div class="error" ng-if="tag.status == 2">
-				<div class="iconmelon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
-					<svg viewBox="0 0 32 32">
-						<g filter="">
-							<use xlink:href="#error"></use>
-						</g>
-					</svg>
+			<div class="error" ng-if="tag.status == 2 || tag.status == 5">
+				<div class="simplelineicon clickable" ng-click="retryTagSearch(tag)" analytics-on analytics-event="Retry tag search" analytics-category="Tags">
+					<i class="icon-close"></i>
 				</div>
 			</div>
 			<div class="search" ng-if="tag.status == 1">
-				<div class="iconmelon">
-					<svg viewBox="0 0 32 32">
-						<g filter="">
-							<use xlink:href="#search"></use>
-						</g>
-					</svg>
+				<div class="simplelineicon">
+					<i class="icon-clock"></i>
 				</div>
+			</div>
+		</div>
+		<div class="tag-actions">
+			<div class="player" ng-if="tag.previewUrl">
+				<audio-player audio-src="tag.previewUrl" />
 			</div>
 		</div>
 		<img ng-if="tag.image" ng-src="{{tag.image}}" class="tag-image">
@@ -85,10 +79,37 @@
 		<div class="tag-name">{{tag.name}}</div>
 		<div class="tag-artist">{{tag.artist}}</div>
 	</div>
+
+	<div class="pagination" ng-if="loading === false && updating() === false">
+		<div class="pagination-left">
+			<a class="pagination-prev" ng-class="{ disabled: !pagination.hasPrevPage() }" ng-click="pagination.prevPage()" analytics-on analytics-event="Prev page" analytics-category="Tags">
+	      <i class="icon-arrow-left-circle"></i>
+	    </a>
+	  </div>
+	  <div class="pagination-center">
+	    <div class="pagination-count" disabled>
+	      {{pagination.page+1}}/{{pagination.nbPages()}}
+	    </div>
+	    <select ng-model="pagination.limitString" ng-change="pagination.limitChanged()" class="pagination-limit">
+	    	<option value="10">10 / page</option>
+	    	<option value="25">25 / page</option>
+	    	<option value="50">50 / page</option>
+	    	<option value="100">100 / page</option>
+	    	<option value="200">200 / page</option>
+	    	<option value="0"><span chrome-translate>all</span> ({{filteredCount}})</option>
+	    </select>
+	  </div>
+	  <div class="pagination-right">
+	    <a class="pagination-next" ng-class="{ disabled: !pagination.hasNextPage() }" ng-click="pagination.nextPage()" analytics-on analytics-event="Next page" analytics-category="Tags">
+	      <i class="icon-arrow-right-circle"></i>
+	    </a>
+	  </div>
+	</div>
+
 	<div class="modal-overlay" ng-if="newSearch.show" ng-click="newSearch.cancel()"></div>
-	<div class="modal" ng-if="newSearch.show">
-		<p chrome-translate>trackNotFound</p>
-		<p chrome-translate>searchQueryPrompt</p>
+	<div class="modal new-search-modal" ng-if="newSearch.show">
+		<p chrome-translate ng-if="newSearch.tag.status != 2">changeTrackSearch</p>
+		<p chrome-translate ng-if="newSearch.tag.status == 2">trackNotFound</p>
 		<form ng-submit="newSearch.send()">
 			<p><label chrome-translate>trackField</label><br />
 			<input type="text" ng-model="newSearch.query.track"></p>
@@ -97,5 +118,40 @@
 			<p><button type="submit" class="pure-button pure-button-primary" chrome-translate analytics-on analytics-event="Start search" analytics-category="Retry search modal">searchTrackButton</button><a class="pure-button pure-button-warning cancel-button" ng-click="newSearch.cancel()" chrome-translate analytics-on analytics-event="Cancel" analytics-category="Retry search modal">cancel</a></p>
 			<p class="error-msg" ng-if="newSearch.error">{{newSearch.error}}</p>
 		</form>
+		<div class="results-tracks-list" ng-if="newSearch.results.length > 0">
+			<h3 chrome-translate>searchResults</h3>
+			<hr />
+			<p chrome-translate>searchResultsPleaseSelect</p>
+			<a ng-click="newSearch.setNotFound()" ng-class="{selected: newSearch.tag.status == 5}" class="tag search-result not-found clickable">
+				<div class="tag-status" ng-class="{ hidden: !(newSearch.tag.status == 5) }">
+					<div class="success">
+						<div class="simplelineicon">
+							<i class="icon-check"></i>
+						</div>
+					</div>
+				</div>
+				<img src="img/placeholder.png" class="tag-image">
+				<div class="tag-name" chrome-translate>notFound</div>
+				<div class="tag-artist" chrome-translate>notFoundText</div>
+			</a>
+			<a ng-click="newSearch.selectTrack(track)" ng-class="{selected: track.id == newSearch.selectedTrack.id}" class="tag search-result clickable" ng-repeat="track in newSearch.results track by track.id">
+				<div class="tag-status" ng-class="{ hidden: !newSearch.isSelectedTrack(track) }">
+					<div class="success">
+						<div class="simplelineicon">
+							<i class="icon-check"></i>
+						</div>
+					</div>
+				</div>
+				<div class="tag-actions">
+					<div class="player" ng-if="track.previewUrl">
+						<audio-player audio-src="track.previewUrl" />
+					</div>
+				</div>
+				<img ng-if="track.image" ng-src="{{track.image}}" class="tag-image">
+				<img ng-if="!track.image" src="img/placeholder.png" class="tag-image">
+				<div class="tag-name">{{track.name}}</div>
+				<div class="tag-artist">{{track.artist}}</div>
+			</a>
+		</div>
 	</div>
 </div>

@@ -31,6 +31,14 @@
 				text += possible.charAt(Math.floor(Math.random() * possible.length));
 			}
 			return text;
+		},
+
+		escapeRegExp: function(string) {
+		    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+		},
+
+		replaceAll: function(string, find, replace) {
+			return string.replace(new RegExp(Helper.escapeRegExp(find), 'g'), replace);
 		}
 	};
 
