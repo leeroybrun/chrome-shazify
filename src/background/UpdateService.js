@@ -67,6 +67,8 @@
 				}, function() {
 					Logger.info('[Updater] All update scripts applied !');
 
+          chrome.runtime.sendMessage({ action: 'forcePopupUpdate' });
+
           s2s.updatingApp = false;
 				});
 			} else {
@@ -203,6 +205,19 @@
           } else {
             return callback();
           }
+        });
+      }},
+      // v0.04.04
+      {'version': 404, 'perform': function(callback) {
+        // Recreate tracks on Spotify playlist to set them in correct order
+        // Dont remove all tracks from playlist, only the one created/stored by Shazify
+        Tags.recreateTracksOnPlaylist(false, function(err) {
+          if(err) {
+            Logger.error(err);
+            Logger.error('[Update] Error recreating (reordering) tags.');
+          }
+
+          return callback();
         });
       }}
 		]

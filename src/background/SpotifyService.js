@@ -159,6 +159,28 @@
 				});
 			},
 
+			removeAllTracks: function(callback) {
+				Logger.info('[Spotify] Removing all tracks in playlist...');
+
+				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
+					if(err) { return callback(err); }
+
+					Spotify.call({
+						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
+						method: 'PUT',
+						data: JSON.stringify({ uris: [] })
+					}, function(err, data) {
+						if(err) { 
+							Logger.info('[Spotify] Error removing all tracks from playlist.'); 
+							Logger.error(err); 
+							return callback(err);
+						}
+
+						return callback(null, data);
+					});
+				});
+			},
+
 			// Add an array of trackIds to playlist
 			addTracks: function(tracksIds, callback) {
 				if(tracksIds.length === 0) {
@@ -198,7 +220,7 @@
 							tracksPaths.push('spotify:track:'+ id);
 						});
 
-						Spotify.playlist._addTracksPaths(tracksPaths, callback);						
+						Spotify.playlist._splitPlaylistTracksRequest(userId, playlistId, 'POST', tracksPaths, callback);
 					});
 				});
 			},
@@ -214,95 +236,87 @@
 
 					Logger.info('[Spotify] '+ tracksIds.length +' tracks to remove from playlist.');
 
-					var tracks = [];
+					var tracksPaths = [];
 					tracksIds.forEach(function(id) {
-						tracks.push({ uri: 'spotify:track:'+ id });
+						tracksPaths.push({ uri: 'spotify:track:'+ id });
 					});
 
-					Spotify.call({
-						method: 'DELETE',
-						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
-						data: JSON.stringify({ tracks: tracks })
-					}, function(err, data) {
-						if(err) { 
-							Logger.error('[Spotify] Error removing tracks from playlist.'); 
-							Logger.error(err);
-
-							return callback(err);
-						}
-
-						if(data.snapshot_id) {
-							return callback();
-						} else {
-							Logger.error('[Spotify] No snapshot_id returned for tracks removal.'); 
-
-							return callback(new Error('[Spotify] No snapshot_id returned for tracks removal.'));
-						}
-					});
+					Spotify.playlist._splitPlaylistTracksRequest(userId, playlistId, 'DELETE', tracksPaths, callback);
 				});
 			},
 
-			// Private : called from addTracks, add an array of trackPaths to playlist.
 			// Handle arrays bigger than 100 items (should be splitted in multiple requests for Spotify API)
-			_addTracksPaths: function(tracksPaths, callback) {
+			_splitPlaylistTracksRequest: function(userId, playlistId, method, tracksPaths, callback) {
 				// We don't have any tracks to add anymore
 				if(tracksPaths.length === 0) {
-					Logger.info('[Spotify] No tracks to add to playlist.');
+					Logger.info('[Spotify] No tracks to '+ method +' to playlist.');
 					return callback();
 				}
 
-				Spotify.getUserAndPlaylist(function(err, userId, playlistId) {
-					if(err) { return callback(err); }
+				Logger.info('[Spotify] Going to '+ method +' tracks to playlist '+ playlistId +'...');
 
-					Logger.info('[Spotify] Going to add tracks to playlist '+ playlistId +'...');
+				//
+				// Spotify API allow only send 100 tracks per requests, so we need to split it.
+				// Slit it from the end, as tracks will be added to the start of playlist and needs to keep the right order.
+				// For deletion (DELETE method), the order of track does not matters, so it's fine to get them from the end too.
+				//
+				// Example tracks to send (10 is the newest, 1 is the oldest) : 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 
+				// Get 5 from the end : 5, 4, 3, 2, 1  -> add these to position 0 in playlist -> playlist = 5, 4, 3, 2, 1
+				// Remaining tracks :   10, 9, 8, 7, 6
+				// Get 5 from the end : 10, 9, 8, 7, 6 -> add these to position 0 in playlist -> playlist = 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+				//
+				var remainingTracks  = tracksPaths.slice(0, -100);
+				if(remainingTracks.length > 0) {
+					Logger.info('[Spotify] Due to Spotify limitation (max 100 tracks/request), we will split this request.');
+					Logger.info('[Spotify] Starting to process the last 100 tracks.');
+					Logger.info('[Spotify] Then, we will have '+ remainingTracks.length +' tracks remaining to process.');
 
-					// Spotify API allow only to add 100 tracks per requests, so we need to split it
-					// Slit it from the end, as tracks will be added to the start of playlist and needs to keep order
-					// 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 (10 is the newest, 1 is the oldest)
-					// 5, 4, 3, 2, 1 (split and add these to position 0 in playlist) -> playlist = 5, 4, 3, 2, 1
-					// 10, 9, 8, 7, 6 (split and add these to position 0 in playlist) -> playlist = 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-					var remainingTracks  = tracksPaths.slice(0, -100);
-					if(remainingTracks.length > 0) {
-						Logger.info('[Spotify] Due to Spotify limitation (max 100 tracks addition/request), we will split this request.');
-						Logger.info('[Spotify] Starting to add the first 100 tracks.');
-						Logger.info('[Spotify] Then, we will have '+ remainingTracks.length +' tracks remaining to add.');
+					tracksPaths = tracksPaths.slice(-100);
+				}
 
-						tracksPaths = tracksPaths.slice(-100);
+				Logger.info('[Spotify] Sending '+ method +' request to playlist '+playlistId+' with tracks:');
+				Logger.info(tracksPaths);
+
+				var requestParams = {};
+				var requestData = {};
+
+				// If method is POST (add tracks), set position to 0 to add them at start of playlist
+				if(method === 'POST') {
+					requestParams.position = 0;
+					requestData.uris = tracksPaths;
+				} else if(method === 'DELETE') {
+					requestData.tracks = tracksPaths;
+				}
+
+				var requestOpt = {
+					method: method,
+					endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
+					data: JSON.stringify(requestData),
+					params: requestParams
+				};
+
+				Spotify.call(requestOpt, function(err, data) {
+					if(err) { 
+						Logger.info('[Spotify] Error sending tracks to playlist.'); 
+						Logger.error(err);
+
+						return callback(err);
 					}
 
-					Logger.info('[Spotify] Saving tracks to playlist '+playlistId+' :');
-					Logger.info(tracksPaths);
+					Logger.info('[Spotify] Request sent to playlist.');
 
-					Spotify.call({
-						method: 'POST',
-						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
-						data: JSON.stringify({ uris: tracksPaths }),
-						params: {
-							position: 0
-						}
-					}, function(err, data) {
-						if(err) { 
-							Logger.info('[Spotify] Error saving tracks to playlist.'); 
-							Logger.error(err);
-
-							return callback(err);
-						}
-
-						Logger.info('[Spotify] Tracks saved to playlist.');
-
-						// If we have remaining tracks to add, call the method again
-						if(remainingTracks.length > 0) {
-							Logger.info('[Spotify] Waiting 2s before processing the next batch of tracks.');
-							
-							setTimeout(function() {
-								Spotify.playlist._addTracksPaths(remainingTracks, callback);
-							}, 2000);
-						} else {
-							// All tracks added, finished !
-							Logger.info('[Spotify] All done !');
-							callback();
-						}					
-					});
+					// If we have remaining tracks to process, call the method again
+					if(remainingTracks.length > 0) {
+						Logger.info('[Spotify] Waiting 2s before processing the next batch of tracks.');
+						
+						setTimeout(function() {
+							Spotify.playlist._splitPlaylistTracksRequest(userId, playlistId, method, remainingTracks, callback);
+						}, 2000);
+					} else {
+						// All tracks processed, finished !
+						Logger.info('[Spotify] All done !');
+						callback();
+					}					
 				});
 			}
 		},

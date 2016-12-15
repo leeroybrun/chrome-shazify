@@ -15,6 +15,45 @@ $(document).ready(function() {
 
 	s2s.getUpdateStatus = s2s.Tags.getUpdateStatus;
 
+	s2s.recreateTracksOnPlaylist = function(removeAll, callback) {
+		if(s2s.updating) {
+			s2s.Logger.info('[core] Tags update already in progress.');
+			return callback('already_in_progress');
+		}
+
+		if(s2s.updatingApp) {
+			s2s.Logger.info('[core] App update in progress, please wait.');
+			return callback('app_update_in_progress');
+		}
+
+		s2s.updating = true;
+		s2s.CanvasIcon.startRotation();
+
+		s2s.Spotify.playlist.get(function(err) {
+			if(err) {
+				s2s.Logger.info('[core] Error getting playlist. Tags recreation aborted.');
+				
+				s2s.updating = false;
+				s2s.CanvasIcon.stopRotation();
+
+				return callback(err);
+			}
+
+			s2s.Tags.recreateTracksOnPlaylist(removeAll, function(err) {
+				if(err) {
+					s2s.Logger.info('[core] Error recreating tags.');
+				} else {
+					s2s.Logger.info('[core] All done ! Tags recreated.');
+				}
+
+				s2s.updating = false;
+				s2s.CanvasIcon.stopRotation();
+
+				return callback(err);
+			});
+		});
+	};
+
 	s2s.updateTags = function(callback) {
 		if(s2s.updating) {
 			s2s.Logger.info('[core] Tags update already in progress.');

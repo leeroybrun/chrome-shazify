@@ -55,7 +55,7 @@
 				icon.ctx.save();
 	            icon.ctx.clearRect(0, 0, icon.canvas.width, icon.canvas.height); //clear the canvas
 	            icon.ctx.translate(icon.cache.width/2, icon.cache.height/2);
-	            icon.ctx.rotate(Math.PI / 180 * (icon.ang += 10)); //increment the angle and rotate the image 
+	            icon.ctx.rotate(Math.PI / 180 * (icon.ang -= 10)); //increment the angle and rotate the image 
 	            icon.ctx.drawImage(icon.img, -icon.cache.width / 2, -icon.cache.height / 2, icon.cache.width, icon.cache.height); //draw the image ;)
 				icon.ctx.restore();
 

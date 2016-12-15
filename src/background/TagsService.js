@@ -76,7 +76,7 @@
 					Tags._updateStatusNbTags = tags.length;
 
 					if(tags.length === 0) {
-						return callback();
+						return Tags.updatePlaylist(callback);
 					}
 
 					Tags.lastUpdate = new Date();
@@ -84,13 +84,13 @@
 					async.eachSeries(tags, function(tag, cbe) {
 						Tags.add(tag, function() {
 							Tags._updateStatusTagsAdded++;
-							cbe();
+							return cbe();
 						});
 					}, function() {
-						Tags.updatePlaylist(callback);
+						return Tags.updatePlaylist(callback);
 					});
 				} else {
-					callback(err);
+					return callback(err);
 				}
 			});
 		},
@@ -120,12 +120,104 @@
 						});
 					}
 
-					Tags.save(callback);
+					return Tags.save(callback);
 				});
 			}).catch(function(reason) {
 				Logger.error('[Tags] Error getting tags list to add.');
 				Logger.error(reason);
 			});
+		},
+
+		// Recreate (and reorder) tracks in Spotify
+		// If removeAll is true, will remove ALL tracks from playlist, before adding them again. This let the user do some cleanup if wanted.
+		recreateTracksOnPlaylist: function(removeAll, callback) {
+			Logger.info('[Tags] Reordering tracks in playlist...');
+
+			function addTracksAgain(tagsToUpdate, callback) {
+        // Update tags in local DB (status=3 to force playlist update)
+        Tags.db.bulkPut(tagsToUpdate).then(function() {
+
+          // Update playlist on Spotify
+          Tags.updatePlaylist(function(err) {
+            if(err) {
+              Logger.error('[Tags] Error updating tags...');
+              Logger.error(err);
+            }
+
+            return callback(err);
+          });
+        }).catch(function(err) {
+          Logger.error('[Tags] Error updating tags in DB...');
+          Logger.error(err);
+
+          return callback(err);
+        });
+			}
+
+      // Get tags with a spotifyId defined, remove spotifyId from playlist, set tag to status = 3, call updatePlaylist
+      Tags.db.filter(function(tag) {
+				// Filter to get only tags with a spotifyId
+				return tag.spotifyId !== null && typeof tag.spotifyId === 'string' && tag.spotifyId.length > 0;
+			}).toArray().then(function(list) {
+        if(list && list.length) {
+          Logger.info('[Tags] '+ list.length +' tags to update...');
+
+          var tracksIdsToRemove = [];
+          var tagsToUpdate = [];
+
+          list.forEach(function(tag) {
+            if(!tag.spotifyId) {
+              return;
+            }
+
+            // If we only remove tracks from Shazify, create the list of tracks to remove
+            if(!removeAll) {
+	            // Add Spotify track ID to list of tracks to remove from playlist
+	            tracksIdsToRemove.push(tag.spotifyId);
+	          }
+
+            // Set status to 3, will force Shazify to send new tracks to paylist in the right order
+            tag.status = 3;
+
+            tagsToUpdate.push(tag);
+          });
+
+          // If we need to remove all tracks
+          if(removeAll) {
+          	// Remove all tracks from playlist
+		        Spotify.playlist.removeAllTracks(function(err) {
+		          if(err) {
+		            Logger.error('[Tags] Error removing all tracks from playlist...');
+		            Logger.error(err);
+		            return callback(err);
+		          }
+
+          		return addTracksAgain(tagsToUpdate, callback);
+          	});
+
+          // Remove only tracks found in Shazify
+          } else {
+          	// Remove tracks from playlist
+		        // We are not cleaning it, as users may have added tracks manually to playlist and may not want to lose them
+		        Spotify.playlist.removeTracks(tracksIdsToRemove, function(err) {
+		          if(err) {
+		            Logger.error('[Tags] Error removing tracks from playlist...');
+		            Logger.error(err);
+		            return callback(err);
+		          }
+
+          		return addTracksAgain(tagsToUpdate, callback);
+          	});
+          }
+        } else {
+        	Logger.info('[Tags] No tracks to recreate...');
+          return callback();
+        }
+      }).catch(function(reason) {
+				Logger.error('[Tags] Error getting tracks from DB...');
+        Logger.error(reason);
+				return callback(reason);
+      });
 		},
 
 		// Manually select a Spotify track for a tag

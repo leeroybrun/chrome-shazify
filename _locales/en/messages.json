@@ -199,5 +199,33 @@
   "exportLogsText": {
     "message": "If you need to debug the extension, you can export the logs here.",
     "description": ""
+  },
+  "recreatePlaylist": {
+    "message": "Recreate and reorder tracks",
+    "description": ""
+  },
+  "recreatePlaylistText": {
+    "message": "If the Spotify playlist became messy and you want to recreate the tracks it contains. We will reorder all the tracks too, and put the latest at top. We only change the playlist created by Shazify, nothing else will be modified.",
+    "description": ""
+  },
+  "recreatePlaylistRemoveWhat": {
+    "message": "Remove and recreate",
+    "description": ""
+  },
+  "recreatePlaylistRemoveAll": {
+    "message": "ALL tracks in playlist",
+    "description": ""
+  },
+  "recreatePlaylistDontRemoveAll": {
+    "message": "Only tracks from Shazify",
+    "description": ""
+  },
+  "recreatePlaylistAreYouSure": {
+    "message": "Are you sure you want to recreate all tracks in playlist?",
+    "description": ""
+  },
+  "recreatePlaylistButton": {
+    "message": "Recreate tracks",
+    "description": ""
   }
 }

@@ -923,12 +923,13 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 
 	.login-status {
 		overflow:hidden;
+		margin-top:1em;
 	}
 
 	.login-status .status {
 		padding:15px;
 		border-radius:3px;
-		border:1px solid;
+		/*border:1px solid;*/
 		float:left;
 		width:142px;
 		text-align:center;
@@ -947,17 +948,26 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 	.login-status .status.on {
 		color: #3c763d;
 		background-color: #dff0d8;
-		border-color: #d6e9c6;
+		/*border-color: #d6e9c6;*/
 	}
 
 	.login-status .status.off {
 		color: #a94442;
 		background-color: #f2dede;
-		border-color: #ebccd1;
+		/*border-color: #ebccd1;*/
 	}
 
-	.advanced-settings {
+	.advanced-settings, .settings-section-container {
 		margin-top: 20px;
 		padding-top: 20px;
 		border-top: 1px solid #e0e0e0;
+	}
+
+	.settings-section-toggle {
+		font-size:120%;
+	}
+
+	.settings-section-toggle .arrow {
+		margin-left:5px;
+		vertical-align: middle;
 	}

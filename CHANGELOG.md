@@ -3,6 +3,11 @@
 ## v0.4.4
 
 - [x] Add tracks in the right order on Spotify (new tracks first)
+- [x] Add setting to recreate tracks in playlist
+- [x] Update script to automatically reorder tracks in playlist when updated to v0.4.4
+- [x] When app update is completed, send message to popup to force update
+- [x] Show tags & app updates in settings too
+- [x] Change rotation or CanvasIcon to match popup icons' rotation
 
 ## v0.4.3
 

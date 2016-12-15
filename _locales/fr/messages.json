@@ -195,5 +195,33 @@
   "exportLogsText": {
     "message": "Afin de déceler et débugger d'éventuels problèmes, vous pouvez exporter les logs de l'application.",
     "description": ""
+  },
+  "recreatePlaylist": {
+    "message": "Recréer et réordonner les morceaux",
+    "description": ""
+  },
+  "recreatePlaylistText": {
+    "message": "Si la playlist Spotify vous semble en désordre et que vous voulez recréer les morceaux qu'elle contient. Nous allons également les réordonner afin de mettre les derniers en haut de la liste. Nous ne modifions que la playlist créée par Shazify, rien d'autre ne sera touché!",
+    "description": ""
+  },
+  "recreatePlaylistRemoveWhat": {
+    "message": "Supprimer et recréer",
+    "description": ""
+  },
+  "recreatePlaylistRemoveAll": {
+    "message": "TOUS les morceaux de la playlist",
+    "description": ""
+  },
+  "recreatePlaylistDontRemoveAll": {
+    "message": "Seulement les morceaux créés par Shazify",
+    "description": ""
+  },
+  "recreatePlaylistAreYouSure": {
+    "message": "Êtes-vous sûr de vouloir recréer les morceaux dans la playlist?",
+    "description": ""
+  },
+  "recreatePlaylistButton": {
+    "message": "Recréer les morceaux",
+    "description": ""
   }
 }

@@ -10,6 +10,14 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 
 	$scope.loading = true;
 
+  chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    if(message.action && message.action === 'forcePopupUpdate') {
+      $timeout(function() {
+        updateList();
+      }, 0);
+    }
+  });
+
 	function updateList() {
 		$scope.loading = true;
 		TagsService.getList($scope.tagsStatusFilters, $scope.pagination.offset(), $scope.pagination.limit(), function(error, result) {

@@ -12,6 +12,24 @@
 	<h2 chrome-translate>settings</h2>
 </div>
 <div class="settings">
+	<div class="waiting-overlay updating" ng-if="updating() === true && updatingApp() === false">
+		<div class="content">
+			<div class="simplelineicon">
+				<i class="icon-refresh icon-spin"></i>
+			</div>
+			<p><span class="updating-tags" chrome-translate>updatingTags</span></p>
+			<p chrome-translate>doNotCloseBrowser</p>
+		</div>
+	</div>
+	<div class="waiting-overlay updating-app" ng-if="updatingApp() === true">
+		<div class="content">
+			<div class="simplelineicon">
+				<i class="icon-settings icon-spin-slow"></i>
+			</div>
+			<p chrome-translate class="updating-app">updatingApp</p>
+			<p chrome-translate>doNotCloseBrowser</p>
+		</div>
+	</div>
 	<h3 chrome-translate>loginStatus</h3>
 	<div class="login-status">
 		<div class="status" ng-class="{on: login.shazam.status, off: !login.shazam.status}">
@@ -56,8 +74,21 @@
 			<p><a class="pure-button button-warning" ng-click="login.spotify.disconnect()" chrome-translate analytics-on analytics-event="Spotify logout" analytics-category="Settings">logout</a></p>
 		</div>
 	</div>
-	<div class="advanced-settings">
-		<a ng-click="advanced.toggle()" class="clickable" analytics-on analytics-event="Toggle advanced settings" analytics-category="Settings"><span chrome-translate>advancedSettings</span> <span class="arrow" ng-if="advanced.hidden">&#x25BC;</span><span class="arrow" ng-if="!advanced.hidden">&#x25B2;</span></a>
+	<div class="settings-section-container">
+		<a ng-click="recreatePlaylist.toggle()" class="settings-section-toggle clickable" analytics-on analytics-event="Toggle recreate playlist" analytics-category="Settings"><span chrome-translate>recreatePlaylist</span> <span class="arrow" ng-if="recreatePlaylist.hidden"><i class="icon-arrow-down"></i></span><span class="arrow" ng-if="!recreatePlaylist.hidden"><i class="icon-arrow-up"></i></span></a>
+		<div class="settings-section-content" ng-if="!recreatePlaylist.hidden">
+			<h3 chrome-translate>recreatePlaylist</h3>
+			<p chrome-translate>recreatePlaylistText</p>
+			<p>
+				<span chrome-translate>recreatePlaylistRemoveWhat</span>:<br />
+				<label><input type="radio" ng-model="recreatePlaylist.removeAll" ng-value="true" /><span chrome-translate>recreatePlaylistRemoveAll</span></label><br />
+				<label><input type="radio" ng-model="recreatePlaylist.removeAll" ng-value="false" /><span chrome-translate>recreatePlaylistDontRemoveAll</span></label>
+			</p>
+			<p><a class="pure-button pure-button-primary" ng-click="recreatePlaylist.send()" chrome-translate analytics-on analytics-event="Recreate playlist" analytics-category="Settings">recreatePlaylistButton</a></p>
+		</div>
+	</div>
+	<div class="settings-section-container">
+		<a ng-click="advanced.toggle()" class="settings-section-toggle clickable" analytics-on analytics-event="Toggle advanced settings" analytics-category="Settings"><span chrome-translate>advancedSettings</span> <span class="arrow" ng-if="advanced.hidden"><i class="icon-arrow-down"></i></span><span class="arrow" ng-if="!advanced.hidden"><i class="icon-arrow-up"></i></span></a>
 		<div class="advanced-content" ng-if="!advanced.hidden">
 			<h3 chrome-translate>clearData</h3>
 			<p chrome-translate>clearDataText</p>

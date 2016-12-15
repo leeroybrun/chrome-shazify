@@ -125,6 +125,18 @@ angular.module('Shazify').factory('TagsService', function($timeout, $interval, B
 					callback(err);
 				}, 0);
 			});
+		},
+		
+		recreateTracksOnPlaylist: function(removeAll, callback) {
+			if(TagsService.updatingApp()) {
+				return callback();
+			}
+
+			BackgroundService.Tags.recreateTracksOnPlaylist(removeAll, function(err) {
+				$timeout(function() {
+					callback(err);
+				}, 0);
+			});
 		}
 	};
 	
