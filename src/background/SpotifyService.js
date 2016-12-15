@@ -257,13 +257,17 @@
 					Logger.info('[Spotify] Going to add tracks to playlist '+ playlistId +'...');
 
 					// Spotify API allow only to add 100 tracks per requests, so we need to split it
-					var remainingTracks  = tracksPaths.slice(99);
+					// Slit it from the end, as tracks will be added to the start of playlist and needs to keep order
+					// 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 (10 is the newest, 1 is the oldest)
+					// 5, 4, 3, 2, 1 (split and add these to position 0 in playlist) -> playlist = 5, 4, 3, 2, 1
+					// 10, 9, 8, 7, 6 (split and add these to position 0 in playlist) -> playlist = 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+					var remainingTracks  = tracksPaths.slice(0, -100);
 					if(remainingTracks.length > 0) {
 						Logger.info('[Spotify] Due to Spotify limitation (max 100 tracks addition/request), we will split this request.');
 						Logger.info('[Spotify] Starting to add the first 100 tracks.');
 						Logger.info('[Spotify] Then, we will have '+ remainingTracks.length +' tracks remaining to add.');
 
-						tracksPaths = tracksPaths.slice(0, 99);
+						tracksPaths = tracksPaths.slice(-100);
 					}
 
 					Logger.info('[Spotify] Saving tracks to playlist '+playlistId+' :');
@@ -272,7 +276,10 @@
 					Spotify.call({
 						method: 'POST',
 						endpoint: '/v1/users/'+ userId +'/playlists/'+ playlistId +'/tracks',
-						data: JSON.stringify({ uris: tracksPaths })
+						data: JSON.stringify({ uris: tracksPaths }),
+						params: {
+							position: 0
+						}
 					}, function(err, data) {
 						if(err) { 
 							Logger.info('[Spotify] Error saving tracks to playlist.'); 

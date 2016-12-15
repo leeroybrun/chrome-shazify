@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.4
+
+- [x] Add tracks in the right order on Spotify (new tracks first)
+
 ## v0.4.3
 
 - [x] Bugfix in v0.4.2 update script

@@ -64,6 +64,7 @@ grunt bundle
 - [ ] Use bulk* methods from Dexie.js to speedup tags addition/update to DB or transactions
 - [ ] Put "new search" (in TagsCtrl) in a separate directive/controller
 - [ ] Add volume control for audio preview
+- [ ] When change/select other track for a Shazam tag, add it to the right place in playlist?
 
 ## Disclaimer
 

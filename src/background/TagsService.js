@@ -99,8 +99,7 @@
 		updatePlaylist: function(callback) {
 			Logger.info('[Tags] Updating playlist on Spotify.');
 
-			// Used to revert "status" if an error occurs
-			Tags.db.where('status').equals(3).toArray().then(function(tracksToAdd) {
+			Tags.db.where('status').equals(3).reverse().sortBy('date').then(function(tracksToAdd) {
 				var tracksIdsToAdd = []; // Used to add tracks to playlist
 
 				for(var i in tracksToAdd) {
