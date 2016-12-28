@@ -56,7 +56,7 @@ grunt build
 grunt bundle
 ```
 
-## Roadmap for v1.0
+## Roadmap
 
 - [ ] Refactor. Code is messy at some places...
 - [ ] Use React/Inferno/Vue.js/Angular 2.x instead of Angular 1.x
@@ -65,6 +65,7 @@ grunt bundle
 - [ ] Put "new search" (in TagsCtrl) in a separate directive/controller
 - [ ] Add volume control for audio preview
 - [ ] When change/select other track for a Shazam tag, add it to the right place in playlist?
+- [ ] When adding tracks to playlist, keep a list of added tracks in this batch. Prevent adding a tag twice if we have 2 Shazam tags for it. (User Shazamed 2 times the same song, as we are adding them together to the playlist, they are not already existing when we check, so we add them twice...)
 
 ## Disclaimer
 
