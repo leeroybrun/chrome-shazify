@@ -26,14 +26,30 @@
 				log.message = data;
 			}
 
-			Logger.logs.push(log);
+			Logger.logs.unshift(log);
 		},
 
 		exportLogs: function() {
 			var data = '';
 
 			Logger.logs.forEach(function(log) {
-				data += '['+ log.type +'] '+ log.date +' - '+ log.message;
+				data += '['+ log.type +'] '+ log.date.toISOString() +' - '+ log.message;
+
+				if(log.stack) {
+					data += log.stack;
+				}
+
+				data += '\n';
+			});
+
+			return data;
+		},
+
+		exportLogsMessages: function() {
+			var data = '';
+
+			Logger.logs.forEach(function(log) {
+				data += log.message;
 
 				if(log.stack) {
 					data += log.stack;

@@ -8,6 +8,31 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
   $scope.totalCount = 0;
   $scope.filteredCount = 0;
 
+  $scope.showLogsWhileUpdating = false;
+	$scope.toggleShowLogsWhileUpdating = function() {
+		$scope.showLogsWhileUpdating = !$scope.showLogsWhileUpdating;
+	};
+  $scope.logs = '';
+  $scope.copyLogs = function() {
+    var emailLink = document.querySelector('pre.updating-logs');  
+    var range = document.createRange();  
+    range.selectNode(emailLink);  
+    window.getSelection().addRange(range);
+
+    try {  
+      // Now that we've selected the  text, execute the copy command  
+      var successful = document.execCommand('copy');  
+      var msg = successful ? 'successful' : 'unsuccessful';  
+      console.log('Copy command was ' + msg);  
+    } catch(err) {  
+      console.log('Oops, unable to copy');  
+    }
+
+    // Remove the selections - NOTE: Should use
+    // removeRange(range) when it is supported  
+    window.getSelection().removeAllRanges(); 
+  };
+
 	$scope.loading = true;
 
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
@@ -142,11 +167,20 @@ angular.module('Shazify').controller('TagsCtrl', function($scope, $location, $in
 		});
 	};
 
+	var updateLogs = function(){
+		$scope.logs = BackgroundService.Logger.exportLogsMessages();
+	};
+
 	var refreshTags = function() {
 		TagsService.updateTags(function() {
 			// Called multiple times to update list/count during update
 			updateStatus();
-			updateList();
+      updateList();
+      
+      if($scope.showLogsWhileUpdating) {
+        updateLogs();
+      }
+
 		}, function(err) {
 			// Final callback called only once
 			if(err) {

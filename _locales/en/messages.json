@@ -66,6 +66,18 @@
   	"message": "Updating tags...",
   	"description": ""
   },
+  "hideLogs": {
+  	"message": "Hide details",
+  	"description": ""
+  },
+  "showLogs": {
+  	"message": "Show details",
+  	"description": ""
+  },
+  "copyLogs": {
+  	"message": "Copy details",
+  	"description": ""
+  },
   "loadingTags": {
     "message": "Loading...",
     "description": ""

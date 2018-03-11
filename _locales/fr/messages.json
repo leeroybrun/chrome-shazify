@@ -66,6 +66,18 @@
   	"message": "Mise à jour des tags en cours...",
   	"description": ""
   },
+  "hideLogs": {
+  	"message": "Cacher les détails",
+  	"description": ""
+  },
+  "showLogs": {
+  	"message": "Afficher les détails",
+  	"description": ""
+  },
+  "copyLogs": {
+  	"message": "Copier les détails",
+  	"description": ""
+  },
   "loadingTags": {
     "message": "Chargement...",
     "description": ""

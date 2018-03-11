@@ -471,6 +471,11 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		font-size:120%;
 	}
 
+	.updating-logs {
+		font-size:80%;
+		font-family:Consolas, Monaco, sans-serif;
+	}
+
 /* Top bar */
 
 	.topbar {

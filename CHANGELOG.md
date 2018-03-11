@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.5
+
+- [x] Add button to show/copy logs while updating (in case the update process is blocked)
+
 ## v0.4.4
 
 - [x] Add tracks in the right order on Spotify (new tracks first)

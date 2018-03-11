@@ -26,6 +26,14 @@
 			</div>
 			<p><span class="updating-tags" chrome-translate>updatingTags</span><br />{{updateStatus}}</p>
 			<p chrome-translate>doNotCloseBrowser</p>
+			<a ng-click="toggleShowLogsWhileUpdating()" class="show-logs clickable button-xsmall pure-button">
+				<span ng-if="showLogsWhileUpdating"><span chrome-translate>hideLogs</span></span>
+				<span ng-if="!showLogsWhileUpdating"><span chrome-translate>showLogs</span></span>
+			</a>
+			<a ng-click="copyLogs()" ng-if="showLogsWhileUpdating" class="copy-logs clickable button-xsmall pure-button">
+				<span chrome-translate>copyLogs</span>
+			</a>
+			<pre class="updating-logs" ng-if="showLogsWhileUpdating">{{logs}}</pre>
 		</div>
 	</div>
 	<div class="waiting-overlay loading" ng-if="loading === true && updating() === false && updatingApp() === false">
@@ -105,6 +113,10 @@
 	    </a>
 	  </div>
 	</div>
+
+	<!--div class="buy-me-beers-pleeease">
+		<a href="https://www.paypal.me/LeeroyBrun">🍺 Do you like Shazify? Buy me a beer! ;-)</a>
+	</div-->
 
 	<div class="modal-overlay" ng-if="newSearch.show" ng-click="newSearch.cancel()"></div>
 	<div class="modal new-search-modal" ng-if="newSearch.show">
