@@ -102,7 +102,7 @@ h4 {
 }
 #header {
   z-index: 0;
-  background: url("./images/bg.jpg") repeat center top #203041;
+  background: url("../images/bg.jpg") repeat center top #203041;
   background-size: 85%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   text-align: center;
@@ -206,6 +206,12 @@ h4 {
   background: #f9f9f9;
   text-align: center;
 }
+.view-github {
+  margin-top: 20px;
+}
+.view-github .btn-main {
+  background-color: rgb(118, 194, 175);
+}
 #features hr {
   border: none;
   border-top: 1px solid #d4d4d4;
@@ -226,16 +232,13 @@ h4 {
   font-size: 32px;
   color: #464646;
 }
-#features [class^="btn-"] {
-  margin-top: -25px;
-}
 #features small {
   display: block;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 12px;
   color: #a7a7a7;
   line-height: 25px;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 @media screen and (max-width: 980px) {
   #features article {
@@ -284,7 +287,7 @@ h4 {
   }
 }
 #how {
-  background: url("./images/bg.jpg") repeat center top #203041;
+  background: url("../images/bg.jpg") repeat center top #203041;
   background-size: 85%;
   position: relative;
   color: #fff;
