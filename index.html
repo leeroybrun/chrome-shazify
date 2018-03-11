@@ -1,98 +1,71 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Shazify - Easily sync your Shazam tracks with a Spotify playlist</title>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Shazify - Sync your Shazam tags with Spotify</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="shazam,spotify,playlist,sync,shazify">
+    <meta name="description" data-i18n="meta.description" content="Sync your Shazam tags with Spotify. Choose the right track. Sync your Shazams in a Spotify playlist.">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="language" content="en">
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <meta name="google-site-verification" content="fJRpEyuBRo2pFHLPcUUkTkEbJk3ZwUGEsHVucgTJMbk" />
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Shazify</h1>
-        <p>Easily sync your Shazam tracks with a Spotify playlist</p>
+</head>
 
-        <p class="view"><a href="https://github.com/leeroybrun/chrome-shazify">View the Project on GitHub <small>leeroybrun/chrome-shazify</small></a></p>
-
-
-        <ul>
-          <li><a href="https://chrome.google.com/webstore/detail/clhbpnpnaneankhiagfnjcegpccjkbib">Extension <strong>install</strong></strong></a></li>
-          <li><a href="https://github.com/leeroybrun/chrome-shazify">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <p>Easily sync your Shazam tracks with a Spotify playlist.</p>
-        
-        <p><img src="https://raw.githubusercontent.com/leeroybrun/chrome-shazify/master/promo_1400x560.png" alt=""></p>
-        <h2>How to use</h2>
-        <p><iframe width="560" height="315" src="//www.youtube.com/embed/Zi1VRJqEI0Q" frameborder="0" allowfullscreen=""></iframe></p>
-
-<h2>
-<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
-
-<p>To install the extention, just go to the Chrome Webstore : <a href="https://chrome.google.com/webstore/detail/shazify/ncdhendbhjlcnboihkbjjldcndoebhan">Shazify on Chrome Webstore</a></p>
-
-<h2>
-<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
-
-<p>It will only works if you use the Shazam app for iOS or Android AND you are logged in with Facebook in the app.</p>
-
-<p>If these conditions are met, Shazam will sync your tags with their MyShazam service (<a href="http://www.shazam.com/myshazam">www.shazam.com/myshazam</a>).</p>
-
-<p>This extension will then parse the MyShazam website, get your tags, and add them to a new playlist created on your Spotify account.</p>
-
-<p>How it works :</p>
-
-<ol>
-<li>Install the extension</li>
-<li>Click on the new icon appeared on your Chrome toolbar</li>
-<li>You will be asked to login on MyShazam and Spotify</li>
-<li>A new playlist ("My Shazam Tags") will be created on your Spotify account</li>
-<li>Your Shazam tags will be listed and automatically added to this playlist</li>
-</ol>
-
-<p>If a Shazam tag cannot be found on Spotify, you will have the possibility to change the search query for this track.</p>
-
-<p>When you want to update your Spotify playlist with new tags, simply click on the Shazify icon on Chrome toolbar. It will then search for new tags on Shazam and add them to Spotify.</p>
-
-<h2>
-<a name="developers" class="anchor" href="#developers"><span class="octicon octicon-link"></span></a>Developers</h2>
-
-<h3>
-<a name="how-to-build" class="anchor" href="#how-to-build"><span class="octicon octicon-link"></span></a>How to build</h3>
-
-<pre><code>grunt build
-</code></pre>
-
-<h3>
-<a name="how-to-bundle" class="anchor" href="#how-to-bundle"><span class="octicon octicon-link"></span></a>How to bundle</h3>
-
-<pre><code>grunt bundle
-</code></pre>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/leeroybrun">leeroybrun</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+<body lang="en" class="beta mac" cz-shortcut-listen="true">
+    <div id="header">
+        <div>
+            <div class="text" style="padding-bottom:0">
+                <h2 style="font-size:60px; font-weight:300"><img src="images/logo.png" alt="Shazify - Sync your Shazam tags with Spotify" style="width:70px; vertical-align:text-bottom;" /> Shazify</h2>
+            </div>
+            <div class="text">
+                <h2 style="font-weight: 300; letter-spacing:1px;">Sync your Shazam tags with Spotify</h2>
+            </div>
+            <ul id="links">
+                <li class="download"><a href="https://chrome.google.com/webstore/detail/shazify/ncdhendbhjlcnboihkbjjldcndoebhan" class="btn-main">Download Shazify</a><br><small><span>For Google Chrome</span></small></li>
+            </ul>
+            <img src="images/screen.png" alt="Shazify - Sync your Shazam tags with Spotify" style="width:250px;max-width:100%;" />
+        </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-57493072-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
+    <div class="container">
+        <section id="features">
+            <div class="clear-fix">
+                <article>
+                    <svg enable-background="new 0 0 64 64" height="64px" version="1.1" viewBox="0 0 64 64" width="64px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Layer_1"><g><circle cx="32" cy="32" fill="#4F5D73" r="32"/></g><g opacity="0.2"><path d="M32.096,39.682c-1.556,1.556-6.087,12.54-6.087,12.54c-0.665,1.208,0.33,2.085,2.593,0.936l8.131-4.435    c4.381-2.435,5.228-3.071,5.17-8.028l-0.815-5.853c-0.279-2.005-1.78-2.373-3.336-0.817L32.096,39.682z" fill="#231F20"/></g><g opacity="0.2"><path d="M27.072,34.658c-1.556,1.556-12.54,6.087-12.54,6.087c-1.208,0.665-2.085-0.33-0.936-2.593l4.435-8.131    c2.435-4.381,3.071-5.228,8.028-5.17l5.853,0.815c2.005,0.279,2.373,1.78,0.817,3.336L27.072,34.658z" fill="#231F20"/></g><g><path d="M32.096,37.682c-1.556,1.556-6.087,12.54-6.087,12.54c-0.665,1.208,0.33,2.085,2.593,0.936l8.131-4.435    c4.381-2.435,5.228-3.071,5.17-8.028l-0.815-5.853c-0.279-2.005-1.78-2.373-3.336-0.817L32.096,37.682z" fill="#C75C5C"/></g><g><path d="M27.072,32.658c-1.556,1.556-12.54,6.087-12.54,6.087c-1.208,0.665-2.085-0.33-0.936-2.593l4.435-8.131    c2.435-4.381,3.071-5.228,8.028-5.17l5.853,0.815c2.005,0.279,2.373,1.78,0.817,3.336L27.072,32.658z" fill="#C75C5C"/></g><g opacity="0.2"><path d="M21.247,39.545c5.074-5.074,9.337-3.526,9.337-3.526s1.549,4.263-3.526,9.337s-13.291,8.76-13.931,8.12    C12.507,52.855,16.172,44.619,21.247,39.545z" fill="#231F20"/></g><g><path d="M21.247,37.545c5.074-5.074,9.337-3.526,9.337-3.526s1.549,4.263-3.526,9.337s-13.291,8.76-13.931,8.12    C12.507,50.855,16.172,42.619,21.247,37.545z" fill="#E0995E"/></g><g><path d="M25.489,33.302c5.074-5.074,9.337-3.526,9.337-3.526s1.549,4.263-3.526,9.337s-13.291,8.76-13.931,8.12    C16.749,46.613,20.415,38.376,25.489,33.302z" fill="#F5CF87"/></g><g opacity="0.2"><path d="M43.634,37.078c-7.81,7.81-19.783,5.673-19.783,5.673s-2.137-11.972,5.673-19.783    s19.643-8.641,21.197-7.087C52.228,17.388,51.445,29.268,43.634,37.078z" fill="#231F20"/></g><g><path d="M43.634,35.078c-7.81,7.81-19.783,5.673-19.783,5.673s-2.137-11.972,5.673-19.783    s19.643-8.641,21.197-7.087C52.228,15.388,51.445,27.268,43.634,35.078z" fill="#E0E0D1"/></g><g opacity="0.2"><path d="M21.023,46.994c-0.781,0.781-1.34,1.488-2.121,0.707l0,0c-0.781-0.781-0.074-1.34,0.707-2.121    l9.899-12.728c0.781-0.781,4.169-1.488,4.95-0.707l0,0c0.781,0.781,0.074,4.169-0.707,4.95L21.023,46.994z" fill="#231F20"/></g><g><path d="M21.023,44.994c-0.781,0.781-1.34,1.488-2.121,0.707l0,0c-0.781-0.781-0.074-1.34,0.707-2.121    l9.899-12.728c0.781-0.781,4.169-1.488,4.95-0.707l0,0c0.781,0.781,0.074,4.169-0.707,4.95L21.023,44.994z" fill="#C75C5C"/></g><g opacity="0.2"><ellipse cx="39.604" cy="27.15" fill="#231F20" rx="4" ry="4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.598 35.9566)"/></g><g opacity="0.2"><ellipse cx="45.261" cy="21.493" fill="#231F20" rx="2" ry="2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -1.9411 38.2997)"/></g><g><ellipse cx="39.604" cy="25.15" fill="#4F5D73" rx="4" ry="4" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -6.1838 35.3708)"/></g><g><ellipse cx="45.261" cy="19.493" fill="#4F5D73" rx="2" ry="2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -0.5269 37.7139)"/></g></g><g id="Layer_2"/></svg>
+                    <h2>Magic!</h2>
+                    <p class="align-center">Shazify auto-magically search all your Shazam tags on Spotify and add them to a new playlist.</p>
+                </article>
+                <article>
+                    <svg enable-background="new 0 0 64 64" height="64px" version="1.1" viewBox="0 0 64 64" width="64px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Layer_1"><g><circle cx="32" cy="32" fill="#E0995E" r="32"/></g><g opacity="0.2"><g><path d="M48,52.5c-0.64,0-1.28-0.244-1.768-0.732l-12-12c-0.977-0.977-0.977-2.559,0-3.535     c0.976-0.977,2.56-0.977,3.535,0l12,12c0.977,0.977,0.977,2.559,0,3.535C49.28,52.256,48.64,52.5,48,52.5z" fill="#231F20"/></g></g><g><path d="M48,50.5c-0.64,0-1.28-0.244-1.768-0.732l-12-12c-0.977-0.977-0.977-2.559,0-3.535    c0.976-0.977,2.56-0.977,3.535,0l12,12c0.977,0.977,0.977,2.559,0,3.535C49.28,50.256,48.64,50.5,48,50.5z" fill="#4F5D73"/></g><g><ellipse cx="28.386" cy="28.386" fill="#77B3D4" rx="10.567" ry="10.567" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -11.7579 28.386)"/></g><g opacity="0.2"><g><path d="M28.386,19.819c2.704,0,5.409,1.032,7.472,3.095c4.127,4.127,4.127,10.817,0,14.944     c-2.063,2.063-4.768,3.095-7.472,3.095s-5.409-1.032-7.472-3.095c-4.127-4.127-4.127-10.817,0-14.944     C22.977,20.851,25.682,19.819,28.386,19.819z M28.386,15.819c-3.891,0-7.549,1.515-10.3,4.267c-5.68,5.68-5.68,14.921,0,20.601     c2.751,2.751,6.409,4.267,10.3,4.267s7.549-1.515,10.3-4.267c5.68-5.68,5.68-14.921,0-20.601     C35.935,17.334,32.277,15.819,28.386,15.819L28.386,15.819z" fill="#231F20"/></g></g><g><path d="M28.386,17.819c2.704,0,5.409,1.032,7.472,3.095c4.127,4.127,4.127,10.817,0,14.944    c-2.063,2.063-4.768,3.095-7.472,3.095s-5.409-1.032-7.472-3.095c-4.127-4.127-4.127-10.817,0-14.944    C22.977,18.851,25.682,17.819,28.386,17.819 M28.386,13.819c-3.891,0-7.549,1.515-10.3,4.267c-5.68,5.68-5.68,14.921,0,20.601    c2.751,2.751,6.409,4.267,10.3,4.267s7.549-1.515,10.3-4.267c5.68-5.68,5.68-14.921,0-20.601    C35.935,15.334,32.277,13.819,28.386,13.819L28.386,13.819z" fill="#FFFFFF"/></g></g><g id="Layer_2"/></svg>
+                    <h2>Manual search</h2>
+                    <p class="align-center">In case we don't find the right song on Spotify, you can manually search and select the right match directly in Shazify.</p>
+                </article>
+                <article>
+                        <svg enable-background="new 0 0 64 64" height="64px" version="1.1" viewBox="0 0 64 64" width="64px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Layer_1"><g><circle cx="32" cy="32" fill="#76C2AF" r="32"/></g><g opacity="0.2"><g><path d="M13.851,49.42c1.596,2.071,4.892,2.206,7.362,0.303C22.218,48.948,24,46.844,24,42.531V29.194l19-3.629     v8.418c0,2.97-2.405,3.652-3.21,3.804c-0.07,0.009-0.139,0.026-0.209,0.038c-0.036,0.004-0.09,0.011-0.09,0.011l0.013,0.004     c-0.951,0.173-1.909,0.572-2.769,1.233c-2.47,1.903-3.181,5.124-1.585,7.196c1.596,2.071,4.892,2.208,7.362,0.305     C43.763,45.61,45,43.75,45,40.844V18.514c0-1.178-0.956-1.843-2.133-1.483l-19.2,3.629C22.489,21.019,22,22.267,22,23.445v12.993     c0,2.974-2.745,4.351-3.547,4.5c-0.041,0.006-0.081,0.019-0.124,0.026c-0.105,0.017-0.173,0.023-0.173,0.023l0.023,0.011     c-0.943,0.177-1.892,0.572-2.743,1.227C12.966,44.127,12.258,47.348,13.851,49.42z" fill="#231F20"/></g></g><g><g><path d="M13.851,47.42c1.596,2.071,4.892,2.206,7.362,0.303C22.218,46.948,24,44.844,24,40.531V27.194l19-3.629     v8.418c0,2.97-2.405,3.652-3.21,3.804c-0.07,0.009-0.139,0.026-0.209,0.038c-0.036,0.004-0.09,0.011-0.09,0.011l0.013,0.004     c-0.951,0.173-1.909,0.572-2.769,1.233c-2.47,1.903-3.181,5.124-1.585,7.196c1.596,2.071,4.892,2.208,7.362,0.305     C43.763,43.61,45,41.75,45,38.844V16.514c0-1.178-0.956-1.843-2.133-1.483l-19.2,3.629C22.489,19.019,22,20.267,22,21.445v12.993     c0,2.974-2.745,4.351-3.547,4.5c-0.041,0.006-0.081,0.019-0.124,0.026c-0.105,0.017-0.173,0.023-0.173,0.023l0.023,0.011     c-0.943,0.177-1.892,0.572-2.743,1.227C12.966,42.127,12.258,45.348,13.851,47.42z" fill="#FFFFFF"/></g></g></g><g id="Layer_2"/></svg>
+                    <h2>Preview songs</h2>
+                    <p class="align-center">You can preview songs directly in Shazify to be sure it's the one you Shazamed in the first place.</p>
+                </article>
+                <article>
+                        <svg enable-background="new 0 0 64 64" height="64px" version="1.1" viewBox="0 0 64 64" width="64px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Layer_1"><g><circle cx="32" cy="32" fill="#76C2AF" r="32"/></g><g opacity="0.2"><g><g><path d="M42.461,44c-0.671,0-1.326-0.338-1.705-0.951c-0.58-0.94-0.287-2.172,0.653-2.752l10.124-6.242      c0.005-0.018,0.007-0.036,0.007-0.056s-0.002-0.038-0.007-0.056L41.41,27.703c-0.94-0.58-1.232-1.812-0.653-2.752      c0.58-0.94,1.812-1.232,2.752-0.653l10.63,6.554l0.165,0.165c0.797,0.797,1.236,1.856,1.236,2.983      c0,1.126-0.439,2.186-1.236,2.983l-0.166,0.166l-10.63,6.554C43.182,43.904,42.819,44,42.461,44z" fill="#231F20"/></g></g><g><g><path d="M21.539,44c-0.358,0-0.721-0.096-1.048-0.298l-10.63-6.554l-0.166-0.166      C8.898,36.186,8.459,35.126,8.459,34c0-1.127,0.439-2.187,1.236-2.983l0.165-0.165l10.63-6.554      c0.941-0.58,2.172-0.287,2.752,0.653c0.58,0.94,0.287,2.172-0.653,2.752l-10.124,6.242c-0.005,0.018-0.007,0.036-0.007,0.056      s0.002,0.038,0.007,0.056l10.124,6.242c0.94,0.58,1.232,1.812,0.653,2.752C22.865,43.663,22.209,44,21.539,44z" fill="#231F20"/></g></g></g><g opacity="0.2"><g><path d="M25.5,53c-0.237,0-0.479-0.042-0.714-0.132c-1.032-0.395-1.548-1.551-1.154-2.583l13-34     c0.395-1.032,1.551-1.549,2.583-1.154c1.032,0.395,1.548,1.551,1.154,2.583l-13,34C27.063,52.511,26.305,53,25.5,53z" fill="#231F20"/></g></g><g><g><path d="M42.461,42c-0.671,0-1.327-0.337-1.705-0.95c-0.58-0.94-0.287-2.173,0.653-2.752l10.123-6.241     c0.01-0.037,0.01-0.076,0-0.113L41.41,25.702c-0.94-0.579-1.233-1.812-0.653-2.752c0.58-0.94,1.811-1.233,2.752-0.652     l10.631,6.554l0.166,0.165c1.644,1.646,1.644,4.321,0,5.967l-0.166,0.165l-10.631,6.554C43.182,41.904,42.819,42,42.461,42z" fill="#FFFFFF"/></g><g><path d="M21.539,42c-0.358,0-0.72-0.096-1.047-0.298L9.86,35.148l-0.166-0.165c-1.644-1.646-1.644-4.321,0-5.967     l0.166-0.165l10.631-6.554c0.939-0.581,2.173-0.288,2.752,0.652c0.58,0.94,0.287,2.173-0.653,2.752l-10.123,6.241     c-0.01,0.037-0.01,0.076,0,0.113l10.123,6.241c0.94,0.579,1.233,1.812,0.653,2.752C22.865,41.663,22.209,42,21.539,42z" fill="#FFFFFF"/></g></g><g><path d="M25.5,51.001c-0.237,0-0.479-0.043-0.714-0.133c-1.032-0.395-1.548-1.551-1.154-2.582l13-34    c0.395-1.031,1.551-1.55,2.583-1.154c1.032,0.395,1.548,1.551,1.154,2.582l-13,34C27.063,50.511,26.305,51.001,25.5,51.001z" fill="#FFFFFF"/></g></g><g id="Layer_2"/></svg>
+                    <h2>Free & Open Source!</h2>
+                    <p class="align-center">Best of all, Shazify is totally free and Open Source! Feel free to <a href="https://github.com/leeroybrun/chrome-shazify" target="_blank" style="color:#6e6e6e;">check the source code on Github</a>.</p>
+                </article>
+            </div>
+            <div class="align-center action"><img src="./images/logo.png" alt="" class="align-center" style="width:64px;">
+                <hr>
+                <h2>Best of all... it's free!</h2>
+                <div class="download"><a href="https://chrome.google.com/webstore/detail/shazify/ncdhendbhjlcnboihkbjjldcndoebhan" class="btn-main">Download Shazify</a><small>For Google Chrome</small></div>
+                <div class="download"><a href="https://github.com/leeroybrun/chrome-shazify" class="btn-main">Download Shazify</a><small>For Google Chrome</small></div>
+            </div>
+                </section>
+                <div id="how">
+                    <div class="limiter">
+                        <h2>How does it works?</h2>
+                        <h4 style="margin-bottom:40px;">Watch the demo!</h4>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/Zi1VRJqEI0Q?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                </div>
+                </div>
+</body>
 
-  </body>
 </html>
