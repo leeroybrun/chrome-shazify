@@ -45,7 +45,7 @@
 		},
 
 		setSpotifyInfosToTag: function(tag, track) {
-			tag.image = track.album.images[track.album.images.length-1].url;
+			tag.image = track.album.images && track.album.images.length > 0 ? track.album.images[track.album.images.length-1].url : null;
 			tag.previewUrl = track.preview_url;
 			tag.spotifyId = track.id;
 
@@ -103,7 +103,11 @@
 				var tracksIdsToAdd = []; // Used to add tracks to playlist
 
 				for(var i in tracksToAdd) {
-					tracksIdsToAdd.push(tracksToAdd[i].spotifyId);
+					// Only add track ID to array of tracks to add if it's not already in there
+					if(tracksIdsToAdd.indexOf(tracksToAdd[i].spotifyId) === -1) {
+						tracksIdsToAdd.push(tracksToAdd[i].spotifyId);
+					}
+					
 					tracksToAdd[i].status = 4; // Set status as added, will not be saved to DB if an error occurs
 				}
 

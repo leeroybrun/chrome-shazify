@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.6
+
+- [x] Filter tracks to add not add them twice to the playlist
+- [x] Bugfix `Spotify.setSpotifyInfosToTag`, check if album has images before using them
+- [x] Bugfix `Spotify.genQuery`, remove consecutive `+`
+
 ## v0.4.5
 
 - [x] Add button to show/copy logs while updating (in case the update process is blocked)
