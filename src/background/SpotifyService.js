@@ -7,10 +7,7 @@
 
 		// From a track name and artist, generate a query for Spotify search
 		genQuery: function(track, artist) {
-			var reSpaces = new RegExp(' ', 'g');
-			var rePlus = /[\+]{2,}/g;
-
-			return 'track:'+ track.replace(reSpaces, '+').replace(rePlus, '+') +' artist:'+ Helper.replaceAll(artist, 'Feat. ', '').replace(reSpaces, '+').replace(rePlus, '+');
+			return 'track:'+ track +' artist:'+ Helper.replaceAllMulti(artist, [' Feat. ', ' & ', ', '], [' ', ' ', ' ']) +'';
 		},
 
 		// Get current user and playlist in cache or on Spotify

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.7
+
+- [x] Lower volume for track preview
+- [x] Bugfix `Spotify.genQuery`, don't replace spaces anymore (replacing them with %20 or + was causing Spotify to not find the tracks)
+- [x] Bugfix `Spotify.genQuery`, replace " Feat. ", " & " and ", " with spaces in the artist field
+
 ## v0.4.6
 
 - [x] Filter tracks to add not add them twice to the playlist

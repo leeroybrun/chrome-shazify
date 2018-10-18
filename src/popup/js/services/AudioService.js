@@ -1,7 +1,7 @@
 angular.module('Shazify').factory('AudioService', function($timeout) {
 	var AudioService = {
 		setup: function() {
-			AudioService._audio.volume = 0.5;
+			AudioService._audio.volume = 0.25;
 
 			AudioService._audio.addEventListener('ended', function() {
 				AudioService.callOnEnd();

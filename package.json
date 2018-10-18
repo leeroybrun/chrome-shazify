@@ -1,9 +1,13 @@
 {
   "name": "chrome-shazify",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "author": "Leeroy Brun <leeroy.brun@gmail.com>",
   "private": true,
   "description": "Easily sync your Shazam tracks with a Spotify playlist",
+  "scripts": {
+    "build": "grunt build",
+    "bundle": "grunt bundle"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",

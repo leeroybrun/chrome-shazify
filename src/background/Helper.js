@@ -39,6 +39,14 @@
 
 		replaceAll: function(string, find, replace) {
 			return string.replace(new RegExp(Helper.escapeRegExp(find), 'g'), replace);
+		},
+
+		replaceAllMulti: function(string, find, replace) {
+			for(var i = 0; i < find.length; i++) {
+				string = string.replace(new RegExp(Helper.escapeRegExp(find[i]), 'g'), replace[i]);
+			}
+
+			return string;
 		}
 	};
 
