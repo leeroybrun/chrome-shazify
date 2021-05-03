@@ -30,7 +30,8 @@
 
 			function receiveMessage(request, sender, sendResponse) {
 	    		if(request.shazamLocalStorage && request.shazamLocalStorage.inid) {
-	    			Shazam.setAndCheckInid(request.shazamLocalStorage.inid, function(isFine) {
+					var inid = JSON.parse(request.shazamLocalStorage.inid);
+	    			Shazam.setAndCheckInid(inid.data, function(isFine) {
 	    				sendResponse({ isFine: isFine });
 
 	    				if(!isFine) {
