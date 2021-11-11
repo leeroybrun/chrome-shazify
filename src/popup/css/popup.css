@@ -763,8 +763,19 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 		margin-top:2px;
 	}
 
+	.tag-actions > * {
+		float: left;
+	}
+
 	.tag-actions .player {
 	  margin-top: 3px;
+	}
+
+	.tag-actions .youtube {
+		color: #ff0200;
+		font-size: 18px;
+		margin-top: 2px;
+		text-decoration: none;
 	}
 
 	.tag-status.hidden+.tag-actions {

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.0
+
+- [x] Add the ability to fetch list of Shazam tags from iCloud and Firebase
+- [x] Add Youtube video links
+
 ## v0.4.7
 
 - [x] Lower volume for track preview

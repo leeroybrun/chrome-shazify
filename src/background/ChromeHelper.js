@@ -35,10 +35,10 @@
 
 			ChromeHelper.findExistingTab(url, function(existing_tab) {
 				if (existing_tab) {
-					chrome.tabs.reload(existing_tab.id, {'bypassCache': true});
 					chrome.tabs.update(existing_tab.id, {'selected': true});
-
-					return callback(existing_tab);
+					chrome.tabs.reload(existing_tab.id, {'bypassCache': true}, function() {
+						return callback(existing_tab, true);
+					});
 				} else {
 					chrome.tabs.create({'url': url, 'selected': true}, callback);
 				}

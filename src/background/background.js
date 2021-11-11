@@ -129,6 +129,7 @@ $(document).ready(function() {
 	        // Clear cached data from background script
 	        s2s.Tags.data.clearCache();
 	        s2s.Spotify.data.clearCache();
+	        s2s.Shazam.data.clearCache();
 	        s2s.CanvasIcon.stopRotation();
 
 	        s2s.Tags.db.clear().then(function() {

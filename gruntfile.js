@@ -89,6 +89,11 @@ module.exports = function(grunt) {
         },
 
         copy: {
+			contentScriptsImg: {
+                files: [
+                    {expand: true, flatten: true, src: ['src/contentscripts/img/**'], dest: 'contentscripts/img/'},
+				]
+			},
             main: {
                 files: [
                     {expand: true, src: ['_locales/**'], dest: 'build/'},
@@ -117,7 +122,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 
-	grunt.registerTask('build', ['concat:css', 'jshint', 'concat:js']);
+	grunt.registerTask('build', ['concat:css', 'jshint', 'concat:js', 'copy:contentScriptsImg']);
 	grunt.registerTask('build:css', ['concat:css']);
 	grunt.registerTask('build:js', ['jshint', 'concat:js']);
 

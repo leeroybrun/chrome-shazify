@@ -9,6 +9,14 @@
     "description": ""
   },
 
+  "introShazamChangesTitle": {
+    "message": "Important",
+    "description": ""
+  },
+  "introShazamChangesText": {
+    "message": "<p>If Shazify suddenly doesn't work anymore, it's probably because I didn't have time to update it due to changes in Shazam.</p><p>Enjoy it while it lasts! ;-)</p><p><a href=\"https://github.com/leeroybrun/chrome-shazify/issues/36\" target=\"_blank\">More info</a></p>",
+    "description": ""
+  },
   "introWelcome": {
     "message": "Welcome",
     "description": ""
@@ -31,6 +39,14 @@
   },
   "introShazamLoggedInText": {
     "message": "<p>Congratulations !</p><p>You have successfully logged in to Shazam.</p><p>Now, let’s go to the next step...</p>",
+    "description": ""
+  },
+  "shazamLoginOnPageInstructionsTitle": {
+    "message": "Login instructions for Shazify",
+    "description": ""
+  },
+  "shazamLoginOnPageInstructions": {
+    "message": "<p>Important: in order for Shazify to work, <b style=\"color:red;\">you must have sync enabled</b> in the Shazam settings on your phone.</p>Then please log in to the page behind this popup <b>in the same way</b> that you are logged in to the Shazam app on your phone. </p><p>As a general rule:</p><ul><li>If you have an iPhone and your Shazam tags are synced with iCloud, please log in with Apple.</li><li>If you have an Android, please log in with Google or your email depending on how you are logged into Shazam on your phone. </li></ul><p>If after logging into Shazam on this page, Shazify does not find your Shazam tags: please check that the login method is the same as on your phone and that syncing is enabled in the Shazam app on that phone. </p><p>If you're logged into Shazam but Shazify doesn't recognize the sign-in, it's probably because things have changed on the Shazam site and I haven't had time to update Shazify.</p><p><a href=\"https://github.com/leeroybrun/chrome-shazify/issues/36\" target=\"_blank\">More info</a></p><p><a id=\"shazify-modal-close-popup-link\">I got it, close the instructions</a></p>",
     "description": ""
   },
   "introOpenShazamLogin": {

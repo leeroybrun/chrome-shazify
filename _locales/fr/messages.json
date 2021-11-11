@@ -9,6 +9,14 @@
     "description": ""
   },
 
+  "introShazamChangesTitle": {
+    "message": "Important",
+    "description": ""
+  },
+  "introShazamChangesText": {
+    "message": "<p>Si tout d'un coup Shazify ne fonctionne plus, c'est probablement que je n'ai pas eu le temps de le mettre à jour suite à des changements dans Shazam.</p><p>Profitez-en tant que ça fonctionne! ;-)</p><p><a href=\"https://github.com/leeroybrun/chrome-shazify/issues/36\" target=\"_blank\">Plus d'infos</a></p>",
+    "description": ""
+  },
   "introWelcome": {
     "message": "Bienvenue",
     "description": ""
@@ -26,11 +34,19 @@
     "description": ""
   },
   "introShazamLoggedOutText": {
-    "message": "<p>Commencons par nous connecter à Shazam.</p><p>Ouvrez la page de connexion et cliquez sur le bouton « Connexion ».</p><p>Une fois connecté, ouvrez à nouveau Shazify.</p>",
+    "message": "<p>Commencons par nous connecter à Shazam.</p><p>Ouvrez la page de connexion et connectez-vous.</p><p>Une fois connecté, ouvrez à nouveau Shazify.</p>",
     "description": ""
   },
   "introShazamLoggedInText": {
     "message": "<p>Félicitations !</p><p>Vous êtes bien connecté<br />à Shazam.</p><p>Passons maintenant à la suite...</p>",
+    "description": ""
+  },
+  "shazamLoginOnPageInstructionsTitle": {
+    "message": "Instructions de connexion pour Shazify",
+    "description": ""
+  },
+  "shazamLoginOnPageInstructions": {
+    "message": "<p>Important: pour que Shazify fonctionne, <b style=\"color:red;\">vous devez avoir activé la synchronisation</b> dans les paramètres de Shazam sur votre téléphone.</p>Veuillez ensuite vous connecter sur la page derrière ce popup <b>de la même manière</b> que vous êtes connecté dans l'app Shazam sur votre téléphone.</p><p>En règle générale:</p><ul><li>Si vous avez un iPhone et que vos tags Shazam sont synchronisés avec iCloud, veuillez vous connecter avec Apple.</li><li>Si vous avez un Android, veuillez vous connecter avec Google ou votre email en fonction de comment vous êtes connecté dans Shazam sur votre téléphone.</li></ul><p>Si une fois connecté à Shazam sur cette page, Shazify ne trouve pas vos tags Shazam: veuillez vérifier que la méthode de connexion est bien la même que sur votre téléphone et que la synchronisation est activée dans l'app Shazam sur celui-ci.</p><p>Si vous êtes connecté à Shazam mais que Shazify ne reconnaît pas la connexion, c'est probablement que des choses ont changé sur le site de Shazam et que je n'ai pas eu le temps de mettre à jour Shazify.</p><p><a href=\"https://github.com/leeroybrun/chrome-shazify/issues/36\" target=\"_blank\">Plus d'infos</a></p><p><a id=\"shazify-modal-close-popup-link\">J'ai compris, fermer les instructions</a></p>",
     "description": ""
   },
   "introOpenShazamLogin": {

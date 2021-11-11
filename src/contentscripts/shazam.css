@@ -13,21 +13,63 @@
 
 /* Modal Content/Box */
 .shazify-modal-content {
+    background-color: #ffffff;
     position:relative;
-    background-color: #89C161;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 8% auto; /* 15% from the top and centered */
     padding: 30px 25px;
     width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 600px;
+}
+
+.shazify-modal-success .shazify-modal-content {
+    background-color: #89C161;
+}
+
+.shazify-modal-success .shazify-modal-content p,
+.shazify-modal-success .shazify-modal-close {
+    color:white;
+}
+
+.shazify-modal-title {
+    font-weight: bold;
+    font-size: 24px !important;
+    text-align: center;
 }
 
 .shazify-modal-content p {
-    color:white;
+    color:black;
     letter-spacing: 0.5px;
+    font-size:16px;
+    margin-bottom: 15px;
+}
+
+.shazify-modal-content p:last-child {
+    margin-bottom: 0;
+}
+
+.shazify-modal-content ul {
+    margin-bottom: 15px;
+}
+
+.shazify-modal-content li {
+    list-style: circle;
+    margin-left: 20px;
+}
+
+.shazify-modal-content a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.shazify-modal-img {
+    margin: 0 auto 20px auto;
+    width:80px;
+    display: block;
 }
 
 /* The Close Button */
 .shazify-modal-close {
-    color: #ffffff;
+    color: black;
     position: absolute;
     right:15px;
     top:15px;

@@ -78,7 +78,12 @@
 			</div>
 		</div>
 		<div class="tag-actions">
-			<div class="player" ng-if="tag.previewUrl">
+			<a class="youtube" ng-if="tag.videoUrl" ng-href="{{tag.videoUrl}}" target="_blank" title="Video">
+				<span class="simplelineicon">
+					<i class="icon-social-youtube"></i>
+				</span>
+			</a>
+			<div class="player" ng-if="tag.previewUrl" title="Preview">
 				<audio-player audio-src="tag.previewUrl" />
 			</div>
 		</div>
