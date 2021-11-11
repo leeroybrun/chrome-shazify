@@ -160,10 +160,6 @@
     "message": "Save the selected track",
     "description": ""
   },
-  "searchResults": {
-    "message": "Search results",
-    "description": ""
-  },
   "settings": {
   	"message": "Settings",
   	"description": ""
