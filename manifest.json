@@ -31,9 +31,6 @@
     "https://accounts.spotify.com/*",
     "https://api.shazify.ch/*"
   ],
-  "host_permissions": [
-    "https://api.shazify.ch/*"
-  ],
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://fonts.googleapis.com; object-src 'self'",
   "web_accessible_resources": [
     "contentscripts/img/attention_icon.png"
