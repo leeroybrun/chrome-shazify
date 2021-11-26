@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.1
+
+- [x] Disable old Shazam connection method (inid)
+
 ## v0.5.0
 
 - [x] Add the ability to fetch list of Shazam tags from iCloud and Firebase

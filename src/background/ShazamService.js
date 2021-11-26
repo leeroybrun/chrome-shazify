@@ -29,22 +29,6 @@
 			});
 
 			function receiveMessage(request, sender, sendResponse) {
-				// inid is the old Shazam way to get tracks from their API
-	    		if(request.shazamLocalStorageInid) {
-					var inid = JSON.parse(request.shazamLocalStorageInid);
-	    			Shazam.setAndCheckInid(inid.data, function(isFine) {
-	    				sendResponse({ isFine: isFine });
-
-	    				if(!isFine) {
-	    					Shazam.data.set({ 'inid': null });
-							Logger.info('[Shazam] "inid" returned is not fine...');
-						} else {
-							Logger.info('[Shazam] "inid" returned is fine!');
-							chrome.runtime.onMessage.removeListener(receiveMessage);
-						}
-					});
-	    		}
-
 				// The new way is using iCloud (CloudKit)
 	    		if(request.shazamLocalStorageIcloud) {
 					var icloud = JSON.parse(request.shazamLocalStorageIcloud);
@@ -88,6 +72,22 @@
 						sendResponse({ isFine: false });
 					}
 	    		}
+
+				/*/ inid is the old Shazam way to get tracks from their API
+	    		if(request.shazamLocalStorageInid) {
+					var inid = JSON.parse(request.shazamLocalStorageInid);
+	    			Shazam.setAndCheckInid(inid.data, function(isFine) {
+	    				sendResponse({ isFine: isFine });
+
+	    				if(!isFine) {
+	    					Shazam.data.set({ 'inid': null });
+							Logger.info('[Shazam] "inid" returned is not fine...');
+						} else {
+							Logger.info('[Shazam] "inid" returned is fine!');
+							chrome.runtime.onMessage.removeListener(receiveMessage);
+						}
+					});
+	    		}*/
 
 	    		// Let us use "sendResponse" asynchronously
 	    		return true;
